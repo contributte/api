@@ -2,16 +2,15 @@
 
 namespace Contributte\Api\Bridges\Nette\DI\Runtime\Annotation;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Nette\DI\ContainerBuilder;
-use Nette\Reflection\ClassType;
 use Contributte\Api\Annotation\Controller\Controller;
 use Contributte\Api\Annotation\Controller\Method;
 use Contributte\Api\Annotation\Controller\Path;
 use Contributte\Api\Annotation\Controller\RootPath;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 use Contributte\Api\Schema\Builder\SchemaController;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Nette\Reflection\ClassType;
 
 final class DoctrineAnnotationLoader extends AbstractLoader implements ILoader
 {
@@ -20,7 +19,6 @@ final class DoctrineAnnotationLoader extends AbstractLoader implements ILoader
 	private $reader;
 
 	/**
-	 * @param ContainerBuilder $builder
 	 * @return SchemaBuilder
 	 */
 	public function load()
@@ -51,6 +49,7 @@ final class DoctrineAnnotationLoader extends AbstractLoader implements ILoader
 	/**
 	 * @param SchemaController $controller
 	 * @param ClassType $class
+	 * @return void
 	 */
 	protected function parseControllerClassAnnotations(SchemaController $controller, ClassType $class)
 	{
@@ -76,6 +75,7 @@ final class DoctrineAnnotationLoader extends AbstractLoader implements ILoader
 	/**
 	 * @param SchemaController $controller
 	 * @param ClassType $class
+	 * @return void
 	 */
 	protected function parseControllerMethodsAnnotations(SchemaController $controller, ClassType $class)
 	{

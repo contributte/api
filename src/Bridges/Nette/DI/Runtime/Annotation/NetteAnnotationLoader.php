@@ -2,10 +2,10 @@
 
 namespace Contributte\Api\Bridges\Nette\DI\Runtime\Annotation;
 
-use Nette\Reflection\ClassType;
-use Nette\Utils\Strings;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 use Contributte\Api\Schema\Builder\SchemaController;
+use Nette\Reflection\ClassType;
+use Nette\Utils\Strings;
 
 final class NetteAnnotationLoader extends AbstractLoader implements ILoader
 {
@@ -41,6 +41,7 @@ final class NetteAnnotationLoader extends AbstractLoader implements ILoader
 	/**
 	 * @param SchemaController $controller
 	 * @param ClassType $class
+	 * @return void
 	 */
 	protected function parseControllerClassAnnotations(SchemaController $controller, ClassType $class)
 	{
@@ -63,6 +64,7 @@ final class NetteAnnotationLoader extends AbstractLoader implements ILoader
 	/**
 	 * @param SchemaController $controller
 	 * @param ClassType $class
+	 * @return void
 	 */
 	protected function parseControllerMethodsAnnotations(SchemaController $controller, ClassType $class)
 	{

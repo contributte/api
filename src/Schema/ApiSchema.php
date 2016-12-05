@@ -10,6 +10,7 @@ final class ApiSchema
 
 	/**
 	 * @param Endpoint $endpoint
+	 * @return void
 	 */
 	public function addEndpoint(Endpoint $endpoint)
 	{

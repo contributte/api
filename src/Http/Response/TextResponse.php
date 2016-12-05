@@ -22,6 +22,7 @@ final class TextResponse extends AbstractResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	protected function doSend(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{

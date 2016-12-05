@@ -40,6 +40,7 @@ final class SchemaMethod
 
 	/**
 	 * @param string $path
+	 * @return void
 	 */
 	public function setPath($path)
 	{
@@ -56,6 +57,7 @@ final class SchemaMethod
 
 	/**
 	 * @param string $method
+	 * @return void
 	 */
 	public function setMethod($method)
 	{

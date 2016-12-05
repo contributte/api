@@ -31,6 +31,7 @@ final class SchemaBuilder
 	}
 
 	/**
+	 * @param IGenerator $generator
 	 * @return mixed
 	 */
 	public function generate(IGenerator $generator)

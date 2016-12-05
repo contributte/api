@@ -27,7 +27,7 @@ final class FileResponse extends AbstractResponse
 	public function __construct($file, $name = NULL, $contentType = NULL, $forceDownload = TRUE)
 	{
 		if (!is_file($file)) {
-			throw new BadRequestException("File '$file' doesn't exist.");
+			throw new BadRequestException('File "' . $file . '" doesn\'t exist.');
 		}
 
 		$this->file = $file;
@@ -39,14 +39,17 @@ final class FileResponse extends AbstractResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	protected function doSend(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{
 		$httpResponse->setContentType($this->contentType);
-		$httpResponse->setHeader('Content-Disposition',
+		$httpResponse->setHeader(
+			'Content-Disposition',
 			($this->forceDownload ? 'attachment' : 'inline')
 			. '; filename="' . $this->name . '"'
-			. '; filename*=utf-8\'\'' . rawurlencode($this->name));
+			. '; filename*=utf-8\'\'' . rawurlencode($this->name)
+		);
 
 		$length = filesize($this->file);
 		$handle = fopen($this->file, 'r');

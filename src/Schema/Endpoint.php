@@ -30,6 +30,7 @@ final class Endpoint
 
 	/**
 	 * @param string $method
+	 * @return void
 	 */
 	public function setMethod($method)
 	{
@@ -46,6 +47,7 @@ final class Endpoint
 
 	/**
 	 * @param string $mask
+	 * @return void
 	 */
 	public function setMask($mask)
 	{
@@ -62,6 +64,7 @@ final class Endpoint
 
 	/**
 	 * @param string $pattern
+	 * @return void
 	 */
 	public function setPattern($pattern)
 	{
@@ -78,6 +81,7 @@ final class Endpoint
 
 	/**
 	 * @param EndpointHandler $handler
+	 * @return void
 	 */
 	public function setHandler($handler)
 	{
@@ -103,6 +107,7 @@ final class Endpoint
 
 	/**
 	 * @param EndpointParam $param
+	 * @return void
 	 */
 	public function addParam(EndpointParam $param)
 	{
@@ -111,8 +116,9 @@ final class Endpoint
 
 	/**
 	 * @param EndpointParam[] $params
+	 * @return void
 	 */
-	public function setParams($params)
+	public function setParams(array $params)
 	{
 		$this->params = $params;
 	}

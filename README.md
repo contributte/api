@@ -35,7 +35,7 @@ composer require contributte/api
 
 -----
 
-The development is sponsored by [Tlapnet](https://www.tlapnet.cz). Thank you guys! :+1:
+The development is sponsored by [Tlapnet](http://www.tlapnet.cz). Thank you guys! :+1:
 
 -----
 

@@ -40,6 +40,7 @@ final class SchemaController
 
 	/**
 	 * @param string $rootPath
+	 * @return void
 	 */
 	public function setRootPath($rootPath)
 	{

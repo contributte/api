@@ -2,9 +2,9 @@
 
 namespace Contributte\Api\Router\Matcher;
 
-use Nette\Utils\Strings;
 use Contributte\Api\Http\Request\IApiRequest;
 use Contributte\Api\Schema\Endpoint;
+use Nette\Utils\Strings;
 
 final class RegexMatcher
 {

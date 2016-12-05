@@ -12,6 +12,7 @@ abstract class JsonableResponse extends AbstractResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	protected function doSend(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{
@@ -32,6 +33,7 @@ abstract class JsonableResponse extends AbstractResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	abstract protected function doJson(HttpRequest $httpRequest, HttpResponse $httpResponse);
 

@@ -28,6 +28,7 @@ final class EndpointParam
 
 	/**
 	 * @param string $name
+	 * @return void
 	 */
 	public function setName($name)
 	{
@@ -44,6 +45,7 @@ final class EndpointParam
 
 	/**
 	 * @param int $type
+	 * @return void
 	 */
 	public function setType($type)
 	{

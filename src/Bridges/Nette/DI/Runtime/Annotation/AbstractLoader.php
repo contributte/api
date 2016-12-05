@@ -2,9 +2,9 @@
 
 namespace Contributte\Api\Bridges\Nette\DI\Runtime\Annotation;
 
+use Contributte\Api\Rest\Controller\IController;
 use Nette\DI\ContainerBuilder;
 use Nette\DI\ServiceDefinition;
-use Contributte\Api\Rest\Controller\IController;
 
 abstract class AbstractLoader
 {

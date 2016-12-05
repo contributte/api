@@ -2,16 +2,16 @@
 
 namespace Contributte\Api\Bridges\Nette\Application\UI;
 
-use Exception;
-use Nette\Application\IPresenter;
-use Nette\Application\IResponse;
-use Nette\Application\Request;
 use Contributte\Api\Bridges\Nette\Application\ResponseWrapper;
 use Contributte\Api\Dispatcher\IDispatcher;
 use Contributte\Api\Http\Request\ApiRequestFactory;
 use Contributte\Api\Http\Response\ErrorResponse;
 use Contributte\Api\Http\Response\ExceptionResponse;
 use Contributte\Api\Http\Response\IApiResponse;
+use Exception;
+use Nette\Application\IPresenter;
+use Nette\Application\IResponse;
+use Nette\Application\Request;
 
 abstract class AbstractApiPresenter implements IPresenter
 {

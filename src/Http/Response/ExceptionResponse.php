@@ -23,6 +23,7 @@ final class ExceptionResponse extends JsonableResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	protected function doJson(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{

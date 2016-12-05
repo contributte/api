@@ -2,9 +2,9 @@
 
 namespace Contributte\Api\Bridges\Nette\Response;
 
+use Contributte\Api\Http\Response\AbstractResponse;
 use Nette\Http\IRequest as HttpRequest;
 use Nette\Http\IResponse as HttpResponse;
-use Contributte\Api\Http\Response\AbstractResponse;
 use Tracy\Debugger;
 
 final class DebugResponse extends AbstractResponse
@@ -24,6 +24,7 @@ final class DebugResponse extends AbstractResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	protected function doSend(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{

@@ -2,12 +2,12 @@
 
 namespace Contributte\Api\Schema\Generator;
 
-use Nette\Utils\Strings;
 use Contributte\Api\Schema\Builder\SchemaController;
 use Contributte\Api\Schema\EndpointHandler;
 use Contributte\Api\Schema\EndpointParam;
 use Contributte\Api\Schema\SchemaMapping;
 use Contributte\Api\Utils\Helpers;
+use Nette\Utils\Strings;
 
 final class ArrayGenerator implements IGenerator
 {

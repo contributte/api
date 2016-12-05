@@ -2,10 +2,10 @@
 
 namespace Contributte\Api\Http\Response;
 
+use Contributte\Api\Http\Request\IApiRequest;
 use Nette\Http\IRequest as HttpRequest;
 use Nette\Http\IResponse as HttpResponse;
 use Nette\InvalidStateException;
-use Contributte\Api\Http\Request\IApiRequest;
 
 final class SystemResponse extends JsonableResponse
 {
@@ -48,6 +48,7 @@ final class SystemResponse extends JsonableResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	protected function doJson(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{
@@ -64,6 +65,7 @@ final class SystemResponse extends JsonableResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	protected function doNotFound(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{
@@ -73,4 +75,5 @@ final class SystemResponse extends JsonableResponse
 			'message' => 'No route for this request',
 		]);
 	}
+
 }

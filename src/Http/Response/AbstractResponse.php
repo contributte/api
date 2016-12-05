@@ -2,9 +2,9 @@
 
 namespace Contributte\Api\Http\Response;
 
+use Contributte\Api\Exception\Logical\InvalidTypeException;
 use Nette\Http\IRequest as HttpRequest;
 use Nette\Http\IResponse as HttpResponse;
-use Contributte\Api\Exception\Logical\InvalidTypeException;
 
 abstract class AbstractResponse implements IApiResponse
 {
@@ -28,6 +28,7 @@ abstract class AbstractResponse implements IApiResponse
 
 	/**
 	 * @param int $code
+	 * @return void
 	 */
 	public function setCode($code)
 	{
@@ -44,6 +45,7 @@ abstract class AbstractResponse implements IApiResponse
 
 	/**
 	 * @param string $contentType
+	 * @return void
 	 */
 	public function setContentType($contentType)
 	{
@@ -57,6 +59,7 @@ abstract class AbstractResponse implements IApiResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	public function send(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{
@@ -68,6 +71,7 @@ abstract class AbstractResponse implements IApiResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	abstract protected function doSend(HttpRequest $httpRequest, HttpResponse $httpResponse);
 

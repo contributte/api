@@ -2,10 +2,6 @@
 
 namespace Contributte\Api\Bridges\Nette\DI;
 
-use Nette\DI\CompilerExtension;
-use Nette\InvalidStateException;
-use Nette\PhpGenerator\ClassType;
-use Nette\Utils\Validators;
 use Contributte\Api\Bridges\Nette\DI\Runtime\Annotation\DoctrineAnnotationLoader;
 use Contributte\Api\Bridges\Nette\DI\Runtime\Annotation\NetteAnnotationLoader;
 use Contributte\Api\Bridges\Tracy\Panel\ApiPanel;
@@ -18,6 +14,10 @@ use Contributte\Api\Router\IRouter;
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Factory\ArraySchemaFactory;
 use Contributte\Api\Schema\Generator\ArrayGenerator;
+use Nette\DI\CompilerExtension;
+use Nette\InvalidStateException;
+use Nette\PhpGenerator\ClassType;
+use Nette\Utils\Validators;
 
 final class ApiAnnotationsExtension extends CompilerExtension
 {

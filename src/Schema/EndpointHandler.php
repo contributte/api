@@ -26,6 +26,7 @@ final class EndpointHandler
 
 	/**
 	 * @param string $class
+	 * @return void
 	 */
 	public function setClass($class)
 	{
@@ -42,6 +43,7 @@ final class EndpointHandler
 
 	/**
 	 * @param string $method
+	 * @return void
 	 */
 	public function setMethod($method)
 	{
@@ -58,6 +60,7 @@ final class EndpointHandler
 
 	/**
 	 * @param string $callback
+	 * @return void
 	 */
 	public function setCallback($callback)
 	{

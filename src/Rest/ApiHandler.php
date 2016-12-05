@@ -2,9 +2,9 @@
 
 namespace Contributte\Api\Rest;
 
-use Nette\DI\Container;
 use Contributte\Api\Http\Response\IApiResponse;
 use Contributte\Api\Rest\Binding\RequestContext;
+use Nette\DI\Container;
 
 final class ApiHandler implements IHandler
 {

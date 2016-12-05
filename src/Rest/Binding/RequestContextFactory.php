@@ -9,7 +9,7 @@ final class RequestContextFactory
 
 	/**
 	 * @param Endpoint $endpoint
-	 * @param array $params
+	 * @param array $parameters
 	 * @return RequestContext
 	 */
 	public static function create(Endpoint $endpoint, array $parameters)

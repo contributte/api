@@ -2,10 +2,10 @@
 
 namespace Contributte\Api\Bridges\Nette\Application;
 
+use Contributte\Api\Http\Response\IApiResponse;
 use Nette\Application\IResponse;
 use Nette\Http\IRequest as HttpRequest;
 use Nette\Http\IResponse as HttpResponse;
-use Contributte\Api\Http\Response\IApiResponse;
 
 class ResponseWrapper implements IResponse
 {
@@ -24,6 +24,7 @@ class ResponseWrapper implements IResponse
 	/**
 	 * @param HttpRequest $httpRequest
 	 * @param HttpResponse $httpResponse
+	 * @return void
 	 */
 	public function send(HttpRequest $httpRequest, HttpResponse $httpResponse)
 	{
