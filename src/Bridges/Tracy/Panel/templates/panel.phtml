@@ -1,0 +1,31 @@
+<h1>API</h1>
+
+<div class="tracy-inner">
+    <table>
+        <tr>
+            <th>Method</th>
+            <th>Mask</th>
+            <th>Handler</th>
+            <th>Parameters</th>
+        </tr>
+        <?php foreach ($schema->getEndpoints() as $endpoint) { ?>
+            <tr>
+                <td><?= $endpoint->getMethod() ?></td>
+                <td><?= $endpoint->getMask() ?></td>
+                <td><?= $endpoint->getHandler()->getClass() ?> :: <?= $endpoint->getHandler()->getMethod() ?></td>
+                <td>
+                    <?php if (count($endpoint->getParams()) > 0) { ?>
+                        <table>
+                            <?php foreach ($endpoint->getParams() as $param) { ?>
+                                <tr>
+                                    <td><?= $param->getName() ?></td>
+                                    <td><?= $param->getType() ?></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    <?php } ?>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
