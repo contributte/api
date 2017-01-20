@@ -1,6 +1,6 @@
 # API
 
-:boom: Powerfull API [REST/Relay/Middleware/GraphQL/DataQL] for [`Nette Framework`](https://github.com/nette/).
+:boom: Powerfull API (`PSR-7`, `REST`, `Relay`, `Middleware`, `GraphQL`, `DataQL`) for [`Nette Framework`](https://github.com/nette/).
 
 -----
 
@@ -26,9 +26,9 @@ composer require contributte/api
 
 ## Version
 
-| Version 	| Status             	| Composer   	| Shields 	|
-|---------	|-------------------	|------------	|---------	|
-| dev     	| heavy development 	| dev-master 	|[![Shield](https://img.shields.io/packagist/vpre/contributte/api.svg?style=flat-square)](https://packagist.org/packages/contributte/api)|
+| State       | Version | Branch   | PHP      |
+|-------------|---------|----------|----------|
+| development | `^0.1`  | `master` | `>= 5.6` |
 
 ## Documentation
 
