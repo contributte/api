@@ -8,7 +8,7 @@ final class SchemaBuilder
 {
 
 	/** @var SchemaController[] */
-	private $controllers;
+	private $controllers = [];
 
 	/**
 	 * @param string $class

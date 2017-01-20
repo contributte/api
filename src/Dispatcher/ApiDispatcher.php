@@ -2,11 +2,10 @@
 
 namespace Contributte\Api\Dispatcher;
 
-use Contributte\Api\Http\Request\IApiRequest;
-use Contributte\Api\Http\Response\IApiResponse;
-use Contributte\Api\Http\Response\SystemResponse;
-use Contributte\Api\Rest\IHandler;
+use Contributte\Api\Http\Request\ApiRequest;
+use Contributte\Api\Http\Response\ApiResponse;
 use Contributte\Api\Router\IRouter;
+use Contributte\Api\UI\IHandler;
 
 final class ApiDispatcher implements IDispatcher
 {
@@ -28,23 +27,59 @@ final class ApiDispatcher implements IDispatcher
 	}
 
 	/**
-	 * @param IApiRequest $request
-	 * @return IApiResponse
+	 * @param ApiRequest $request
+	 * @param ApiResponse $response
+	 * @return ApiResponse
 	 */
-	public function dispatch(IApiRequest $request)
+	public function dispatch(ApiRequest $request, ApiResponse $response)
 	{
 		// Try match request to our routes
-		$match = $this->router->match($request);
+		$matchedRequest = $this->match($request, $response);
 
-		// According to matched endpoint, forward to handler
-		if ($match !== NULL) {
-			return $this->handler->process($match);
+		// If there is no match route <=> endpoint,
+		if ($matchedRequest === NULL) {
+			return $this->fallback($request, $response);
 		}
 
-		// @todo Maybe, events, middlewares in here..
+		// According to matched endpoint, forward to handler
+		return $this->handle($matchedRequest, $response);
+	}
 
-		// Otherwise, not found
-		return new SystemResponse($request, SystemResponse::NOT_FOUND);
+	/**
+	 * @param ApiRequest $request
+	 * @param ApiResponse $response
+	 * @return ApiRequest
+	 */
+	protected function match(ApiRequest $request, ApiResponse $response)
+	{
+		return $this->router->match($request);
+	}
+
+	/**
+	 * @param ApiRequest $request
+	 * @param ApiResponse $response
+	 * @return ApiResponse
+	 */
+	protected function handle(ApiRequest $request, ApiResponse $response)
+	{
+		return $this->handler->handle($request, $response);
+	}
+
+	/**
+	 * @param ApiRequest $request
+	 * @param ApiResponse $response
+	 * @return ApiResponse
+	 */
+	protected function fallback(ApiRequest $request, ApiResponse $response)
+	{
+		$psr7 = $response
+			->getResponse()
+			->withStatus(404);
+
+		$psr7->getBody()
+			->write('No suitable API handler found');
+
+		return $response->withResponse($psr7);
 	}
 
 }

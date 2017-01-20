@@ -2,7 +2,7 @@
 
 namespace Contributte\Api\Router\Matcher;
 
-use Contributte\Api\Http\Request\IApiRequest;
+use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Schema\Endpoint;
 use Nette\Utils\Strings;
 
@@ -11,25 +11,22 @@ final class RegexMatcher
 
 	/**
 	 * @param Endpoint $endpoint
-	 * @param IApiRequest $request
-	 * @return array
+	 * @param ApiRequest $request
+	 * @return ApiRequest
 	 */
-	public function match(Endpoint $endpoint, IApiRequest $request)
+	public function match(Endpoint $endpoint, ApiRequest $request)
 	{
-		$match = Strings::match($request->getPath(), $endpoint->getPattern());
-		$params = [];
+		// Parse url from ApiRequest
+		$url = $request->getRequest()->getUri()->getPath();
+
+		// Try to match againts the pattern
+		$match = Strings::match($url, $endpoint->getPattern());
 
 		// Skip no-match
 		if ($match === NULL) return NULL;
 
-		// Collect request parameters (parsed from regex)
-		foreach ($match as $name => $value) {
-			if ($endpoint->hasParam($name)) {
-				$params[$name] = $value;
-			}
-		}
-
-		return $params;
+		// @todo add parameters!
+		return $request;
 	}
 
 }

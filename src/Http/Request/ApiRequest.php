@@ -2,126 +2,56 @@
 
 namespace Contributte\Api\Http\Request;
 
-use Nette\Utils\Json;
+use Contributte\Api\Schema\Endpoint;
+use Psr\Http\Message\ServerRequestInterface;
 
-final class ApiRequest implements IApiRequest
+class ApiRequest
 {
 
-	/** @var string */
-	private $method;
+	/** @var ServerRequestInterface */
+	private $request;
 
-	/** @var string */
-	private $path;
-
-	/** @var array */
-	private $query = [];
-
-	/** @var array */
-	private $post = [];
-
-	/** @var array */
-	private $files = [];
-
-	/** @var mixed */
-	private $content;
+	/** @var Endpoint */
+	private $endpoint;
 
 	/**
-	 * @param string $method
-	 * @param string $path
-	 * @param array $queries
-	 * @param array $post
-	 * @param array $file
-	 * @param mixed $content
+	 * @param ServerRequestInterface $request
+	 * @return ApiRequest
 	 */
-	public function __construct($method, $path, array $queries, array $post, array $file, $content)
+	public function withRequest(ServerRequestInterface $request)
 	{
-		$this->method = $method;
-		$this->path = $path;
-		$this->query = $queries;
-		$this->post = $post;
-		$this->files = $file;
-		$this->content = $content;
+		$new = clone $this;
+		$new->request = $request;
+
+		return $new;
 	}
 
 	/**
-	 * @return string
+	 * @return ServerRequestInterface
 	 */
-	public function getMethod()
+	public function getRequest()
 	{
-		return $this->method;
+		return $this->request;
 	}
 
 	/**
-	 * @return string
+	 * @param Endpoint $endpoint
+	 * @return ApiRequest
 	 */
-	public function getPath()
+	public function withEndpoint(Endpoint $endpoint)
 	{
-		return $this->path;
-	}
+		$new = clone $this;
+		$new->endpoint = $endpoint;
 
-
-	/**
-	 * @return mixed
-	 */
-	public function getContent()
-	{
-		return $this->content;
+		return $new;
 	}
 
 	/**
-	 * @return mixed
+	 * @return Endpoint
 	 */
-	public function getJson()
+	public function getEndpoint()
 	{
-		return Json::decode($this->content, Json::FORCE_ARRAY);
-	}
-
-	/**
-	 * Get the GET parameter or default value
-	 *
-	 * @param string $name
-	 * @param mixed $default
-	 * @return mixed
-	 */
-	public function getQuery($name, $default = NULL)
-	{
-		if (array_key_exists($name, $this->query)) {
-			return $this->query[$name];
-		}
-
-		return $default;
-	}
-
-	/**
-	 * Get the POST parameter or default value
-	 *
-	 * @param string $name
-	 * @param mixed $default
-	 * @return mixed
-	 */
-	public function getPost($name, $default = NULL)
-	{
-		if (array_key_exists($name, $this->post)) {
-			return $this->post[$name];
-		}
-
-		return $default;
-	}
-
-	/**
-	 * Get the file or default value
-	 *
-	 * @param string $name
-	 * @param mixed $default
-	 * @return mixed
-	 */
-	public function getFiles($name, $default = NULL)
-	{
-		if (array_key_exists($name, $this->files)) {
-			return $this->files[$name];
-		}
-
-		return $default;
+		return $this->endpoint;
 	}
 
 }

@@ -1,7 +1,7 @@
 {
   "name": "contributte/api",
-  "description": "Powerful API for Nette Framework",
-  "keywords": ["nette", "library", "skeleton", "sandbox"],
+  "description": "Powerfull API [REST/Relay/Middleware/GraphQL/DataQL] for Nette Framework",
+  "keywords": ["api", "rest", "graphql", "json", "nette"],
   "type": "library",
   "license": "MIT",
   "homepage": "https://github.com/contributte/api",
@@ -21,21 +21,22 @@
   ],
   "require": {
     "php": ">= 5.6",
-    "nette/application": "^2.3.7|^2.4.2",
-    "nette/http": "^2.3.7|^2.4.2"
+    "contributte/psr-7": "^0.1.1"
   },
   "require-dev": {
-    "ninjify/qa": "^0.3.2",
+    "ninjify/qa": "^0.3.3",
+    "ninjify/nunjuck": "^0.1.4",
     "doctrine/annotations": "^1.3.0",
     "nette/reflection": "^2.4.0",
     "nette/di": "^2.4.4",
-    "tracy/tracy": "2.4.3"
+    "contributte/middlewares": "^0.1.1"
   },
   "suggest": {
-    "nette/di": "Allows register Nette extensions (ApiAnnotationsExtension)",
-    "doctrine/annotations": "Allows loading annotations (DoctrineAnnotationLoader)",
-    "nette/reflection": "Allows loading annotations (NetteAnnotationLoader)",
-    "tracy/tracy": "Allows debugging (DebugResponse)"
+    "nette/di": "to register Nette extensions [ApiAnnotationsExtension]",
+    "doctrine/annotations": "to load annotations [DoctrineAnnotationLoader]",
+    "nette/reflection": "for annotations [NetteAnnotationLoader]",
+    "tracy/tracy": "for debugging [DebugResponse]",
+    "contributte/middlewares": "for middlewares [ApiMiddleware]"
   },
   "autoload": {
     "psr-4": {
@@ -67,16 +68,16 @@
       "Ninjify\\Composer\\Script\\Linter::execute"
     ],
     "qa-tester": [
-      "tester tests/cases -s -p php -c tests/php-unix.ini"
+      "tester --setup vendor/bin/nunjuck-setup -j 40 --colors tests/cases -s -p php -c tests/php-unix.ini"
     ],
     "qa-tester-info": [
-      "tester tests/cases -s -p php -c tests/php-unix.ini -i"
+      "tester --setup vendor/bin/nunjuck-setup -j 40 --colors tests/cases -s -p php -c tests/php-unix.ini -i"
     ],
     "qa-tester-coverage": [
-      "tester tests/cases -s -p php -c tests/php-unix.ini -d extension=xdebug.so --coverage ./coverage.xml --coverage-src ./src"
+      "tester --setup vendor/bin/nunjuck-setup -j 40 --colors tests/cases -s -p php -c tests/php-unix.ini -d extension=xdebug.so --coverage ./coverage.xml --coverage-src ./src"
     ],
     "qa-tester-coverage-info": [
-      "tester tests/cases -s -p php -c tests/php-unix.ini -d extension=xdebug.so --coverage ./coverage.xml --coverage-src ./src -i"
+      "tester --setup vendor/bin/nunjuck-setup -j 40 --colors tests/cases -s -p php -c tests/php-unix.ini -d extension=xdebug.so --coverage ./coverage.xml --coverage-src ./src -i"
     ]
   },
   "extra": {

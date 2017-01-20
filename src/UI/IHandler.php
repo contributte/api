@@ -1,11 +1,11 @@
 <?php
 
-namespace Contributte\Api\Dispatcher;
+namespace Contributte\Api\UI;
 
 use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiResponse;
 
-interface IDispatcher
+interface IHandler
 {
 
 	/**
@@ -13,6 +13,6 @@ interface IDispatcher
 	 * @param ApiResponse $response
 	 * @return ApiResponse
 	 */
-	public function dispatch(ApiRequest $request, ApiResponse $response);
+	public function handle(ApiRequest $request, ApiResponse $response);
 
 }

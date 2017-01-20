@@ -2,16 +2,15 @@
 
 namespace Contributte\Api\Router;
 
-use Contributte\Api\Http\Request\IApiRequest;
-use Contributte\Api\Rest\Binding\RequestContext;
+use Contributte\Api\Http\Request\ApiRequest;
 
 interface IRouter
 {
 
 	/**
-	 * @param IApiRequest $request
-	 * @return RequestContext|NULL
+	 * @param ApiRequest $request
+	 * @return ApiRequest|NULL
 	 */
-	public function match(IApiRequest $request);
+	public function match(ApiRequest $request);
 
 }

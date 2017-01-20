@@ -2,9 +2,7 @@
 
 namespace Contributte\Api\Router;
 
-use Contributte\Api\Http\Request\IApiRequest;
-use Contributte\Api\Rest\Binding\RequestContext;
-use Contributte\Api\Rest\Binding\RequestContextFactory;
+use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Router\Matcher\RegexMatcher;
 use Contributte\Api\Schema\ApiSchema;
 
@@ -23,10 +21,10 @@ final class ApiRouter implements IRouter
 	}
 
 	/**
-	 * @param IApiRequest $request
-	 * @return RequestContext|NULL
+	 * @param ApiRequest $request
+	 * @return ApiRequest|NULL
 	 */
-	public function match(IApiRequest $request)
+	public function match(ApiRequest $request)
 	{
 		$matcher = new RegexMatcher();
 
@@ -34,13 +32,19 @@ final class ApiRouter implements IRouter
 		foreach ($this->schema->getEndpoints() as $endpoint) {
 
 			// Skip unsupported HTTP method
-			if (strtolower($endpoint->getMethod()) !== strtolower($request->getMethod())) continue;
+			if (strtolower($endpoint->getMethod()) !== strtolower($request->getRequest()->getMethod())) continue;
 
 			// Try match given URL (path) by build pattern
-			$match = $matcher->match($endpoint, $request);
-			if ($match !== NULL) {
-				return RequestContextFactory::create($endpoint, $match);
-			}
+			$matched = $matcher->match($endpoint, $request);
+
+			// Skip if endpoint is not matched
+			if ($matched === NULL) continue;
+
+			// If matched is not NULL, returns given ApiRequest
+			// with all parsed arguments and data
+			$matched = $matched->withEndpoint($endpoint);
+
+			return $matched;
 		}
 
 		return NULL;

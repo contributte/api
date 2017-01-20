@@ -36,21 +36,21 @@ before_script:
 
 script:
   # Quality Assurance
-  - travis_retry composer run-script qa-linter
-  - travis_retry composer run-script qa-codesniffer
+  - composer run-script qa-linter
+  - composer run-script qa-codesniffer
 
   # Nette\Tester
-  #- composer run-script qa-tester-info
-  #- composer run-script qa-tester
+  - composer run-script qa-tester-info
+  - composer run-script qa-tester
 
   # Nette\Tester + CodeCoverage
-  #- if [ "$COVERAGE" != "" ]; then composer run-script qa-tester-coverage-info; fi
-  #- if [ "$COVERAGE" != "" ]; then composer run-script qa-tester-coverage; fi
+  - if [ "$COVERAGE" != "" ]; then composer run-script qa-tester-coverage-info; fi
+  - if [ "$COVERAGE" != "" ]; then composer run-script qa-tester-coverage; fi
 
 after_script:
   # Coverage (Coveralls)
-  #- if [ "$COVERAGE" != "" ]; then wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar; fi
-  #- if [ "$COVERAGE" != "" ]; then php coveralls.phar --verbose --config tests/.coveralls.yml; fi
+  - if [ "$COVERAGE" != "" ]; then wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar; fi
+  - if [ "$COVERAGE" != "" ]; then php coveralls.phar --verbose --config tests/.coveralls.yml; fi
 
 after_failure:
   # Print *.actual content
