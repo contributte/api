@@ -113,7 +113,7 @@ class ApiRouter implements IInvoker
 	 */
 	protected function compile()
 	{
-		$regex = sprintf('#%s#', $this->mask);
+		$regex = sprintf('#%s#U', $this->mask);
 
 		// Build route
 		$route = [
