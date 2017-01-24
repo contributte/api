@@ -4,7 +4,7 @@ namespace Contributte\Api\Bridges\DI;
 
 use Contributte\Api\Bridges\DI\Annotation\DoctrineAnnotationLoader;
 use Contributte\Api\Bridges\DI\Annotation\NetteAnnotationLoader;
-use Contributte\Api\Bridges\Tracy\ApiPanel\ApiPanel;
+use Contributte\Api\Bridges\Tracy\Panel\ApiPanel\ApiPanel;
 use Contributte\Api\Dispatcher\ApiDispatcher;
 use Contributte\Api\Dispatcher\IDispatcher;
 use Contributte\Api\Router\ApiRouter;

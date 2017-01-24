@@ -1,6 +1,6 @@
 # API
 
-:boom: Powerfull API (`PSR-7`, `REST`, `Relay`, `Middleware`, `GraphQL`, `DataQL`) for [`Nette Framework`](https://github.com/nette/).
+:boom: Powerful API (`PSR-7`, `REST`, `Relay`, `Middleware`, `GraphQL`, `DataQL`, `Annotations`) for [`Nette Framework`](https://github.com/nette/).
 
 -----
 
@@ -28,11 +28,53 @@ composer require contributte/api
 
 | State       | Version | Branch   | PHP      |
 |-------------|---------|----------|----------|
-| development | `^0.1`  | `master` | `>= 5.6` |
+| development | `^0.2`  | `master` | `>= 5.6` |
+
+## Prolog
+
+This really powerful annotation based API library is build on top of the PSR-7 standard. It reuses immutable `Request` & `Response` objects. 
+It's well known that in Nette applications are an `alfa` and an `omega` `Nette\Appliction\UI\Presenter`(s). We've took an idea from 
+Java (Spring Framework) and many others and together we've created Controller-based API.
+
+Controllers are small parts which can be register to DIC. They have a few public annotated methods. If the method is matched by router, it obtained
+`ApiRequest` and `ApiResponse`. Here's come the magic, these simple objects hold `PSR-7` - `Request` & `Response` instances.
+
+Thats all. Take a look, it's really simple.
+
+```php
+use Contributte\Api\Annotation\Controller\Controller;
+use Contributte\Api\Annotation\Controller\Method;
+use Contributte\Api\Annotation\Controller\Path;
+use Contributte\Api\Annotation\Controller\RootPath;
+use Contributte\Api\Http\Request\ApiRequest;
+use Contributte\Api\Http\Response\ApiResponse;
+
+/**
+ * @Controller
+ * @RootPath("/users")
+ */
+final class UsersController
+{
+
+    /**
+     * @Path("/")
+     * @Method("GET")
+     * @param ApiRequest $request
+     * @param ApiResponse $response
+     * @return ApiResponse
+     */
+    public function index(ApiRequest $request, ApiResponse $response)
+    {
+        $response->getPsr7()->getBody()->write('Hello world!');
+
+        return $response;
+    }
+}
+```
 
 ## Documentation
 
-@todo
+- [Installation - how to register an extension](https://github.com/contributte/api/tree/master/.docs#installation)
 
 -----
 

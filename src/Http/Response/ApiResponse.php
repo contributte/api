@@ -8,13 +8,17 @@ class ApiResponse
 {
 
 	/** @var ResponseInterface */
-	private $response;
+	protected $response;
+
+	/**
+	 * PSR-7 *******************************************************************
+	 */
 
 	/**
 	 * @param ResponseInterface $response
-	 * @return ApiResponse
+	 * @return static
 	 */
-	public function withResponse(ResponseInterface $response)
+	public function withPsr7(ResponseInterface $response)
 	{
 		$new = clone $this;
 		$new->response = $response;
@@ -23,13 +27,9 @@ class ApiResponse
 	}
 
 	/**
-	 * PSR-7 *******************************************************************
-	 */
-
-	/**
 	 * @return ResponseInterface
 	 */
-	public function getResponse()
+	public function getPsr7()
 	{
 		return $this->response;
 	}
@@ -37,29 +37,6 @@ class ApiResponse
 	/**
 	 * API *********************************************************************
 	 */
-
-	/**
-	 * @param mixed $data
-	 * @return static
-	 */
-	public function write($data)
-	{
-		$this->response->getBody()->write($data);
-
-		return $this;
-	}
-
-	/**
-	 * @param array $data
-	 * @return static
-	 */
-	public function json(array $data)
-	{
-		$this->write(json_encode($data));
-		$this->response = $this->response->withHeader('Content-type', 'application/json');
-
-		return $this;
-	}
 
 	/**
 	 * @param int $code

@@ -29,13 +29,13 @@
     "doctrine/annotations": "^1.3.0",
     "nette/reflection": "^2.4.0",
     "nette/di": "^2.4.4",
-    "contributte/middlewares": "^0.1.1"
+    "contributte/middlewares": "^0.2.0"
   },
   "suggest": {
     "nette/di": "to register Nette extensions [ApiAnnotationsExtension]",
     "doctrine/annotations": "to load annotations [DoctrineAnnotationLoader]",
     "nette/reflection": "for annotations [NetteAnnotationLoader]",
-    "tracy/tracy": "for debugging [DebugResponse]",
+    "tracy/tracy": "for tracy panel [ApiPanel]",
     "contributte/middlewares": "for middlewares [ApiMiddleware]"
   },
   "autoload": {

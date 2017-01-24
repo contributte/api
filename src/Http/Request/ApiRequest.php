@@ -9,16 +9,20 @@ class ApiRequest
 {
 
 	/** @var ServerRequestInterface */
-	private $request;
+	protected $request;
 
 	/** @var Endpoint */
-	private $endpoint;
+	protected $endpoint;
+
+	/**
+	 * PSR-7 *******************************************************************
+	 */
 
 	/**
 	 * @param ServerRequestInterface $request
-	 * @return ApiRequest
+	 * @return static
 	 */
-	public function withRequest(ServerRequestInterface $request)
+	public function withPsr7(ServerRequestInterface $request)
 	{
 		$new = clone $this;
 		$new->request = $request;
@@ -29,14 +33,18 @@ class ApiRequest
 	/**
 	 * @return ServerRequestInterface
 	 */
-	public function getRequest()
+	public function getPsr7()
 	{
 		return $this->request;
 	}
 
 	/**
+	 * ENDPOINT ****************************************************************
+	 */
+
+	/**
 	 * @param Endpoint $endpoint
-	 * @return ApiRequest
+	 * @return static
 	 */
 	public function withEndpoint(Endpoint $endpoint)
 	{

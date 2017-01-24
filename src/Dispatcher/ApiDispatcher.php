@@ -73,13 +73,13 @@ final class ApiDispatcher implements IDispatcher
 	protected function fallback(ApiRequest $request, ApiResponse $response)
 	{
 		$psr7 = $response
-			->getResponse()
+			->getPsr7()
 			->withStatus(404);
 
 		$psr7->getBody()
 			->write('No suitable API handler found');
 
-		return $response->withResponse($psr7);
+		return $response->withPsr7($psr7);
 	}
 
 }

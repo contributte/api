@@ -32,7 +32,8 @@ final class ApiRouter implements IRouter
 		foreach ($this->schema->getEndpoints() as $endpoint) {
 
 			// Skip unsupported HTTP method
-			if (strtolower($endpoint->getMethod()) !== strtolower($request->getRequest()->getMethod())) continue;
+			// @idea in_array($endpoint->getMethods()) ??
+			if (strtolower($endpoint->getMethod()) !== strtolower($request->getPsr7()->getMethod())) continue;
 
 			// Try match given URL (path) by build pattern
 			$matched = $matcher->match($endpoint, $request);
@@ -42,7 +43,7 @@ final class ApiRouter implements IRouter
 
 			// If matched is not NULL, returns given ApiRequest
 			// with all parsed arguments and data
-			$matched = $matched->withEndpoint($endpoint);
+			$matched = $request->withEndpoint($endpoint);
 
 			return $matched;
 		}

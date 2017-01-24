@@ -30,8 +30,9 @@ final class ArrayGenerator implements IGenerator
 				if (empty($method->getPath())) continue;
 
 				// Build full mask (@RootPath + @Path)
-				$mask = '/' . trim($controller->getRootPath(), '/') . '/' . $method->getPath();
+				$mask = '/' . $controller->getRootPath() . '/' . $method->getPath();
 				$mask = Helpers::slashless($mask);
+				$mask = rtrim($mask, '/');
 
 				// Create endpoint
 				$endpoint = [
