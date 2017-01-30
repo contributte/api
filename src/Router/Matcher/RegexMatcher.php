@@ -4,10 +4,11 @@ namespace Contributte\Api\Router\Matcher;
 
 use Contributte\Api\Bridges\Middlewares\ApiMiddleware;
 use Contributte\Api\Http\Request\ApiRequest;
+use Contributte\Api\Http\Request\Param\ParametersMapper;
 use Contributte\Api\Schema\Endpoint;
-use Nette\Utils\Strings;
+use Contributte\Api\Utils\Regex;
 
-final class RegexMatcher
+final class RegexMatcher implements IMatcher
 {
 
 	/**
@@ -33,12 +34,19 @@ final class RegexMatcher
 		$url = sprintf('/%s', trim($url, '/'));
 
 		// Try to match againts the pattern
-		$match = Strings::match($url, $endpoint->getPattern());
+		$match = Regex::match($url, $endpoint->getPattern());
 
-		// Skip no-match
+		// Skip if there's no match
 		if ($match === NULL) return NULL;
 
-		// @todo add parameters!
+		// Fill request parameters from matched URL
+		foreach ($endpoint->getParams() as $param) {
+			$request->addParameter(
+				$param->getName(),
+				ParametersMapper::parse($param->getType(), $match[$param->getName()])
+			);
+		}
+
 		return $request;
 	}
 

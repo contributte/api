@@ -16,7 +16,7 @@ final class EndpointParam
 	private $name;
 
 	/** @var int */
-	private $type;
+	private $type = self::TYPE_SCALAR;
 
 	/**
 	 * @return string

@@ -2,6 +2,8 @@
 
 namespace Contributte\Api\Http\Request;
 
+use Contributte\Api\Exception\Logical\InvalidStateException;
+use Contributte\Api\Http\Request\Param\AbstractParameter;
 use Contributte\Api\Schema\Endpoint;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -13,6 +15,9 @@ class ApiRequest
 
 	/** @var Endpoint */
 	protected $endpoint;
+
+	/** @var AbstractParameter[] */
+	protected $parameters = [];
 
 	/**
 	 * PSR-7 *******************************************************************
@@ -60,6 +65,50 @@ class ApiRequest
 	public function getEndpoint()
 	{
 		return $this->endpoint;
+	}
+
+	/**
+	 * PARAMETERS **************************************************************
+	 */
+
+	/**
+	 * @param string $name
+	 * @param AbstractParameter $parameter
+	 * @return void
+	 */
+	public function addParameter($name, AbstractParameter $parameter)
+	{
+		$this->parameters[$name] = $parameter;
+	}
+
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public function hasParameter($name)
+	{
+		return isset($this->parameters[$name]);
+	}
+
+	/**
+	 * @param string $name
+	 * @return AbstractParameter
+	 */
+	public function getParameter($name)
+	{
+		if (!$this->hasParameter($name)) {
+			throw new InvalidStateException('No parameter found');
+		}
+
+		return $this->parameters[$name];
+	}
+
+	/**
+	 * @return AbstractParameter[]
+	 */
+	public function getParameters()
+	{
+		return $this->parameters;
 	}
 
 }
