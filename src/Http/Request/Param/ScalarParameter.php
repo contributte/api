@@ -6,7 +6,7 @@ use Contributte\Api\Exception\Logical\InvalidTypeException;
 
 class ScalarParameter extends AbstractParameter
 {
-	
+
 	/**
 	 * @param mixed $value
 	 * @return void
