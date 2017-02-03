@@ -58,8 +58,8 @@ class ApiMiddleware
 	protected function invoke(ServerRequestInterface $psr7Request, ResponseInterface $psr7Response)
 	{
 		// Create API request & response
-		$apiRequest = $this->apiRequest = $this->createApiRequest($psr7Request, $psr7Response);
-		$apiResponse = $this->apiResponse = $this->createApiResponse($psr7Request, $psr7Response);
+		$apiRequest = $this->createApiRequest($psr7Request, $psr7Response);
+		$apiResponse = $this->createApiResponse($psr7Request, $psr7Response);
 
 		/** @var IInvoker $invoker */
 		$invoker = $this->createChain($this->invokers);

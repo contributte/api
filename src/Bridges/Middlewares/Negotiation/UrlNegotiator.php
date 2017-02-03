@@ -2,6 +2,7 @@
 
 namespace Contributte\Api\Bridges\Middlewares\Negotiation;
 
+use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\IOutTransformer;
 use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\ITransformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Exception\Logical\InvalidTypeException;
@@ -9,16 +10,17 @@ use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiDataResponse;
 use Contributte\Api\Http\Response\ApiResponse;
 
-class UrlNegotiator implements INegotiator
+class UrlNegotiator implements IResponseNegotiator
 {
 
+	// Masks
 	const FALLBACK = '*';
 
-	/** @var ITransformer[] */
+	/** @var IOutTransformer[] */
 	private $transformers = [];
 
 	/**
-	 * @param ITransformer[] $transformers
+	 * @param IOutTransformer[] $transformers
 	 */
 	public function __construct(array $transformers)
 	{
@@ -57,7 +59,7 @@ class UrlNegotiator implements INegotiator
 
 		// Try fallback
 		if (isset($this->transformers[self::FALLBACK])) {
-			// Transform (fallbackly) data to given format
+			// Transform (fallback) data to given format
 			return $this->transform($this->transformers[self::FALLBACK], $request, $response);
 		}
 
@@ -76,7 +78,7 @@ class UrlNegotiator implements INegotiator
 	 */
 	protected function transform(ITransformer $transformer, ApiRequest $request, ApiDataResponse $response)
 	{
-		$transformed = $transformer->encode($response->fetch());
+		$transformed = $transformer->encode($response->getData());
 
 		$response
 			->getPsr7()

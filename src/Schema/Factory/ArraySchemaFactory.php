@@ -39,7 +39,7 @@ final class ArraySchemaFactory implements ISchemaFactory
 
 			$endpoint = new Endpoint();
 			$endpoint->setHandler($handler);
-			$endpoint->setMethod($route[SchemaMapping::METHOD]);
+			$endpoint->addMethod($route[SchemaMapping::METHOD]);
 			$endpoint->setMask($route[SchemaMapping::MASK]);
 			$endpoint->setPattern($route[SchemaMapping::PATTERN]);
 

@@ -17,7 +17,7 @@ class ApiDataResponse extends ApiResponse
 	 */
 	public function isEmpty()
 	{
-		return $this->data !== NULL;
+		return $this->data === NULL;
 	}
 
 	/**
@@ -34,7 +34,7 @@ class ApiDataResponse extends ApiResponse
 	/**
 	 * @return mixed
 	 */
-	public function fetch()
+	public function getData()
 	{
 		return $this->data;
 	}

@@ -40,8 +40,14 @@ final class ServiceHandler implements IHandler
 			[$request, $response]
 		);
 
+		// Validate if response is returned
 		if (!$response) {
 			throw new InvalidStateException(sprintf('Handler "%s::%s()" must return response', get_class($service), $method));
+		}
+
+		// Validate if response is ApiResponse
+		if (!($response instanceof ApiResponse)) {
+			throw new InvalidStateException(sprintf('Handler returned response must be subtype of %s', ApiResponse::class));
 		}
 
 		return $response;

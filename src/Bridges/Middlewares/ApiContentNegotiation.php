@@ -2,7 +2,8 @@
 
 namespace Contributte\Api\Bridges\Middlewares;
 
-use Contributte\Api\Bridges\Middlewares\Negotiation\INegotiator;
+use Contributte\Api\Bridges\Middlewares\Negotiation\IRequestNegotiator;
+use Contributte\Api\Bridges\Middlewares\Negotiation\IResponseNegotiator;
 use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiDataResponse;
@@ -11,15 +12,69 @@ use Contributte\Api\Http\Response\ApiResponse;
 class ApiContentNegotiation implements IInvoker
 {
 
-	/** @var INegotiator[] */
-	protected $negotiators = [];
+	// Attributes in ServerRequestInterface
+	const ATTR_SKIP = 'C-Negotiation-Skip';
+	const ATTR_SKIP_REQUEST = 'C-Negotiation-Skip-Request';
+	const ATTR_SKIP_RESPONSE = 'C-Negotiation-Skip-Response';
+
+	/** @var IRequestNegotiator[] */
+	protected $requestNegotiators = [];
+
+	/** @var IResponseNegotiator[] */
+	protected $responseNegotiators = [];
 
 	/**
-	 * @param INegotiator[] $negotiators
+	 * @param IRequestNegotiator[] $requestNegotiators
+	 * @param IResponseNegotiator[] $responseNegotiators
 	 */
-	public function __construct(array $negotiators)
+	public function __construct(array $requestNegotiators = [], array $responseNegotiators = [])
 	{
-		$this->negotiators = $negotiators;
+		$this->requestNegotiators = $requestNegotiators;
+		$this->responseNegotiators = $responseNegotiators;
+	}
+
+	/**
+	 * SETTERS *****************************************************************
+	 */
+
+	/**
+	 * @param IRequestNegotiator[] $negotiators
+	 * @return void
+	 */
+	public function addRequestNegotiations(array $negotiators)
+	{
+		foreach ($negotiators as $negotiator) {
+			$this->addRequestNegotiation($negotiator);
+		}
+	}
+
+	/**
+	 * @param IRequestNegotiator $negotiator
+	 * @return void
+	 */
+	public function addRequestNegotiation(IRequestNegotiator $negotiator)
+	{
+		$this->requestNegotiators[] = $negotiator;
+	}
+
+	/**
+	 * @param IResponseNegotiator[] $negotiators
+	 * @return void
+	 */
+	public function addResponseNegotiations(array $negotiators)
+	{
+		foreach ($negotiators as $negotiator) {
+			$this->addRequestNegotiation($negotiator);
+		}
+	}
+
+	/**
+	 * @param IResponseNegotiator $negotiator
+	 * @return void
+	 */
+	public function addResponseNegotiation(IResponseNegotiator $negotiator)
+	{
+		$this->responseNegotiators[] = $negotiator;
 	}
 
 	/**
@@ -34,37 +89,72 @@ class ApiContentNegotiation implements IInvoker
 	 */
 	public function invoke(ApiRequest $request, ApiResponse $response, callable $next)
 	{
+		// Validation
+		if (!($request instanceof ApiDataResponse)) {
+			throw new InvalidStateException(sprintf('Given API request must be of type %s', ApiDataResponse::class));
+		}
+
+		// Should we skip negotiation?
+		if ($request->getPsr7()->getAttribute(self::ATTR_SKIP, FALSE) === TRUE) {
+			return $next($request, $response);
+		}
+
+		// 1) Request negotiation
+		if ($request->getPsr7()->getAttribute(self::ATTR_SKIP_REQUEST, FALSE) !== TRUE) {
+			$request = $this->negotiateRequest($request, $response);
+		}
+
 		// Pass to next invoker
 		$response = $next($request, $response);
 
-		// If the response is not a appropriate type of or
-		// does not have a any data, return response immediately
-		if (!($response instanceof ApiDataResponse) ||
-			!$response->isEmpty()
-		) {
-			return $response;
+		// 2) Response negotiation
+		if ($request->getPsr7()->getAttribute(self::ATTR_SKIP_RESPONSE, FALSE) !== TRUE) {
+			$response = $this->negotiateResponse($request, $response);
 		}
 
-		// Otherwise, pass to negotiator
-		return $this->negotiate($request, $response);
+		return $response;
 	}
 
 	/**
-	 * HELPERS *****************************************************************
+	 * NEGOTIATION *************************************************************
 	 */
+
+	/**
+	 * @param ApiRequest $request
+	 * @param ApiResponse $response
+	 * @return ApiRequest
+	 */
+	protected function negotiateRequest(ApiRequest $request, ApiResponse $response)
+	{
+		if (!$this->requestNegotiators) {
+			throw new InvalidStateException('Please add at least one request negotiator');
+		}
+
+		foreach ($this->requestNegotiators as $negotiator) {
+			// Pass to negotiator and check return value
+			$negotiated = $negotiator->negotiate($request, $response);
+
+			// If it's not NULL, we have an ApiRequest
+			if ($negotiated !== NULL) {
+				return $negotiated;
+			}
+		}
+
+		return $request;
+	}
 
 	/**
 	 * @param ApiRequest $request
 	 * @param ApiResponse $response
 	 * @return ApiResponse
 	 */
-	protected function negotiate(ApiRequest $request, ApiResponse $response)
+	protected function negotiateResponse(ApiRequest $request, ApiResponse $response)
 	{
-		if (!$this->negotiators) {
-			throw new InvalidStateException('Please add at least one negotiator');
+		if (!$this->responseNegotiators) {
+			throw new InvalidStateException('Please add at least one response negotiator');
 		}
 
-		foreach ($this->negotiators as $negotiator) {
+		foreach ($this->responseNegotiators as $negotiator) {
 			// Pass to negotiator and check return value
 			$negotiated = $negotiator->negotiate($request, $response);
 

@@ -2,20 +2,7 @@
 
 namespace Contributte\Api\Bridges\Middlewares\Negotiation\Transformer;
 
-interface ITransformer
+interface ITransformer extends IInTransformer, IOutTransformer
 {
-
-	/**
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	public function encode($data);
-
-
-	/**
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	public function decode($data);
 
 }

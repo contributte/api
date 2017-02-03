@@ -14,11 +14,12 @@ class ApiRouter implements IInvoker
 	const ATTR_MATCHED_PATTERN = 'C-Api-Router-Pattern';
 	const ATTR_MATCHED_REGEX = 'C-Api-Router-Regex';
 	const ATTR_MATCHED_PATH = 'C-Api-Router-Path';
+	const ATTR_MATCHED_ATTRS = 'C-Api-Router-Attrs';
 	const ATTR_MATCHED_ATTR = 'C-Api-Router-Attr';
 
 	// Special variables in URL
-	const VARIABLE_URL = 'api';
-	const VARIABLE_FORMAT = 'format';
+	const ATTR_VARIABLE_URL = 'api';
+	const ATTR_VARIABLE_FORMAT = 'format';
 
 	/** @var string */
 	protected $mask;
@@ -47,11 +48,8 @@ class ApiRouter implements IInvoker
 
 		// Handle matched point (by request)
 		if ($matched !== NULL) {
-			// Replace request by matched request
-			$request = $matched;
-
 			// Pass to next invoker
-			return $next($request, $response);
+			return $next($matched, $response);
 		}
 
 		// Pass to fallback
@@ -81,7 +79,8 @@ class ApiRouter implements IInvoker
 			$psr7 = $psr7
 				->withAttribute(self::ATTR_MATCHED_PATTERN, $route['pattern'])
 				->withAttribute(self::ATTR_MATCHED_REGEX, $route['regex'])
-				->withAttribute(self::ATTR_MATCHED_PATH, $path);
+				->withAttribute(self::ATTR_MATCHED_PATH, $path)
+				->withAttribute(self::ATTR_MATCHED_ATTRS, $match);
 
 			foreach ($route['variables'] as $variable) {
 				if (isset($match[$variable])) {
@@ -90,13 +89,13 @@ class ApiRouter implements IInvoker
 			}
 
 			// API: url attribute
-			if (isset($match[self::VARIABLE_URL])) {
-				$psr7 = $psr7->withAttribute(ApiMiddleware::ATTR_URL, $match[self::VARIABLE_URL]);
+			if (isset($match[self::ATTR_VARIABLE_URL])) {
+				$psr7 = $psr7->withAttribute(ApiMiddleware::ATTR_URL, $match[self::ATTR_VARIABLE_URL]);
 			}
 
 			// API: format attribute
-			if (isset($match[self::VARIABLE_FORMAT])) {
-				$psr7 = $psr7->withAttribute(ApiMiddleware::ATTR_FORMAT, $match[self::VARIABLE_FORMAT]);
+			if (isset($match[self::ATTR_VARIABLE_FORMAT])) {
+				$psr7 = $psr7->withAttribute(ApiMiddleware::ATTR_FORMAT, $match[self::ATTR_VARIABLE_FORMAT]);
 			}
 
 			// Replace psr7 request in this api request

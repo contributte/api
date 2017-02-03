@@ -49,7 +49,6 @@ final class EndpointParam
 	 */
 	public function setType($type)
 	{
-		// @todo validation
 		$this->type = $type;
 	}
 

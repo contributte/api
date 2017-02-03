@@ -92,12 +92,17 @@ class ApiRequest
 
 	/**
 	 * @param string $name
+	 * @param mixed $default
 	 * @return AbstractParameter
 	 */
-	public function getParameter($name)
+	public function getParameter($name, $default = NULL)
 	{
 		if (!$this->hasParameter($name)) {
-			throw new InvalidStateException('No parameter found');
+			if (func_num_args() < 2) {
+				throw new InvalidStateException('No parameter found');
+			}
+
+			return $default;
 		}
 
 		return $this->parameters[$name];

@@ -57,6 +57,7 @@ final class ArrayGenerator implements IGenerator
 					// Create endpoint param
 					$endpointParam = [
 						SchemaMapping::PARAMS_NAME => $paramName,
+						// @todo type by annotation
 						SchemaMapping::PARAMS_TYPE => EndpointParam::TYPE_SCALAR,
 					];
 
@@ -64,6 +65,7 @@ final class ArrayGenerator implements IGenerator
 					$endpoint[SchemaMapping::PARAMS][$paramName] = $endpointParam;
 
 					// Replace param in mask
+					// @todo pattern by param type
 					$endpoint[SchemaMapping::PATTERN] = str_replace($wholeParam, sprintf('(?P<%s>[^/]+)', $paramName), $endpoint[SchemaMapping::PATTERN]);
 				}
 

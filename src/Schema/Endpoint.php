@@ -2,11 +2,22 @@
 
 namespace Contributte\Api\Schema;
 
+use Contributte\Api\Exception\Logical\InvalidArgumentException;
+
 final class Endpoint
 {
 
-	/** @var string */
-	private $method;
+	/** @var array */
+	private static $allowed = [
+		'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'OPTION',
+	];
+
+	/** @var string[] */
+	private $methods = [];
 
 	/** @var string */
 	private $mask;
@@ -21,20 +32,46 @@ final class Endpoint
 	private $params;
 
 	/**
-	 * @return string
+	 * @return string[]
 	 */
-	public function getMethod()
+	public function getMethods()
 	{
-		return $this->method;
+		return $this->methods;
+	}
+
+	/**
+	 * @param string[] $methods
+	 * @return void
+	 */
+	public function setMethods(array $methods)
+	{
+		foreach ($methods as $method) {
+			$this->addMethod($method);
+		}
 	}
 
 	/**
 	 * @param string $method
 	 * @return void
 	 */
-	public function setMethod($method)
+	public function addMethod($method)
 	{
-		$this->method = $method;
+		$method = strtoupper($method);
+
+		if (!in_array($method, self::$allowed)) {
+			throw new InvalidArgumentException(sprintf('Method %s is not allowed', $method));
+		}
+
+		$this->methods[] = $method;
+	}
+
+	/**
+	 * @param string $method
+	 * @return bool
+	 */
+	public function hasMethod($method)
+	{
+		return in_array(strtoupper($method), $this->methods);
 	}
 
 	/**
@@ -120,7 +157,9 @@ final class Endpoint
 	 */
 	public function setParams(array $params)
 	{
-		$this->params = $params;
+		foreach ($params as $param) {
+			$this->addParam($param);
+		}
 	}
 
 }

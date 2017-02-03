@@ -9,6 +9,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 use Contributte\Api\Utils\Helpers;
 use Tester\Assert;
 
+// Helpers::slashless
 test(function () {
 	Assert::equal('/', Helpers::slashless('/'));
 	Assert::equal('/', Helpers::slashless('//'));
