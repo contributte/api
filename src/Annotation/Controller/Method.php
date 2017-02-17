@@ -12,29 +12,37 @@ use Doctrine\Common\Annotations\AnnotationException;
 final class Method
 {
 
-	/** @var string */
-	private $method;
+	/** @var array */
+	private $methods = [];
 
 	/**
 	 * @param array $values
 	 */
 	public function __construct(array $values)
 	{
-		if (isset($values['value']) && is_string($values['value'])) {
-			$this->method = $values['value'];
+		if (isset($values['value'])) {
+			if (is_array($values['value'])) {
+				$this->methods = $values['value'];
+			} else if (is_string($values['value'])) {
+				$this->methods = [$values['value']];
+			} else {
+				throw new AnnotationException('Invalid method given');
+			}
+		} else if (isset($values['methods'])) {
+			$this->methods = $values['methods'];
 		} else if (isset($values['method'])) {
-			$this->method = $values['method'];
+			$this->methods = [$values['method']];
 		} else {
 			throw new AnnotationException('No method given');
 		}
 	}
 
 	/**
-	 * @return string
+	 * @return array
 	 */
-	public function getMethod()
+	public function getMethods()
 	{
-		return $this->method;
+		return $this->methods;
 	}
 
 }

@@ -11,8 +11,8 @@ final class SchemaMethod
 	/** @var string */
 	private $path;
 
-	/** @var string */
-	private $method;
+	/** @var array */
+	private $methods = [];
 
 	/**
 	 * @param string $name
@@ -50,18 +50,38 @@ final class SchemaMethod
 	/**
 	 * @return string
 	 */
-	public function getMethod()
+	public function getMethods()
 	{
-		return $this->method;
+		return $this->methods;
+	}
+
+	/**
+	 * @param array $methods
+	 * @return void
+	 */
+	public function setMethods(array $methods)
+	{
+		$this->methods = $methods;
 	}
 
 	/**
 	 * @param string $method
 	 * @return void
 	 */
-	public function setMethod($method)
+	public function addMethod($method)
 	{
-		$this->method = $method;
+		$this->methods[] = strtoupper($method);
+	}
+
+	/**
+	 * @param string|array $methods
+	 * @return void
+	 */
+	public function appendMethods(array $methods)
+	{
+		foreach ($methods as $method) {
+			$this->addMethod($method);
+		}
 	}
 
 }

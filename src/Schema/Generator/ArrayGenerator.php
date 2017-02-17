@@ -42,7 +42,7 @@ final class ArrayGenerator implements IGenerator
 						SchemaMapping::HANDLER_CLASS => $controller->getClass(),
 						SchemaMapping::HANDLER_METHOD => $method->getName(),
 					],
-					SchemaMapping::METHOD => $method->getMethod(),
+					SchemaMapping::METHODS => $method->getMethods(),
 					SchemaMapping::ROOT_PATH => $controller->getRootPath(),
 					SchemaMapping::PATH => $method->getPath(),
 					SchemaMapping::MASK => $mask,

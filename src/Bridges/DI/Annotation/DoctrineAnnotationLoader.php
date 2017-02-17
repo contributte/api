@@ -89,14 +89,14 @@ final class DoctrineAnnotationLoader extends AnnotationLoader
 			// Iterate over all method annotations
 			foreach ($annotations as $annotation) {
 				// Parse @Path =========================
-				if (get_class($annotation) == Path::class) {
+				if (get_class($annotation) === Path::class) {
 					$schemaMethod->setPath($annotation->getPath());
 					continue;
 				}
 
 				// Parse @Method =======================
-				if (get_class($annotation) == Method::class) {
-					$schemaMethod->setMethod($annotation->getMethod());
+				if (get_class($annotation) === Method::class) {
+					$schemaMethod->appendMethods($annotation->getMethods());
 					continue;
 				}
 			}

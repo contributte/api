@@ -36,6 +36,5 @@ test(function () {
 	$schemaBuilder = $loader->load();
 
 	Assert::type(SchemaBuilder::class, $schemaBuilder);
-
 	Mockery::close();
 });

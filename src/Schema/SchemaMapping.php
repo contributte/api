@@ -9,7 +9,7 @@ interface SchemaMapping
 	const HANDLER_TYPE = 'type';
 	const HANDLER_CLASS = 'class';
 	const HANDLER_METHOD = 'method';
-	const METHOD = 'method';
+	const METHODS = 'method';
 	const ROOT_PATH = 'rootPath';
 	const PATH = 'path';
 	const MASK = 'mask';

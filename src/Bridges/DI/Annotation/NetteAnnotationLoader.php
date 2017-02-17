@@ -86,7 +86,7 @@ final class NetteAnnotationLoader extends AnnotationLoader
 
 				// Parse @Method =======================
 				if ($this->compare($name, 'Method')) {
-					$schemaMethod->setMethod($annotation[0]);
+					$schemaMethod->appendMethods((array) $annotation[0]);
 					continue;
 				}
 			}
