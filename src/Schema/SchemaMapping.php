@@ -13,7 +13,7 @@ interface SchemaMapping
 	const ROOT_PATH = 'rootPath';
 	const PATH = 'path';
 	const MASK = 'mask';
-	const PARAMS = 'params';
+	const PARAMETERS = 'parameters';
 	const PATTERN = 'pattern';
 	const PARAMS_NAME = 'name';
 	const PARAMS_TYPE = 'type';

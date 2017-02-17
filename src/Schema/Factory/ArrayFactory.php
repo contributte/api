@@ -43,7 +43,7 @@ final class ArrayFactory implements IFactory
 			$endpoint->setMask($route[SchemaMapping::MASK]);
 			$endpoint->setPattern($route[SchemaMapping::PATTERN]);
 
-			foreach ($route[SchemaMapping::PARAMS] as $p) {
+			foreach ($route[SchemaMapping::PARAMETERS] as $p) {
 				$param = new EndpointParameter();
 				$param->setName($p[SchemaMapping::PARAMS_NAME]);
 				$param->setType(EndpointParameter::TYPE_SCALAR);

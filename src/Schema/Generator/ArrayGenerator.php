@@ -46,7 +46,7 @@ final class ArrayGenerator implements IGenerator
 					SchemaMapping::ROOT_PATH => $controller->getRootPath(),
 					SchemaMapping::PATH => $method->getPath(),
 					SchemaMapping::MASK => $mask,
-					SchemaMapping::PARAMS => [],
+					SchemaMapping::PARAMETERS => [],
 					SchemaMapping::PATTERN => $mask,
 				];
 
@@ -63,7 +63,7 @@ final class ArrayGenerator implements IGenerator
 					];
 
 					// Append to params
-					$endpoint[SchemaMapping::PARAMS][$paramName] = $endpointParam;
+					$endpoint[SchemaMapping::PARAMETERS][$paramName] = $endpointParam;
 
 					// Replace param in mask
 					// @todo pattern by param type
