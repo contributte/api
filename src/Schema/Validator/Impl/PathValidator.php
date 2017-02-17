@@ -57,6 +57,7 @@ class PathValidator implements IValidator
 
 	/**
 	 * @param SchemaBuilder $builder
+	 * @return void
 	 */
 	protected function validateSlashes(SchemaBuilder $builder)
 	{
@@ -85,6 +86,7 @@ class PathValidator implements IValidator
 
 	/**
 	 * @param SchemaBuilder $builder
+	 * @return void
 	 */
 	protected function validateRegex(SchemaBuilder $builder)
 	{

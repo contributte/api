@@ -23,6 +23,7 @@ class RootPathValidator implements IValidator
 
 	/**
 	 * @param SchemaBuilder $builder
+	 * @return void
 	 */
 	protected function validateDuplicities(SchemaBuilder $builder)
 	{
@@ -43,6 +44,7 @@ class RootPathValidator implements IValidator
 
 	/**
 	 * @param SchemaBuilder $builder
+	 * @return void
 	 */
 	protected function validateSlashes(SchemaBuilder $builder)
 	{
@@ -69,6 +71,7 @@ class RootPathValidator implements IValidator
 
 	/**
 	 * @param SchemaBuilder $builder
+	 * @return void
 	 */
 	protected function validateRegex(SchemaBuilder $builder)
 	{
