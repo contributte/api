@@ -11,7 +11,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Nette\Reflection\ClassType;
 
-final class DoctrineAnnotationLoader extends AbstractLoader implements ILoader
+final class DoctrineAnnotationLoader extends AnnotationLoader
 {
 
 	/** @var AnnotationReader */

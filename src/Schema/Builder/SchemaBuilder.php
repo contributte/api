@@ -2,8 +2,6 @@
 
 namespace Contributte\Api\Schema\Builder;
 
-use Contributte\Api\Schema\Generator\IGenerator;
-
 final class SchemaBuilder
 {
 
@@ -28,15 +26,6 @@ final class SchemaBuilder
 	public function getControllers()
 	{
 		return $this->controllers;
-	}
-
-	/**
-	 * @param IGenerator $generator
-	 * @return mixed
-	 */
-	public function generate(IGenerator $generator)
-	{
-		return $generator->generate($this->controllers);
 	}
 
 }

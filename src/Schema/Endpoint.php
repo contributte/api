@@ -29,7 +29,7 @@ final class Endpoint
 	private $handler;
 
 	/** @var EndpointParameter[] */
-	private $parameters;
+	private $parameters = [];
 
 	/**
 	 * @return string[]
@@ -137,7 +137,7 @@ final class Endpoint
 	 * @param string $name
 	 * @return bool
 	 */
-	public function hasParam($name)
+	public function hasParameter($name)
 	{
 		return isset($this->parameters[$name]);
 	}

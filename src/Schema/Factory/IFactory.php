@@ -4,7 +4,7 @@ namespace Contributte\Api\Schema\Factory;
 
 use Contributte\Api\Schema\ApiSchema;
 
-interface ISchemaFactory
+interface IFactory
 {
 
 	/**

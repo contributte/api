@@ -7,26 +7,30 @@ use Contributte\Api\Bridges\DI\Annotation\NetteAnnotationLoader;
 use Contributte\Api\Bridges\Tracy\Panel\ApiPanel\ApiPanel;
 use Contributte\Api\Dispatcher\ApiDispatcher;
 use Contributte\Api\Dispatcher\IDispatcher;
+use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Router\ApiRouter;
 use Contributte\Api\Router\IRouter;
 use Contributte\Api\Schema\ApiSchema;
-use Contributte\Api\Schema\Factory\ArraySchemaFactory;
+use Contributte\Api\Schema\Factory\ArrayFactory;
 use Contributte\Api\Schema\Generator\ArrayGenerator;
 use Contributte\Api\UI\IHandler;
 use Contributte\Api\UI\ServiceHandler;
 use Nette\DI\CompilerExtension;
-use Nette\InvalidStateException;
 use Nette\PhpGenerator\ClassType;
 use Nette\Utils\Validators;
 
-final class ApiAnnotationsExtension extends CompilerExtension
+class ApiExtension extends CompilerExtension
 {
+
+	// Loader types
+	const LOADER = ['annotations', 'neon', 'php'];
 
 	/** @var array */
 	private $defaults = [
-		'debugger' => TRUE,
-		'annotation' => [
-			'loader' => DoctrineAnnotationLoader::class,
+		'debug' => FALSE,
+		'loader' => [
+			'type' => 'annotations',
+			'impl' => DoctrineAnnotationLoader::class,
 		],
 	];
 
@@ -65,7 +69,17 @@ final class ApiAnnotationsExtension extends CompilerExtension
 	 */
 	public function beforeCompile()
 	{
-		$this->loadAnnotations();
+		$config = $this->validateConfig($this->defaults);
+
+		if ($config['loader']['type'] === 'annotations') {
+			$this->loadAnnotations();
+		} else if ($config['loader']['type'] === 'neon') {
+			throw new InvalidStateException('Not implemented');
+		} else if ($config['loader']['type'] === 'php') {
+			throw new InvalidStateException('Not implemented');
+		} else {
+			throw new InvalidStateException('Unknown loader type');
+		}
 	}
 
 	/**
@@ -76,53 +90,44 @@ final class ApiAnnotationsExtension extends CompilerExtension
 	{
 		$config = $this->validateConfig($this->defaults);
 
-		if ($config['debugger'] === TRUE) {
+		if ($config['debug'] === TRUE) {
 			$class->getMethod('initialize')
 				->addBody('$this->getService(?)->addPanel($this->getByType(?));', ['tracy.bar', ApiPanel::class]);
 		}
 	}
 
 	/**
-	 * Load annotations
+	 * Create annotation loaders and create ApiSchema
 	 *
 	 * @return void
 	 */
-	private function loadAnnotations()
+	protected function loadAnnotations()
 	{
 		$config = $this->validateConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
 
-		// Validation
-		Validators::assertField($config['annotation'], 'loader', 'type');
+		// Validation loader
+		Validators::assertField($config['loader'], 'impl', 'type');
 
-		// Loaders
-		if ($config['annotation']['loader'] === DoctrineAnnotationLoader::class) {
-
+		// Create annotation
+		if ($config['loader']['impl'] === DoctrineAnnotationLoader::class) {
 			// Doctrine-like @annotations
 			$loader = new DoctrineAnnotationLoader($builder);
-			$schema = $loader->load()->generate(new ArrayGenerator());
-
-			$builder->addDefinition($this->prefix('schemaFactory'))
-				->setClass(ArraySchemaFactory::class, [$schema]);
-
-			$builder->getDefinition($this->prefix('schema'))
-				->setFactory('@' . $this->prefix('schemaFactory') . '::create');
-
-		} else if ($config['annotation']['loader'] === NetteAnnotationLoader::class) {
-
+		} else if ($config['loader']['impl'] === NetteAnnotationLoader::class) {
 			// Nette-like-simple @annotations
 			$loader = new NetteAnnotationLoader($builder);
-			$schema = $loader->load()->generate(new ArrayGenerator());
-
-			$builder->addDefinition($this->prefix('schemaFactory'))
-				->setClass(ArraySchemaFactory::class, [$schema]);
-
-			$builder->getDefinition($this->prefix('schema'))
-				->setFactory('@' . $this->prefix('schemaFactory') . '::create');
-
 		} else {
-			throw new InvalidStateException('Uknown annotation loader');
+			throw new InvalidStateException('Unknown annotation loader');
 		}
+
+		$generator = new ArrayGenerator();
+		$schema = $generator->generate($loader->load());
+
+		$builder->addDefinition($this->prefix('schemaFactory'))
+			->setClass(ArrayFactory::class, [$schema]);
+
+		$builder->getDefinition($this->prefix('schema'))
+			->setFactory('@' . $this->prefix('schemaFactory') . '::create');
 	}
 
 }

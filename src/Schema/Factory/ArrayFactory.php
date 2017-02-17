@@ -8,7 +8,7 @@ use Contributte\Api\Schema\EndpointHandler;
 use Contributte\Api\Schema\EndpointParameter;
 use Contributte\Api\Schema\SchemaMapping;
 
-final class ArraySchemaFactory implements ISchemaFactory
+final class ArrayFactory implements IFactory
 {
 
 	/** @var array */

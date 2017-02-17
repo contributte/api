@@ -7,7 +7,7 @@ use Contributte\Api\Schema\Builder\SchemaController;
 use Nette\Reflection\ClassType;
 use Nette\Utils\Strings;
 
-final class NetteAnnotationLoader extends AbstractLoader implements ILoader
+final class NetteAnnotationLoader extends AnnotationLoader
 {
 
 	/**

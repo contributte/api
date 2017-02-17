@@ -2,15 +2,15 @@
 
 namespace Contributte\Api\Schema\Generator;
 
-use Contributte\Api\Schema\Builder\SchemaController;
+use Contributte\Api\Schema\Builder\SchemaBuilder;
 
 interface IGenerator
 {
 
 	/**
-	 * @param SchemaController[] $controllers
+	 * @param SchemaBuilder $builder
 	 * @return mixed
 	 */
-	public function generate(array $controllers);
+	public function generate(SchemaBuilder $builder);
 
 }

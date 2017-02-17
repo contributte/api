@@ -2,7 +2,7 @@
 
 namespace Contributte\Api\Schema\Generator;
 
-use Contributte\Api\Schema\Builder\SchemaController;
+use Contributte\Api\Schema\Builder\SchemaBuilder;
 use Contributte\Api\Schema\EndpointHandler;
 use Contributte\Api\Schema\EndpointParameter;
 use Contributte\Api\Schema\SchemaMapping;
@@ -13,11 +13,12 @@ final class ArrayGenerator implements IGenerator
 {
 
 	/**
-	 * @param SchemaController[] $controllers
+	 * @param SchemaBuilder $builder
 	 * @return array
 	 */
-	public function generate(array $controllers)
+	public function generate(SchemaBuilder $builder)
 	{
+		$controllers = $builder->getControllers();
 		$schema = [];
 
 		// Iterate over all controllers

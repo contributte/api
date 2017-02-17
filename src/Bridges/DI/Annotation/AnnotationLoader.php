@@ -2,11 +2,12 @@
 
 namespace Contributte\Api\Bridges\DI\Annotation;
 
+use Contributte\Api\Bridges\DI\Loader\ILoader;
 use Contributte\Api\UI\Controller\IController;
 use Nette\DI\ContainerBuilder;
 use Nette\DI\ServiceDefinition;
 
-abstract class AbstractLoader
+abstract class AnnotationLoader implements ILoader
 {
 
 	/** @var ContainerBuilder */
