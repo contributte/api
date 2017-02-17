@@ -10,14 +10,20 @@ use Psr\Http\Message\ServerRequestInterface;
 class ApiRequest
 {
 
+	// Attributes
+	const ATTR_ROUTER_VARS = 'Router-Vars';
+
 	/** @var ServerRequestInterface */
 	protected $request;
 
 	/** @var Endpoint */
 	protected $endpoint;
 
-	/** @var AbstractParameter[] */
+	/** @var array */
 	protected $parameters = [];
+
+	/** @var array */
+	protected $attributes = [];
 
 	/**
 	 * PSR-7 *******************************************************************
@@ -72,13 +78,28 @@ class ApiRequest
 	 */
 
 	/**
-	 * @param string $name
-	 * @param AbstractParameter $parameter
-	 * @return void
+	 * @param array $parameters
+	 * @return static
 	 */
-	public function addParameter($name, AbstractParameter $parameter)
+	public function withParameters(array $parameters)
 	{
-		$this->parameters[$name] = $parameter;
+		$new = clone $this;
+		$new->parameters = $parameters;
+
+		return $new;
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $value
+	 * @return static
+	 */
+	public function withParameter($name, $value)
+	{
+		$new = clone $this;
+		$new->parameters[$name] = $value;
+
+		return $new;
 	}
 
 	/**
@@ -114,6 +135,70 @@ class ApiRequest
 	public function getParameters()
 	{
 		return $this->parameters;
+	}
+
+	/**
+	 * ATTRIBUTES **************************************************************
+	 */
+
+	/**
+	 * @param array $attributes
+	 * @return static
+	 */
+	public function withAttributes(array $attributes)
+	{
+		$new = clone $this;
+		$new->attributes = $attributes;
+
+		return $new;
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $value
+	 * @return static
+	 */
+	public function withAttribute($name, $value)
+	{
+		$new = clone $this;
+		$new->attributes[$name] = $value;
+
+		return $new;
+	}
+
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public function hasAttribute($name)
+	{
+		return isset($this->attributes[$name]);
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $default
+	 * @return AbstractParameter
+	 */
+	public function getAttribute($name, $default = NULL)
+	{
+		if (!$this->hasAttribute($name)) {
+			if (func_num_args() < 2) {
+				throw new InvalidStateException('No attribute found');
+			}
+
+			return $default;
+		}
+
+		return $this->attributes[$name];
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAttributes()
+	{
+		return $this->attributes;
 	}
 
 }

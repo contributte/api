@@ -42,7 +42,7 @@ class ApiResponse
 	 * @param int $code
 	 * @return static
 	 */
-	public function status($code)
+	public function withStatus($code)
 	{
 		$this->response = $this->response->withStatus($code);
 

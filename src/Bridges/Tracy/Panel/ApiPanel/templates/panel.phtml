@@ -1,3 +1,6 @@
+<?php
+/** @var Contributte\Api\Schema\ApiSchema $schema */
+?>
 <h1>API</h1>
 
 <div class="tracy-inner">
@@ -10,13 +13,13 @@
         </tr>
         <?php foreach ($schema->getEndpoints() as $endpoint) { ?>
             <tr>
-                <td><?= $endpoint->getMethod() ?></td>
+                <td><?= implode(',', $endpoint->getMethods()) ?></td>
                 <td><?= $endpoint->getMask() ?></td>
                 <td><?= $endpoint->getHandler()->getClass() ?> :: <?= $endpoint->getHandler()->getMethod() ?></td>
                 <td>
-                    <?php if (count($endpoint->getParams()) > 0) { ?>
+                    <?php if (count($endpoint->getParameters()) > 0) { ?>
                         <table>
-                            <?php foreach ($endpoint->getParams() as $param) { ?>
+                            <?php foreach ($endpoint->getParameters() as $param) { ?>
                                 <tr>
                                     <td><?= $param->getName() ?></td>
                                     <td><?= $param->getType() ?></td>

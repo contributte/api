@@ -58,3 +58,6 @@ middlewares:
 		- @middleware.basepath
 		- @middleware.router
 ```
+
+@todo:
+- zdokumentovat automaticke nacitani Controlleru pres IController interface

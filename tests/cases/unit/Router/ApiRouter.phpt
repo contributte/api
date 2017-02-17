@@ -4,13 +4,13 @@
  * Test: Router/ApiRouter
  */
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Router\ApiRouter;
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Endpoint;
-use Contributte\Api\Schema\EndpointParam;
+use Contributte\Api\Schema\EndpointParameter;
 use Contributte\Psr7\Psr7ServerRequest;
 use Tester\Assert;
 
@@ -20,9 +20,9 @@ test(function () {
 	$endpoint->addMethod('GET');
 	$endpoint->setPattern('#^/users/(?P<id>[^/]+)#');
 
-	$id = new EndpointParam();
+	$id = new EndpointParameter();
 	$id->setName('id');
-	$endpoint->addParam($id);
+	$endpoint->addParameter($id);
 
 	$schema = new ApiSchema();
 	$schema->addEndpoint($endpoint);
@@ -33,9 +33,10 @@ test(function () {
 	$router = new ApiRouter($schema);
 	$matched = $router->match($request);
 
+	var_dump($matched->getParameters());
 	Assert::type(ApiRequest::class, $matched);
 	Assert::true($matched->hasParameter('id'));
-	Assert::equal('22', $matched->getParameter('id')->getValue());
+	Assert::equal('22', $matched->getParameter('id'));
 });
 
 // Match parameters {foo}/{bar}
@@ -44,13 +45,13 @@ test(function () {
 	$endpoint->addMethod('GET');
 	$endpoint->setPattern('#^/users/(?P<foo>[^/]+)/(?P<bar>[^/]+)#');
 
-	$foo = new EndpointParam();
+	$foo = new EndpointParameter();
 	$foo->setName('foo');
-	$endpoint->addParam($foo);
+	$endpoint->addParameter($foo);
 
-	$bar = new EndpointParam();
+	$bar = new EndpointParameter();
 	$bar->setName('bar');
-	$endpoint->addParam($bar);
+	$endpoint->addParameter($bar);
 
 	$schema = new ApiSchema();
 	$schema->addEndpoint($endpoint);
@@ -63,7 +64,7 @@ test(function () {
 
 	Assert::type(ApiRequest::class, $matched);
 	Assert::true($matched->hasParameter('foo'));
-	Assert::equal('1', $matched->getParameter('foo')->getValue());
+	Assert::equal('1', $matched->getParameter('foo'));
 	Assert::true($matched->hasParameter('bar'));
-	Assert::equal('baz', $matched->getParameter('bar')->getValue());
+	Assert::equal('baz', $matched->getParameter('bar'));
 });

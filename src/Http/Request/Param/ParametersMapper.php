@@ -3,15 +3,15 @@
 namespace Contributte\Api\Http\Request\Param;
 
 use Contributte\Api\Exception\Logical\InvalidStateException;
-use Contributte\Api\Schema\EndpointParam;
+use Contributte\Api\Schema\EndpointParameter;
 
 class ParametersMapper
 {
 
 	/** @var array */
 	public static $mapping = [
-		EndpointParam::TYPE_SCALAR => ScalarParameter::class,
-		EndpointParam::TYPE_STRING => StringParameter::class,
+		EndpointParameter::TYPE_SCALAR => ScalarParameter::class,
+		EndpointParameter::TYPE_STRING => StringParameter::class,
 	];
 
 	/**
@@ -27,7 +27,7 @@ class ParametersMapper
 
 		/** @var AbstractParameter $param */
 		$param = new self::$mapping[$type]();
-		$param->parse($value);
+		$param->setValue($value);
 
 		return $param;
 	}

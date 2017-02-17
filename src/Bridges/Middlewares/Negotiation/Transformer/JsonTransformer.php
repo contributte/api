@@ -17,7 +17,6 @@ class JsonTransformer implements ITransformer
 		return json_encode($data);
 	}
 
-
 	/**
 	 * Parse given data from request
 	 *

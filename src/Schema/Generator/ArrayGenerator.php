@@ -4,7 +4,7 @@ namespace Contributte\Api\Schema\Generator;
 
 use Contributte\Api\Schema\Builder\SchemaController;
 use Contributte\Api\Schema\EndpointHandler;
-use Contributte\Api\Schema\EndpointParam;
+use Contributte\Api\Schema\EndpointParameter;
 use Contributte\Api\Schema\SchemaMapping;
 use Contributte\Api\Utils\Helpers;
 use Nette\Utils\Strings;
@@ -58,7 +58,7 @@ final class ArrayGenerator implements IGenerator
 					$endpointParam = [
 						SchemaMapping::PARAMS_NAME => $paramName,
 						// @todo type by annotation
-						SchemaMapping::PARAMS_TYPE => EndpointParam::TYPE_SCALAR,
+						SchemaMapping::PARAMS_TYPE => EndpointParameter::TYPE_SCALAR,
 					];
 
 					// Append to params

@@ -8,8 +8,9 @@ use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiDataResponse;
 use Contributte\Api\Http\Response\ApiResponse;
+use Exception;
 
-class ApiContentNegotiation implements IInvoker
+class ApiContentNegotiation
 {
 
 	// Attributes in ServerRequestInterface
@@ -24,13 +25,11 @@ class ApiContentNegotiation implements IInvoker
 	protected $responseNegotiators = [];
 
 	/**
-	 * @param IRequestNegotiator[] $requestNegotiators
-	 * @param IResponseNegotiator[] $responseNegotiators
+	 * @param array $negotiators
 	 */
-	public function __construct(array $requestNegotiators = [], array $responseNegotiators = [])
+	public function __construct(array $negotiators = [])
 	{
-		$this->requestNegotiators = $requestNegotiators;
-		$this->responseNegotiators = $responseNegotiators;
+		$this->addNegotiations($negotiators);
 	}
 
 	/**
@@ -78,6 +77,22 @@ class ApiContentNegotiation implements IInvoker
 	}
 
 	/**
+	 * @param array $negotiators
+	 * @return void
+	 */
+	public function addNegotiations(array $negotiators)
+	{
+		foreach ($negotiators as $negotiator) {
+			if ($negotiator instanceof IRequestNegotiator) {
+				$this->addRequestNegotiation($negotiator);
+			}
+			if ($negotiator instanceof IResponseNegotiator) {
+				$this->addResponseNegotiation($negotiator);
+			}
+		}
+	}
+
+	/**
 	 * API - INVOKING **********************************************************
 	 */
 
@@ -87,11 +102,11 @@ class ApiContentNegotiation implements IInvoker
 	 * @param callable $next
 	 * @return ApiResponse
 	 */
-	public function invoke(ApiRequest $request, ApiResponse $response, callable $next)
+	public function __invoke(ApiRequest $request, ApiResponse $response, callable $next)
 	{
 		// Validation
-		if (!($request instanceof ApiDataResponse)) {
-			throw new InvalidStateException(sprintf('Given API request must be of type %s', ApiDataResponse::class));
+		if (!($response instanceof ApiDataResponse)) {
+			throw new InvalidStateException(sprintf('Given API response must be of type %s', ApiDataResponse::class));
 		}
 
 		// Should we skip negotiation?
@@ -104,10 +119,14 @@ class ApiContentNegotiation implements IInvoker
 			$request = $this->negotiateRequest($request, $response);
 		}
 
-		// Pass to next invoker
-		$response = $next($request, $response);
+		// 2) Pass to next invoker
+		try {
+			$response = $next($request, $response);
+		} catch (Exception $e) {
+			$response = $this->negotiateException($e, $request, $response);
+		}
 
-		// 2) Response negotiation
+		// 3) Response negotiation
 		if ($request->getPsr7()->getAttribute(self::ATTR_SKIP_RESPONSE, FALSE) !== TRUE) {
 			$response = $this->negotiateResponse($request, $response);
 		}
@@ -121,18 +140,17 @@ class ApiContentNegotiation implements IInvoker
 
 	/**
 	 * @param ApiRequest $request
-	 * @param ApiResponse $response
+	 * @param ApiDataResponse $response
 	 * @return ApiRequest
 	 */
-	protected function negotiateRequest(ApiRequest $request, ApiResponse $response)
+	protected function negotiateRequest(ApiRequest $request, ApiDataResponse $response)
 	{
-		if (!$this->requestNegotiators) {
-			throw new InvalidStateException('Please add at least one request negotiator');
-		}
+		// Early return in case of no negotiators
+		if (!$this->requestNegotiators) return $request;
 
 		foreach ($this->requestNegotiators as $negotiator) {
 			// Pass to negotiator and check return value
-			$negotiated = $negotiator->negotiate($request, $response);
+			$negotiated = $negotiator->negotiateRequest($request, $response);
 
 			// If it's not NULL, we have an ApiRequest
 			if ($negotiated !== NULL) {
@@ -145,24 +163,42 @@ class ApiContentNegotiation implements IInvoker
 
 	/**
 	 * @param ApiRequest $request
-	 * @param ApiResponse $response
+	 * @param ApiDataResponse $response
 	 * @return ApiResponse
 	 */
-	protected function negotiateResponse(ApiRequest $request, ApiResponse $response)
+	protected function negotiateResponse(ApiRequest $request, ApiDataResponse $response)
 	{
-		if (!$this->responseNegotiators) {
-			throw new InvalidStateException('Please add at least one response negotiator');
-		}
+		// Early return in case of no negotiators
+		if (!$this->responseNegotiators) return $response;
 
 		foreach ($this->responseNegotiators as $negotiator) {
 			// Pass to negotiator and check return value
-			$negotiated = $negotiator->negotiate($request, $response);
+			$negotiated = $negotiator->negotiateResponse($request, $response);
 
 			// If it's not NULL, we have an ApiResponse
 			if ($negotiated !== NULL) {
 				return $negotiated;
 			}
 		}
+
+		return $response;
+	}
+
+	/**
+	 * @param Exception $exception
+	 * @param ApiRequest $request
+	 * @param ApiDataResponse $response
+	 * @return ApiResponse
+	 */
+	protected function negotiateException(Exception $exception, ApiRequest $request, ApiDataResponse $response)
+	{
+		$response->setData([
+			'error' => $exception->getMessage(),
+			'code' => $exception->getCode(),
+		]);
+
+		$code = $exception->getCode();
+		$response->withStatus($code < 200 || $code > 504 ? 404 : $code);
 
 		return $response;
 	}

@@ -157,7 +157,7 @@ class ApiRouter implements IInvoker
 			->withStatus(404);
 
 		$psr7->getBody()
-			->write('No suitable API route found');
+			->write('No matched middleware route by given URL');
 
 		return $response->withPsr7($psr7);
 	}

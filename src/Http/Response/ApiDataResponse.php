@@ -9,22 +9,22 @@ class ApiDataResponse extends ApiResponse
 	protected $data;
 
 	/**
-	 * API *********************************************************************
+	 * DATA ********************************************************************
 	 */
 
 	/**
 	 * @return bool
 	 */
-	public function isEmpty()
+	public function hasData()
 	{
-		return $this->data === NULL;
+		return $this->data !== NULL;
 	}
 
 	/**
 	 * @param mixed $data
 	 * @return static
 	 */
-	public function write($data)
+	public function setData($data)
 	{
 		$this->data = $data;
 
@@ -37,6 +37,15 @@ class ApiDataResponse extends ApiResponse
 	public function getData()
 	{
 		return $this->data;
+	}
+
+	/**
+	 * @param array $data
+	 * @return static
+	 */
+	public function setJson(array $data)
+	{
+		return $this->setData(json_encode($data));
 	}
 
 }

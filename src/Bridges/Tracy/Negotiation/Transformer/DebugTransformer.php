@@ -11,18 +11,20 @@ class DebugTransformer implements ITransformer
 
 	/**
 	 * @param mixed $data
+	 * @param array $options
 	 * @return mixed
 	 */
-	public function encode($data)
+	public function encode($data, array $options = [])
 	{
 		return Debugger::dump($data, TRUE);
 	}
 
 	/**
 	 * @param mixed $data
+	 * @param array $options
 	 * @return mixed
 	 */
-	public function decode($data)
+	public function decode($data, array $options = [])
 	{
 		throw new InvalidStateException('No decode mode');
 	}

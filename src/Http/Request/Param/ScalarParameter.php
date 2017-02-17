@@ -11,7 +11,7 @@ class ScalarParameter extends AbstractParameter
 	 * @param mixed $value
 	 * @return void
 	 */
-	public function parse($value)
+	public function setValue($value)
 	{
 		if (!is_scalar($value)) {
 			throw new InvalidTypeException('Scalar value expected');

@@ -4,12 +4,11 @@ namespace Contributte\Api\Router;
 
 use Contributte\Api\Bridges\Middlewares\ApiMiddleware;
 use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Request\Param\ParametersMapper;
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Endpoint;
 use Contributte\Api\Utils\Regex;
 
-final class ApiRouter implements IRouter
+class ApiRouter implements IRouter
 {
 
 	/** @var ApiSchema */
@@ -62,7 +61,7 @@ final class ApiRouter implements IRouter
 		}
 
 		// Try match given URL (path) by build pattern
-		$request = $this->matchHttp($endpoint, $request);
+		$request = $this->compareUrl($endpoint, $request);
 
 		return $request;
 	}
@@ -72,7 +71,7 @@ final class ApiRouter implements IRouter
 	 * @param ApiRequest $request
 	 * @return ApiRequest|NULL
 	 */
-	protected function matchHttp(Endpoint $endpoint, ApiRequest $request)
+	protected function compareUrl(Endpoint $endpoint, ApiRequest $request)
 	{
 		// Parse url from ApiRequest
 		$psr7 = $request->getPsr7();
@@ -89,20 +88,18 @@ final class ApiRouter implements IRouter
 		// and no trailing slash at the end
 		$url = sprintf('/%s', trim($url, '/'));
 
-		// Try to match againts the pattern
+		// Try to match against the pattern
 		$match = Regex::match($url, $endpoint->getPattern());
-
-		var_dump($match);
 
 		// Skip if there's no match
 		if ($match === NULL) return NULL;
 
-		// Fill request parameters from matched URL
-		foreach ($endpoint->getParams() as $param) {
-			$request->addParameter(
-				$param->getName(),
-				ParametersMapper::parse($param->getType(), $match[$param->getName()])
-			);
+		// Fill ApiRequest attributes with matched variables
+		$request = $request->withAttribute(ApiRequest::ATTR_ROUTER_VARS, $match);
+
+		// Fill ApiRequest parameters with matched variables
+		foreach ($endpoint->getParameters() as $param) {
+			$request = $request->withParameter($param->getName(), $match[$param->getName()]);
 		}
 
 		return $request;

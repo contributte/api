@@ -10,10 +10,10 @@ final class Endpoint
 	/** @var array */
 	private static $allowed = [
 		'GET',
-    'POST',
-    'PUT',
-    'DELETE',
-    'OPTION',
+		'POST',
+		'PUT',
+		'DELETE',
+		'OPTION',
 	];
 
 	/** @var string[] */
@@ -28,8 +28,8 @@ final class Endpoint
 	/** @var EndpointHandler */
 	private $handler;
 
-	/** @var EndpointParam[] */
-	private $params;
+	/** @var EndpointParameter[] */
+	private $parameters;
 
 	/**
 	 * @return string[]
@@ -126,11 +126,11 @@ final class Endpoint
 	}
 
 	/**
-	 * @return EndpointParam[]
+	 * @return EndpointParameter[]
 	 */
-	public function getParams()
+	public function getParameters()
 	{
-		return $this->params;
+		return $this->parameters;
 	}
 
 	/**
@@ -139,26 +139,26 @@ final class Endpoint
 	 */
 	public function hasParam($name)
 	{
-		return isset($this->params[$name]);
+		return isset($this->parameters[$name]);
 	}
 
 	/**
-	 * @param EndpointParam $param
+	 * @param EndpointParameter $param
 	 * @return void
 	 */
-	public function addParam(EndpointParam $param)
+	public function addParameter(EndpointParameter $param)
 	{
-		$this->params[$param->getName()] = $param;
+		$this->parameters[$param->getName()] = $param;
 	}
 
 	/**
-	 * @param EndpointParam[] $params
+	 * @param EndpointParameter[] $parameters
 	 * @return void
 	 */
-	public function setParams(array $params)
+	public function setParameters(array $parameters)
 	{
-		foreach ($params as $param) {
-			$this->addParam($param);
+		foreach ($parameters as $param) {
+			$this->addParameter($param);
 		}
 	}
 

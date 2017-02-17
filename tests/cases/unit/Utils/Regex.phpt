@@ -4,7 +4,7 @@
  * Test: Utils/Regex
  */
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
 use Contributte\Api\Utils\Regex;
 use Tester\Assert;

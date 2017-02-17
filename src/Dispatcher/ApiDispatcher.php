@@ -2,12 +2,13 @@
 
 namespace Contributte\Api\Dispatcher;
 
+use Contributte\Api\Exception\Logical\Api\BadRequestException;
 use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiResponse;
 use Contributte\Api\Router\IRouter;
 use Contributte\Api\UI\IHandler;
 
-final class ApiDispatcher implements IDispatcher
+class ApiDispatcher implements IDispatcher
 {
 
 	/** @var IRouter */
@@ -72,14 +73,9 @@ final class ApiDispatcher implements IDispatcher
 	 */
 	protected function fallback(ApiRequest $request, ApiResponse $response)
 	{
-		$psr7 = $response
-			->getPsr7()
-			->withStatus(404);
+		throw new BadRequestException('No matched route by given URL', 404);
 
-		$psr7->getBody()
-			->write('No suitable API handler found');
-
-		return $response->withPsr7($psr7);
+		return $response;
 	}
 
 }

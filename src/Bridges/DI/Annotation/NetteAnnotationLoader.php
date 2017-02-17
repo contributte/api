@@ -20,6 +20,9 @@ final class NetteAnnotationLoader extends AbstractLoader implements ILoader
 		// Find all controllers by type (interface, annotation)
 		$controllers = $this->findControllers();
 
+		// Add controllers as dependencies to DIC
+		$this->addDependencies($controllers);
+
 		// Iterate over all controllers
 		foreach ($controllers as $def) {
 			// Create reflection

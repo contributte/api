@@ -17,14 +17,10 @@ abstract class AbstractParameter
 	}
 
 	/**
-	 * PARSING *****************************************************************
-	 */
-
-	/**
 	 * @param mixed $value
 	 * @return void
 	 */
-	abstract public function parse($value);
+	abstract public function setValue($value);
 
 	/**
 	 * MAGIC *******************************************************************

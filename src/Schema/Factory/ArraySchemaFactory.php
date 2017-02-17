@@ -5,7 +5,7 @@ namespace Contributte\Api\Schema\Factory;
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Endpoint;
 use Contributte\Api\Schema\EndpointHandler;
-use Contributte\Api\Schema\EndpointParam;
+use Contributte\Api\Schema\EndpointParameter;
 use Contributte\Api\Schema\SchemaMapping;
 
 final class ArraySchemaFactory implements ISchemaFactory
@@ -44,10 +44,10 @@ final class ArraySchemaFactory implements ISchemaFactory
 			$endpoint->setPattern($route[SchemaMapping::PATTERN]);
 
 			foreach ($route[SchemaMapping::PARAMS] as $p) {
-				$param = new EndpointParam();
+				$param = new EndpointParameter();
 				$param->setName($p[SchemaMapping::PARAMS_NAME]);
-				$param->setType(EndpointParam::TYPE_SCALAR);
-				$endpoint->addParam($param);
+				$param->setType(EndpointParameter::TYPE_SCALAR);
+				$endpoint->addParameter($param);
 			}
 
 			$schema->addEndpoint($endpoint);

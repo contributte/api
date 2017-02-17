@@ -8,7 +8,7 @@ use Contributte\Api\Http\Response\ApiResponse;
 use Exception;
 use Nette\InvalidStateException;
 
-class ApiEmitter implements IInvoker
+class ApiEmitter
 {
 
 	/** @var IDispatcher */
@@ -32,7 +32,7 @@ class ApiEmitter implements IInvoker
 	 * @param callable $next
 	 * @return ApiResponse
 	 */
-	public function invoke(ApiRequest $request, ApiResponse $response, callable $next)
+	public function __invoke(ApiRequest $request, ApiResponse $response, callable $next)
 	{
 		// Pass this API request/response objects to API dispatcher
 		$response = $this->dispatch($request, $response);

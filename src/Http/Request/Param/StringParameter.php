@@ -15,13 +15,13 @@ class StringParameter extends AbstractParameter
 	 * @param mixed $value
 	 * @return void
 	 */
-	public function parse($value)
+	public function setValue($value)
 	{
 		if (!is_string($value)) {
 			throw new InvalidTypeException('String value expected');
 		}
 
-		parent::parse(strval($value));
+		parent::setValue(strval($value));
 	}
 
 }

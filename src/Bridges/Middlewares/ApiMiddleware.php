@@ -14,11 +14,11 @@ class ApiMiddleware
 	const ATTR_URL = 'C-Api-Url';
 	const ATTR_FORMAT = 'C-Api-Format';
 
-	/** @var IInvoker[] */
+	/** @var callable[] */
 	protected $invokers;
 
 	/**
-	 * @param IInvoker[] $invokers
+	 * @param callable[] $invokers
 	 */
 	public function __construct(array $invokers)
 	{
@@ -61,7 +61,7 @@ class ApiMiddleware
 		$apiRequest = $this->createApiRequest($psr7Request, $psr7Response);
 		$apiResponse = $this->createApiResponse($psr7Request, $psr7Response);
 
-		/** @var IInvoker $invoker */
+		/** @var callable $invoker */
 		$invoker = $this->createChain($this->invokers);
 
 		// Pass this API request/response to API invokers
@@ -97,7 +97,7 @@ class ApiMiddleware
 	}
 
 	/**
-	 * @param IInvoker[] $invokers
+	 * @param callable[] $invokers
 	 * @return callable
 	 */
 	protected function createChain(array $invokers)
@@ -109,7 +109,7 @@ class ApiMiddleware
 
 		while ($invoker = array_pop($invokers)) {
 			$next = function (ApiRequest $request, ApiResponse $response) use ($invoker, $next) {
-				return $invoker->invoke($request, $response, $next);
+				return $invoker($request, $response, $next);
 			};
 		}
 

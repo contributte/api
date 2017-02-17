@@ -2,7 +2,7 @@
 
 namespace Contributte\Api\Schema;
 
-final class EndpointParam
+final class EndpointParameter
 {
 
 	const TYPE_SCALAR = 1;

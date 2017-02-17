@@ -40,12 +40,10 @@ script:
   - composer run-script qa-codesniffer
 
   # Nette\Tester
-  - composer run-script qa-tester-info
-  - composer run-script qa-tester
+  - composer run-script ci
 
   # Nette\Tester + CodeCoverage
-  - if [ "$COVERAGE" != "" ]; then composer run-script qa-tester-coverage-info; fi
-  - if [ "$COVERAGE" != "" ]; then composer run-script qa-tester-coverage; fi
+  - if [ "$COVERAGE" != "" ]; then composer run-script ci-coverage; fi
 
 after_script:
   # Coverage (Coveralls)

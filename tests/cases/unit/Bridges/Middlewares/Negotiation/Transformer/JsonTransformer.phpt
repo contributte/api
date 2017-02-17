@@ -4,7 +4,7 @@
  * Test: Bridges\Middlewares\Negotiation\Transformer\JsonTransformer
  */
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__ . '/../../../../../../bootstrap.php';
 
 use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\JsonTransformer;
 use Tester\Assert;
