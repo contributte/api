@@ -4,7 +4,6 @@ namespace Contributte\Api\Bridges\Middlewares\Negotiation;
 
 use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\IOutTransformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
-use Contributte\Api\Exception\Logical\InvalidTypeException;
 use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiDataResponse;
 
@@ -101,10 +100,6 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 	 */
 	public function negotiateResponse(ApiRequest $request, ApiDataResponse $response)
 	{
-		if (!($response instanceof ApiDataResponse)) {
-			throw new InvalidTypeException(sprintf('Response must be %s', ApiDataResponse::class));
-		}
-
 		if (!$this->transformers) {
 			throw new InvalidStateException('Please add at least one transformer');
 		}

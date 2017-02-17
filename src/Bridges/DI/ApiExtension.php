@@ -11,8 +11,12 @@ use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Router\ApiRouter;
 use Contributte\Api\Router\IRouter;
 use Contributte\Api\Schema\ApiSchema;
+use Contributte\Api\Schema\Builder\SchemaBuilder;
 use Contributte\Api\Schema\Factory\ArrayFactory;
 use Contributte\Api\Schema\Generator\ArrayGenerator;
+use Contributte\Api\Schema\Validator\Impl\PathValidator;
+use Contributte\Api\Schema\Validator\Impl\RootPathValidator;
+use Contributte\Api\Schema\Validator\SchemaBuilderValidator;
 use Contributte\Api\UI\IHandler;
 use Contributte\Api\UI\ServiceHandler;
 use Nette\DI\CompilerExtension;
@@ -70,9 +74,11 @@ class ApiExtension extends CompilerExtension
 	public function beforeCompile()
 	{
 		$config = $this->validateConfig($this->defaults);
+		$builder = $this->getContainerBuilder();
 
+		// Create loader and fill schema builder
 		if ($config['loader']['type'] === 'annotations') {
-			$this->loadAnnotations();
+			$schemaBuilder = $this->loadAnnotations();
 		} else if ($config['loader']['type'] === 'neon') {
 			throw new InvalidStateException('Not implemented');
 		} else if ($config['loader']['type'] === 'php') {
@@ -80,6 +86,19 @@ class ApiExtension extends CompilerExtension
 		} else {
 			throw new InvalidStateException('Unknown loader type');
 		}
+
+		// Validate schema
+		$this->validateSchema($schemaBuilder);
+
+		// Convert schema to array (for DI)
+		$generator = new ArrayGenerator();
+		$schema = $generator->generate($schemaBuilder);
+
+		$builder->addDefinition($this->prefix('schemaFactory'))
+			->setClass(ArrayFactory::class, [$schema]);
+
+		$builder->getDefinition($this->prefix('schema'))
+			->setFactory('@' . $this->prefix('schemaFactory') . '::create');
 	}
 
 	/**
@@ -99,7 +118,7 @@ class ApiExtension extends CompilerExtension
 	/**
 	 * Create annotation loaders and create ApiSchema
 	 *
-	 * @return void
+	 * @return SchemaBuilder
 	 */
 	protected function loadAnnotations()
 	{
@@ -120,14 +139,20 @@ class ApiExtension extends CompilerExtension
 			throw new InvalidStateException('Unknown annotation loader');
 		}
 
-		$generator = new ArrayGenerator();
-		$schema = $generator->generate($loader->load());
+		return $loader->load();
+	}
 
-		$builder->addDefinition($this->prefix('schemaFactory'))
-			->setClass(ArrayFactory::class, [$schema]);
+	/**
+	 * @param SchemaBuilder $builder
+	 * @return void
+	 */
+	protected function validateSchema($builder)
+	{
+		$validator = new SchemaBuilderValidator();
+		$validator->add(new RootPathValidator());
+		$validator->add(new PathValidator());
 
-		$builder->getDefinition($this->prefix('schema'))
-			->setFactory('@' . $this->prefix('schemaFactory') . '::create');
+		$validator->validate($builder);
 	}
 
 }

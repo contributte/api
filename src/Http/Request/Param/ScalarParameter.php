@@ -2,7 +2,7 @@
 
 namespace Contributte\Api\Http\Request\Param;
 
-use Contributte\Api\Exception\Logical\InvalidTypeException;
+use Contributte\Api\Exception\Logical\InvalidValueTypeException;
 
 class ScalarParameter extends AbstractParameter
 {
@@ -14,7 +14,7 @@ class ScalarParameter extends AbstractParameter
 	public function setValue($value)
 	{
 		if (!is_scalar($value)) {
-			throw new InvalidTypeException('Scalar value expected');
+			throw new InvalidValueTypeException('Scalar value expected');
 		}
 
 		$this->value = $value;

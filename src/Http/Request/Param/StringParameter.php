@@ -2,7 +2,7 @@
 
 namespace Contributte\Api\Http\Request\Param;
 
-use Contributte\Api\Exception\Logical\InvalidTypeException;
+use Contributte\Api\Exception\Logical\InvalidValueTypeException;
 
 class StringParameter extends AbstractParameter
 {
@@ -18,7 +18,7 @@ class StringParameter extends AbstractParameter
 	public function setValue($value)
 	{
 		if (!is_string($value)) {
-			throw new InvalidTypeException('String value expected');
+			throw new InvalidValueTypeException('String value expected');
 		}
 
 		parent::setValue(strval($value));

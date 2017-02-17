@@ -12,7 +12,7 @@ final class SchemaController
 	private $rootPath;
 
 	/** @var SchemaMethod[] */
-	private $methods;
+	private $methods = [];
 
 	/**
 	 * @param string $class
