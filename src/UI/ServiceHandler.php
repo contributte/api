@@ -28,6 +28,7 @@ final class ServiceHandler implements IHandler
 	 */
 	public function handle(ApiRequest $request, ApiResponse $response)
 	{
+		// @todo RequestParamDecorator!
 		$handler = $request->getEndpoint()->getHandler();
 
 		// Find handler in DI container by class

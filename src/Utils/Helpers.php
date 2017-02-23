@@ -2,8 +2,6 @@
 
 namespace Contributte\Api\Utils;
 
-use Nette\Utils\Strings;
-
 final class Helpers
 {
 
@@ -13,7 +11,7 @@ final class Helpers
 	 */
 	public static function slashless($str)
 	{
-		return Strings::replace($str, '#/{2,}#', '/');
+		return Regex::replace($str, '#/{2,}#', '/');
 	}
 
 }

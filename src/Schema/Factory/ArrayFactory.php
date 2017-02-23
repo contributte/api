@@ -39,7 +39,7 @@ final class ArrayFactory implements IFactory
 
 			$endpoint = new Endpoint();
 			$endpoint->setHandler($handler);
-			$endpoint->addMethod($route[SchemaMapping::METHOD]);
+			$endpoint->setMethods($route[SchemaMapping::METHODS]);
 			$endpoint->setMask($route[SchemaMapping::MASK]);
 			$endpoint->setPattern($route[SchemaMapping::PATTERN]);
 

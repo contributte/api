@@ -7,7 +7,7 @@ use Contributte\Api\Schema\EndpointHandler;
 use Contributte\Api\Schema\EndpointParameter;
 use Contributte\Api\Schema\SchemaMapping;
 use Contributte\Api\Utils\Helpers;
-use Nette\Utils\Strings;
+use Contributte\Api\Utils\Regex;
 
 final class ArrayGenerator implements IGenerator
 {
@@ -31,6 +31,8 @@ final class ArrayGenerator implements IGenerator
 				if (empty($method->getPath())) continue;
 
 				// Build full mask (@RootPath + @Path)
+				// without duplicated slashes (//)
+				// and without trailing slash at the end
 				$mask = '/' . $controller->getRootPath() . '/' . $method->getPath();
 				$mask = Helpers::slashless($mask);
 				$mask = rtrim($mask, '/');
@@ -51,9 +53,8 @@ final class ArrayGenerator implements IGenerator
 				];
 
 				// Collect variable parameters
-				$params = Strings::matchAll($mask, '#{(.+)}#U');
-				foreach ($params as $param) {
-					list ($wholeParam, $paramName) = $param;
+				$pattern = Regex::replaceCallback($mask, '#({([a-zA-Z0-9\-_]+)})#U', function ($matches) use ($endpoint) {
+					list($whole, $variable, $variableName) = $matches;
 
 					// Create endpoint param
 					$endpointParam = [
@@ -68,12 +69,12 @@ final class ArrayGenerator implements IGenerator
 					// Replace param in mask
 					// @todo pattern by param type
 					$endpoint[SchemaMapping::PATTERN] = str_replace($wholeParam, sprintf('(?P<%s>[^/]+)', $paramName), $endpoint[SchemaMapping::PATTERN]);
-				}
+				});
 
 				// Build final regex pattern
-				$endpoint[SchemaMapping::PATTERN] = sprintf('#^%s$#', $endpoint[SchemaMapping::PATTERN]);
+				$endpoint[SchemaMapping::PATTERN] = sprintf('#%s$/?\z#A', $pattern);
 
-				// Append to scheme
+				// Append to schema
 				$schema[$mask] = $endpoint;
 			}
 		}

@@ -3,10 +3,10 @@
 namespace Contributte\Api\Bridges\Middlewares;
 
 use Contributte\Api\Dispatcher\IDispatcher;
+use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiResponse;
 use Exception;
-use Nette\InvalidStateException;
 
 class ApiEmitter
 {

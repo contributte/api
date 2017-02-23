@@ -4,8 +4,8 @@ namespace Contributte\Api\Bridges\DI\Annotation;
 
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 use Contributte\Api\Schema\Builder\SchemaController;
+use Contributte\Api\Utils\Regex;
 use Nette\Reflection\ClassType;
-use Nette\Utils\Strings;
 
 final class NetteAnnotationLoader extends AnnotationLoader
 {
@@ -104,7 +104,7 @@ final class NetteAnnotationLoader extends AnnotationLoader
 	 */
 	private function compare($annotation, $expected)
 	{
-		return Strings::match(strtolower($annotation), sprintf('#%s$$#U', strtolower($expected))) !== NULL;
+		return Regex::match(strtolower($annotation), sprintf('#%s$$#U', strtolower($expected))) !== NULL;
 	}
 
 }
