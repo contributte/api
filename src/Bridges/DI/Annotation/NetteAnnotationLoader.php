@@ -55,7 +55,7 @@ final class NetteAnnotationLoader extends AnnotationLoader
 		foreach ($class->getAnnotations() as $name => $annotation) {
 			// Parse @RootPath
 			if ($this->compare($name, 'RootPath')) {
-				$controller->setRootPath($annotation[0]);
+				$controller->setRootPath((string) $annotation[0]);
 				continue;
 			}
 		}
@@ -80,7 +80,7 @@ final class NetteAnnotationLoader extends AnnotationLoader
 
 				// Parse @Path =========================
 				if ($this->compare($name, 'Path')) {
-					$schemaMethod->setPath($annotation[0]);
+					$schemaMethod->setPath((string) $annotation[0]);
 					continue;
 				}
 

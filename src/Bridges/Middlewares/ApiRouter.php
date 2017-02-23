@@ -7,7 +7,7 @@ use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiResponse;
 use Contributte\Api\Utils\Regex;
 
-class ApiRouter implements IInvoker
+class ApiRouter
 {
 
 	// Attributes in ServerRequestInterface
@@ -63,7 +63,7 @@ class ApiRouter implements IInvoker
 	/**
 	 * @param ApiRequest $request
 	 * @param ApiResponse $response
-	 * @return ApiRequest
+	 * @return ApiRequest|NULL
 	 */
 	protected function match(ApiRequest $request, ApiResponse $response)
 	{

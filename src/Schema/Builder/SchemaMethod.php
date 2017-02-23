@@ -11,7 +11,7 @@ final class SchemaMethod
 	/** @var string */
 	private $path;
 
-	/** @var array */
+	/** @var string[] */
 	private $methods = [];
 
 	/**
@@ -48,7 +48,7 @@ final class SchemaMethod
 	}
 
 	/**
-	 * @return string
+	 * @return string[]
 	 */
 	public function getMethods()
 	{
@@ -56,7 +56,7 @@ final class SchemaMethod
 	}
 
 	/**
-	 * @param array $methods
+	 * @param string[] $methods
 	 * @return void
 	 */
 	public function setMethods(array $methods)
@@ -74,7 +74,7 @@ final class SchemaMethod
 	}
 
 	/**
-	 * @param string|array $methods
+	 * @param string|string[] $methods
 	 * @return void
 	 */
 	public function appendMethods(array $methods)

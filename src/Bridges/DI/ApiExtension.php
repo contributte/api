@@ -75,6 +75,7 @@ class ApiExtension extends CompilerExtension
 	{
 		$config = $this->validateConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
+		$schemaBuilder = NULL;
 
 		// Create loader and fill schema builder
 		if ($config['loader']['type'] === 'annotations') {

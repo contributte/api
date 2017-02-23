@@ -63,7 +63,7 @@ class ApiContentNegotiation
 	public function addResponseNegotiations(array $negotiators)
 	{
 		foreach ($negotiators as $negotiator) {
-			$this->addRequestNegotiation($negotiator);
+			$this->addResponseNegotiation($negotiator);
 		}
 	}
 
