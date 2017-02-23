@@ -32,17 +32,16 @@ composer require contributte/api
 
 ## Prolog
 
-This really powerful annotation based API library is build on top of the PSR-7 standard. It reuses immutable `Request` & `Response` objects. 
-It's well known that in Nette applications are an `alfa` and an `omega` [Presenters](https://api.nette.org/2.4/Nette.Application.UI.Presenter.html).
-The presenters are not very suitable for API request.
+This really powerful annotation-based API library is build on top of the PSR-7 standard. It reuses immutable `Request` & `Response` objects. 
+It's well known that [Presenters](https://api.nette.org/2.4/Nette.Application.UI.Presenter.html) are the `alpha` and the `omega` in Nette applications.
+The presenters are not very suitable for API requests.
 
-We've took an idea from Java (Spring Framework) and many others and together we've created Controller-based API. With full annotation support.
+We have taken an idea from Java (Spring Framework) and many others and together we have created a Controller-based API. With full annotation support.
 
-Controllers are small objects which can be register to DIC as services (same as [Presenters](https://api.nette.org/2.4/Nette.Application.UI.Presenter.html)). 
-They have a few public annotated methods. If on of the method is matched by router, it obtained
-`ApiRequest` and `ApiResponse`. Here's come the magic, these objects hold `PSR-7` - `Request` & `Response` instances.
+Controllers are small objects which can be registered in DIC as services (same as [Presenters](https://api.nette.org/2.4/Nette.Application.UI.Presenter.html)). 
+They have a few public annotated methods. If one of the methods is matched by a router, it is called with `ApiRequest` and `ApiResponse` objects. Here comes the magic, these objects hold `PSR-7` - `Request` & `Response` instances.
 
-Thats all. Take a look, it's really simple.
+That's all. Take a look, it's really simple.
 
 ```php
 use Contributte\Api\Annotation\Controller\Controller;
@@ -76,7 +75,7 @@ final class UsersController
 ```
 
 As you can see, the architecture is ultra simple. `ApiRequest` & `ApiResponse` have no constructor, so you can easily
-extend this class and implement it by your own.
+extend this class and implement it on your own.
 
 ## Documentation
 
