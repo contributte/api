@@ -33,6 +33,8 @@ before_script:
   - travis_retry composer install --no-interaction
   # Coverage
   - if [[ "$TRAVIS_PHP_VERSION" == "7.0" && "$COMPOSER_FLAG" == "" ]]; then COVERAGE=1; fi
+  # Phpstan
+  - if [[ "$TRAVIS_PHP_VERSION" == "7.1" && "$COMPOSER_FLAG" == "" ]]; then PHPSTAN=1; fi
 
 script:
   # Quality Assurance
@@ -44,6 +46,10 @@ script:
 
   # Nette\Tester + CodeCoverage
   - if [ "$COVERAGE" != "" ]; then composer run-script ci-coverage; fi
+
+  # PHPSTAN
+  - if [ "$PHPSTAN" != "" ]; then composer require phpstan/phpstan:^0.6.4; fi
+  - if [ "$PHPSTAN" != "" ]; then composer run-script qa-phpstan; fi
 
 after_script:
   # Coverage (Coveralls)
