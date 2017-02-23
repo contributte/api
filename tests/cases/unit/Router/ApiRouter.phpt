@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Router/ApiRouter
+ * Test: Router\ApiRouter
  */
 
 require_once __DIR__ . '/../../../bootstrap.php';

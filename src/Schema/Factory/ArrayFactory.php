@@ -45,7 +45,7 @@ final class ArrayFactory implements IFactory
 
 			foreach ($route[SchemaMapping::PARAMETERS] as $p) {
 				$param = new EndpointParameter();
-				$param->setName($p[SchemaMapping::PARAMS_NAME]);
+				$param->setName($p[SchemaMapping::PARAMETERS_NAME]);
 				$param->setType(EndpointParameter::TYPE_SCALAR);
 				$endpoint->addParameter($param);
 			}

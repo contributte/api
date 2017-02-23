@@ -53,22 +53,22 @@ final class ArrayGenerator implements IGenerator
 				];
 
 				// Collect variable parameters
-				$pattern = Regex::replaceCallback($mask, '#({([a-zA-Z0-9\-_]+)})#U', function ($matches) use ($endpoint) {
+				$pattern = Regex::replaceCallback($mask, '#({([a-zA-Z0-9\-_]+)})#U', function ($matches) use (&$endpoint) {
 					list($whole, $variable, $variableName) = $matches;
 
-					// Create endpoint param
-					$endpointParam = [
-						SchemaMapping::PARAMS_NAME => $paramName,
-						// @todo type by annotation
-						SchemaMapping::PARAMS_TYPE => EndpointParameter::TYPE_SCALAR,
-					];
+					// Build parameter pattern
+					$pattern = sprintf('(?P<%s>[^/]+)', $variableName);
 
 					// Append to params
-					$endpoint[SchemaMapping::PARAMETERS][$paramName] = $endpointParam;
+					$endpoint[SchemaMapping::PARAMETERS][$variableName] = [
+						SchemaMapping::PARAMETERS_NAME => $variableName,
+						// @todo type by annotation
+						SchemaMapping::PARAMETERS_TYPE => EndpointParameter::TYPE_SCALAR,
+						SchemaMapping::PARAMETERS_PATTERN => $pattern,
+					];
 
-					// Replace param in mask
-					// @todo pattern by param type
-					$endpoint[SchemaMapping::PATTERN] = str_replace($wholeParam, sprintf('(?P<%s>[^/]+)', $paramName), $endpoint[SchemaMapping::PATTERN]);
+					// Returned pattern replace {variable} in mask
+					return $pattern;
 				});
 
 				// Build final regex pattern

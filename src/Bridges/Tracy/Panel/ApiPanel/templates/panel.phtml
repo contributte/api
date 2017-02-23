@@ -3,6 +3,8 @@
 ?>
 <h1>API</h1>
 
+<h2>Endpoints</h2>
+
 <div class="tracy-inner">
     <table>
         <tr>
@@ -15,14 +17,13 @@
             <tr>
                 <td><?= implode(',', $endpoint->getMethods()) ?></td>
                 <td><?= $endpoint->getMask() ?></td>
-                <td><?= $endpoint->getHandler()->getClass() ?> :: <?= $endpoint->getHandler()->getMethod() ?></td>
+                <td><?= $endpoint->getHandler()->getClass() ?> :: <?= $endpoint->getHandler()->getMethod() ?>()</td>
                 <td>
                     <?php if (count($endpoint->getParameters()) > 0) { ?>
                         <table>
                             <?php foreach ($endpoint->getParameters() as $param) { ?>
                                 <tr>
                                     <td><?= $param->getName() ?></td>
-                                    <td><?= $param->getType() ?></td>
                                 </tr>
                             <?php } ?>
                         </table>
@@ -31,4 +32,10 @@
             </tr>
         <?php } ?>
     </table>
+</div>
+
+<h2>Schema</h2>
+
+<div>
+    <?= Tracy\Dumper::toHtml($schema, [Tracy\Dumper::COLLAPSE => true]); ?>
 </div>

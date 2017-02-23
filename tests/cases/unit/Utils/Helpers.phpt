@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Utils/Helpers
+ * Test: Utils\Helpers
  */
 
 require_once __DIR__ . '/../../../bootstrap.php';

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test: Bridges\Middlewares\Negotiation\UrlNegotiator
+ * Test: Bridges\Middlewares\Negotiation\SuffixNegotiator
  */
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
@@ -23,7 +23,7 @@ test(function () {
 	}, InvalidStateException::class, 'Please add at least one transformer');
 });
 
-// NULL negotition (no suitable transformer)
+// Same response (no suitable transformer)
 test(function () {
 	$negotiation = new SuffixNegotiator(['.json' => new JsonTransformer()]);
 
@@ -32,8 +32,11 @@ test(function () {
 	$response = new ApiDataResponse();
 	$response = $response->withPsr7(new Psr7Response());
 
-	// Not transformer found, return NULL;
-	Assert::null($negotiation->negotiateResponse($request, $response));
+	// 1# Negotiate request (same object as given);
+	Assert::same($request, $negotiation->negotiateRequest($request, $response));
+
+	// 2# Negotiate response (same object as given)
+	Assert::same($response, $negotiation->negotiateResponse($request, $response));
 });
 
 // JSON negotiation (according to .json suffix in URL)
@@ -46,7 +49,10 @@ test(function () {
 	$response->setData(['foo' => 'bar']);
 	$response = $response->withPsr7(new Psr7Response());
 
-	// PSR7 body contains encoded json data
+	// 1# Negotiate request
+	$request = $negotiation->negotiateRequest($request, $response);
+
+	// 2# Negotiate response (PSR7 body contains encoded json data)
 	$res = $negotiation->negotiateResponse($request, $response);
 	Assert::equal('{"foo":"bar"}', (string) $res->getPsr7()->getBody());
 });
@@ -61,7 +67,10 @@ test(function () {
 	$response->setData(['foo' => 'bar']);
 	$response = $response->withPsr7(new Psr7Response());
 
-	// PSR7 body contains encoded json data
+	// 1# Negotiate request
+	$request = $negotiation->negotiateRequest($request, $response);
+
+	// 2# Negotiate response (PSR7 body contains encoded json data)
 	$res = $negotiation->negotiateResponse($request, $response);
 	Assert::equal('{"foo":"bar"}', (string) $res->getPsr7()->getBody());
 });

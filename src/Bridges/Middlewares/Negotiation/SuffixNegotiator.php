@@ -13,6 +13,9 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 	// Masks
 	const FALLBACK = '*';
 
+	// Attributes in ServerRequestInterface
+	const ATTR_SUFFIX = 'C-Negotiation-Suffix';
+
 	/** @var IOutTransformer[] */
 	private $transformers = [];
 
@@ -56,7 +59,7 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 	/**
 	 * @param ApiRequest $request
 	 * @param ApiDataResponse $response
-	 * @return ApiRequest|NULL
+	 * @return ApiRequest
 	 */
 	public function negotiateRequest(ApiRequest $request, ApiDataResponse $response)
 	{
@@ -79,24 +82,25 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 				// Strip suffix from URL
 				$newPath = substr($path, 0, strlen($path) - strlen($suffix));
 
-				// Update ApiRequest without suffix (.json, ...)
+				// Update ApiRequest without suffix (.json, ...) and also fill
+				// request attribute
 				$request = $request->withPsr7(
-					$psr7Request->withUri(
-						$psr7Request->getUri()->withPath($newPath)
-					)
+					$psr7Request
+						->withUri($psr7Request->getUri()->withPath($newPath))
+						->withAttribute(self::ATTR_SUFFIX, $suffix)
 				);
 
 				return $request;
 			}
 		}
 
-		return NULL;
+		return $request;
 	}
 
 	/**
 	 * @param ApiRequest $request
 	 * @param ApiDataResponse $response
-	 * @return ApiDataResponse|NULL
+	 * @return ApiDataResponse
 	 */
 	public function negotiateResponse(ApiRequest $request, ApiDataResponse $response)
 	{
@@ -104,8 +108,7 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 			throw new InvalidStateException('Please add at least one transformer');
 		}
 
-		$psr7Request = $request->getPsr7();
-		$path = $psr7Request->getUri()->getPath();
+		$requestSuffix = $request->getPsr7()->getAttribute(self::ATTR_SUFFIX);
 
 		foreach ($this->transformers as $suffix => $transformer) {
 			// Skip fallback transformer
@@ -115,7 +118,7 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 			$suffix = sprintf('.%s', ltrim($suffix, '.'));
 
 			// Try match by suffix
-			if ($this->match($path, $suffix) === TRUE) {
+			if ($requestSuffix === $suffix) {
 				return $this->transform($transformer, $request, $response);
 			}
 		}
@@ -126,7 +129,7 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 			return $this->transform($this->transformers[self::FALLBACK], $request, $response);
 		}
 
-		return NULL;
+		return $response;
 	}
 
 	/**

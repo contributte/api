@@ -9,6 +9,22 @@ use Tracy\Debugger;
 class DebugTransformer implements ITransformer
 {
 
+	/** @var int */
+	private $maxDepth;
+
+	/** @var int */
+	private $maxLength;
+
+	/**
+	 * @param int $maxDepth
+	 * @param int $maxLength
+	 */
+	public function __construct($maxDepth = 10, $maxLength = 1500)
+	{
+		$this->maxDepth = $maxDepth;
+		$this->maxLength = $maxLength;
+	}
+
 	/**
 	 * @param mixed $data
 	 * @param array $options
@@ -16,6 +32,9 @@ class DebugTransformer implements ITransformer
 	 */
 	public function encode($data, array $options = [])
 	{
+		Debugger::$maxDepth = $this->maxDepth;
+		Debugger::$maxLength = $this->maxLength;
+
 		return Debugger::dump($data, TRUE);
 	}
 
