@@ -38,3 +38,33 @@ test(function () {
 	Assert::type(SchemaBuilder::class, $schemaBuilder);
 	Mockery::close();
 });
+
+// Parse annotations
+test(function () {
+	$builder = new ContainerBuilder();
+	$builder->addDefinition('foobar')
+		->setClass(FoobarController::class);
+
+	$loader = new NetteAnnotationLoader($builder);
+	$schemaBuilder = $loader->load();
+
+	Assert::type(SchemaBuilder::class, $schemaBuilder);
+	Assert::count(1, $schemaBuilder->getControllers());
+
+	$controllers = $schemaBuilder->getControllers();
+	$controller = array_pop($controllers);
+
+	Assert::equal(FoobarController::class, $controller->getClass());
+	Assert::equal('/foobar', $controller->getRootPath());
+
+	Assert::count(2, $controller->getMethods());
+
+	Assert::equal('baz1', $controller->getMethods()['baz1']->getName());
+	Assert::equal('/baz1', $controller->getMethods()['baz1']->getPath());
+	Assert::equal(['GET'], $controller->getMethods()['baz1']->getMethods());
+
+	Assert::equal('baz2', $controller->getMethods()['baz2']->getName());
+	Assert::equal('/baz2', $controller->getMethods()['baz2']->getPath());
+
+	Mockery::close();
+});

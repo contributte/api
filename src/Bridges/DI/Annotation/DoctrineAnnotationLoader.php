@@ -80,11 +80,17 @@ final class DoctrineAnnotationLoader extends AnnotationLoader
 	{
 		// Iterate over all methods in class
 		foreach ($class->getMethods() as $method) {
-			// Append method to scheme
-			$schemaMethod = $controller->addMethod($method->getName());
+			// Skip protected/private methods
+			if (!$method->isPublic()) continue;
 
 			// Read method annotations
 			$annotations = $this->createReader()->getMethodAnnotations($method);
+
+			// Skip if method has no @Path/@Method annotations
+			if (count($annotations) <= 0) continue;
+
+			// Append method to scheme
+			$schemaMethod = $controller->addMethod($method->getName());
 
 			// Iterate over all method annotations
 			foreach ($annotations as $annotation) {

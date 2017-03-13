@@ -39,4 +39,28 @@ final class FoobarController implements IController
 	{
 	}
 
+	/**
+	 * @return void
+	 */
+	public function getData1()
+	{
+		// Skip this method
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function getData2()
+	{
+		// Skip this method
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function getData3()
+	{
+		// Skip this method
+	}
+
 }

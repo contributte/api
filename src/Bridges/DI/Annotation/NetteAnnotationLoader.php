@@ -70,6 +70,14 @@ final class NetteAnnotationLoader extends AnnotationLoader
 	{
 		// Iterate over all methods in class
 		foreach ($class->getMethods() as $method) {
+			// Skip protected/private methods
+			if (!$method->isPublic()) continue;
+
+			// Skip if method has no @Path/@Method annotation
+			if (!$method->hasAnnotation('Path')
+				|| !$method->hasAnnotation('Method')
+			) continue;
+
 			// Append method to scheme
 			$schemaMethod = $controller->addMethod($method->getName());
 
