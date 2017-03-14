@@ -142,7 +142,7 @@ class ApiResponse
 	public function setJson(array $data)
 	{
 		$this->setHeader('Content-Type', 'application/json');
-		$this->setData(json_encode($data));
+		$this->setBody(json_encode($data));
 
 		return $this;
 	}
