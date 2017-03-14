@@ -2,31 +2,45 @@
 
 namespace Contributte\Api\Bridges\Middlewares\Negotiation\Transformer;
 
+use Contributte\Api\Http\Request\ApiRequest;
+use Contributte\Api\Http\Response\ApiResponse;
+
 class JsonTransformer implements ITransformer
 {
 
 	/**
 	 * Encode given data for response
 	 *
-	 * @param mixed $data
+	 * @param ApiResponse $response
 	 * @param array $options
-	 * @return mixed
+	 * @return ApiResponse
 	 */
-	public function encode($data, array $options = [])
+	public function encode(ApiResponse $response, array $options = [])
 	{
-		return json_encode($data);
+		// Setup content type
+		$response->setHeader('Content-Type', 'application/json');
+
+		// Encode body
+		$body = json_encode($response->getData());
+		$response->setBody($body);
+
+		return $response;
 	}
 
 	/**
 	 * Parse given data from request
 	 *
-	 * @param mixed $data
+	 * @param ApiRequest $request
 	 * @param array $options
-	 * @return mixed
+	 * @return ApiRequest
 	 */
-	public function decode($data, array $options = [])
+	public function decode(ApiRequest $request, array $options = [])
 	{
-		return json_decode($data, TRUE);
+		// Decode request pure JSON
+		$body = json_decode($request->getContents(), TRUE);
+		$request->setData($body);
+
+		return $request;
 	}
 
 }

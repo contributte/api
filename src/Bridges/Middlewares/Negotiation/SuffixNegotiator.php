@@ -5,7 +5,7 @@ namespace Contributte\Api\Bridges\Middlewares\Negotiation;
 use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\IOutTransformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiDataResponse;
+use Contributte\Api\Http\Response\ApiResponse;
 
 class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 {
@@ -58,10 +58,10 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 
 	/**
 	 * @param ApiRequest $request
-	 * @param ApiDataResponse $response
+	 * @param ApiResponse $response
 	 * @return ApiRequest
 	 */
-	public function negotiateRequest(ApiRequest $request, ApiDataResponse $response)
+	public function negotiateRequest(ApiRequest $request, ApiResponse $response)
 	{
 		if (!$this->transformers) {
 			throw new InvalidStateException('Please add at least one transformer');
@@ -99,10 +99,10 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 
 	/**
 	 * @param ApiRequest $request
-	 * @param ApiDataResponse $response
-	 * @return ApiDataResponse
+	 * @param ApiResponse $response
+	 * @return ApiResponse
 	 */
-	public function negotiateResponse(ApiRequest $request, ApiDataResponse $response)
+	public function negotiateResponse(ApiRequest $request, ApiResponse $response)
 	{
 		if (!$this->transformers) {
 			throw new InvalidStateException('Please add at least one transformer');
@@ -139,19 +139,12 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 	/**
 	 * @param IOutTransformer $transformer
 	 * @param ApiRequest $request
-	 * @param ApiDataResponse $response
-	 * @return ApiDataResponse
+	 * @param ApiResponse $response
+	 * @return ApiResponse
 	 */
-	protected function transform(IOutTransformer $transformer, ApiRequest $request, ApiDataResponse $response)
+	protected function transform(IOutTransformer $transformer, ApiRequest $request, ApiResponse $response)
 	{
-		$transformed = $transformer->encode($response->getData());
-
-		$response
-			->getPsr7()
-			->getBody()
-			->write($transformed);
-
-		return $response;
+		return $transformer->encode($response);
 	}
 
 	/**

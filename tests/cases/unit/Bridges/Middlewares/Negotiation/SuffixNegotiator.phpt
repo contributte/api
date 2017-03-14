@@ -10,7 +10,7 @@ use Contributte\Api\Bridges\Middlewares\Negotiation\SuffixNegotiator;
 use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\JsonTransformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiDataResponse;
+use Contributte\Api\Http\Response\ApiResponse;
 use Contributte\Psr7\Psr7Response;
 use Contributte\Psr7\Psr7ServerRequest;
 use Tester\Assert;
@@ -19,7 +19,7 @@ use Tester\Assert;
 test(function () {
 	Assert::exception(function () {
 		$negotiation = new SuffixNegotiator([]);
-		$negotiation->negotiateResponse(new ApiRequest(), new ApiDataResponse());
+		$negotiation->negotiateResponse(new ApiRequest(), new ApiResponse());
 	}, InvalidStateException::class, 'Please add at least one transformer');
 });
 
@@ -29,7 +29,7 @@ test(function () {
 
 	$request = new ApiRequest();
 	$request = $request->withPsr7(new Psr7ServerRequest('GET', 'https://contributte.org'));
-	$response = new ApiDataResponse();
+	$response = new ApiResponse();
 	$response = $response->withPsr7(new Psr7Response());
 
 	// 1# Negotiate request (same object as given);
@@ -45,7 +45,7 @@ test(function () {
 
 	$request = new ApiRequest();
 	$request = $request->withPsr7(new Psr7ServerRequest('GET', 'https://contributte.org/foo.json'));
-	$response = new ApiDataResponse();
+	$response = new ApiResponse();
 	$response->setData(['foo' => 'bar']);
 	$response = $response->withPsr7(new Psr7Response());
 
@@ -63,7 +63,7 @@ test(function () {
 
 	$request = new ApiRequest();
 	$request = $request->withPsr7(new Psr7ServerRequest('GET', 'https://contributte.org/foo.bar'));
-	$response = new ApiDataResponse();
+	$response = new ApiResponse();
 	$response->setData(['foo' => 'bar']);
 	$response = $response->withPsr7(new Psr7Response());
 

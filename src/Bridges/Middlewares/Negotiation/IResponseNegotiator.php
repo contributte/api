@@ -3,16 +3,16 @@
 namespace Contributte\Api\Bridges\Middlewares\Negotiation;
 
 use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiDataResponse;
+use Contributte\Api\Http\Response\ApiResponse;
 
 interface IResponseNegotiator
 {
 
 	/**
 	 * @param ApiRequest $request
-	 * @param ApiDataResponse $response
-	 * @return ApiDataResponse|NULL
+	 * @param ApiResponse $response
+	 * @return ApiResponse|NULL
 	 */
-	public function negotiateResponse(ApiRequest $request, ApiDataResponse $response);
+	public function negotiateResponse(ApiRequest $request, ApiResponse $response);
 
 }

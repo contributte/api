@@ -4,9 +4,7 @@ namespace Contributte\Api\Bridges\Middlewares;
 
 use Contributte\Api\Bridges\Middlewares\Negotiation\IRequestNegotiator;
 use Contributte\Api\Bridges\Middlewares\Negotiation\IResponseNegotiator;
-use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiDataResponse;
 use Contributte\Api\Http\Response\ApiResponse;
 use Exception;
 
@@ -98,17 +96,12 @@ class ApiContentNegotiation
 
 	/**
 	 * @param ApiRequest $request
-	 * @param ApiResponse|ApiDataResponse $response
+	 * @param ApiResponse $response
 	 * @param callable $next
 	 * @return ApiResponse
 	 */
 	public function __invoke(ApiRequest $request, ApiResponse $response, callable $next)
 	{
-		// Validation
-		if (!($response instanceof ApiDataResponse)) {
-			throw new InvalidStateException(sprintf('Given API response must be of type %s', ApiDataResponse::class));
-		}
-
 		// Should we skip negotiation?
 		if ($request->getPsr7()->getAttribute(self::ATTR_SKIP, FALSE) === TRUE) {
 			return $next($request, $response);
@@ -140,10 +133,10 @@ class ApiContentNegotiation
 
 	/**
 	 * @param ApiRequest $request
-	 * @param ApiDataResponse $response
+	 * @param ApiResponse $response
 	 * @return ApiRequest
 	 */
-	protected function negotiateRequest(ApiRequest $request, ApiDataResponse $response)
+	protected function negotiateRequest(ApiRequest $request, ApiResponse $response)
 	{
 		// Early return in case of no negotiators
 		if (!$this->requestNegotiators) return $request;
@@ -163,10 +156,10 @@ class ApiContentNegotiation
 
 	/**
 	 * @param ApiRequest $request
-	 * @param ApiDataResponse $response
+	 * @param ApiResponse $response
 	 * @return ApiResponse
 	 */
-	protected function negotiateResponse(ApiRequest $request, ApiDataResponse $response)
+	protected function negotiateResponse(ApiRequest $request, ApiResponse $response)
 	{
 		// Early return in case of no negotiators
 		if (!$this->responseNegotiators) return $response;
@@ -187,10 +180,10 @@ class ApiContentNegotiation
 	/**
 	 * @param Exception $exception
 	 * @param ApiRequest $request
-	 * @param ApiDataResponse $response
+	 * @param ApiResponse $response
 	 * @return ApiResponse
 	 */
-	protected function negotiateException(Exception $exception, ApiRequest $request, ApiDataResponse $response)
+	protected function negotiateException(Exception $exception, ApiRequest $request, ApiResponse $response)
 	{
 		$response->setData([
 			'error' => $exception->getMessage(),
@@ -198,7 +191,7 @@ class ApiContentNegotiation
 		]);
 
 		$code = $exception->getCode();
-		$response->withStatus($code < 200 || $code > 504 ? 404 : $code);
+		$response->setStatus($code < 200 || $code > 504 ? 404 : $code);
 
 		return $response;
 	}

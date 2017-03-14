@@ -2,16 +2,18 @@
 
 namespace Contributte\Api\Bridges\Middlewares\Negotiation\Transformer;
 
+use Contributte\Api\Http\Request\ApiRequest;
+
 interface IInTransformer
 {
 
 	/**
 	 * Parse given data from request
 	 *
-	 * @param mixed $data
+	 * @param ApiRequest $request
 	 * @param array $options
-	 * @return mixed
+	 * @return ApiRequest
 	 */
-	public function decode($data, array $options = []);
+	public function decode(ApiRequest $request, array $options = []);
 
 }

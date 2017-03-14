@@ -6,6 +6,8 @@ use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\Request\Param\AbstractParameter;
 use Contributte\Api\Schema\Endpoint;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 
 class ApiRequest
 {
@@ -16,14 +18,14 @@ class ApiRequest
 	/** @var ServerRequestInterface */
 	protected $request;
 
+	/** @var array */
+	protected $data;
+
 	/** @var Endpoint */
 	protected $endpoint;
 
 	/** @var array */
 	protected $parameters = [];
-
-	/** @var array */
-	protected $attributes = [];
 
 	/**
 	 * PSR-7 *******************************************************************
@@ -46,7 +48,68 @@ class ApiRequest
 	 */
 	public function getPsr7()
 	{
+		if (!$this->request) {
+			throw new InvalidStateException('ServerRequestInterface is missing, please call withPsr7($request)');
+		}
+
 		return $this->request;
+	}
+
+	/**
+	 * PSR-7 API ***************************************************************
+	 */
+
+	/**
+	 * @return string
+	 */
+	public function getMethod()
+	{
+		return $this->getPsr7()->getMethod();
+	}
+
+	/**
+	 * @return StreamInterface
+	 */
+	public function getBody()
+	{
+		return $this->getPsr7()->getBody();
+	}
+
+	/**
+	 * @param mixed $body
+	 * @return static
+	 */
+	public function setBody($body)
+	{
+		$this->getPsr7()
+			->getBody()
+			->write($body);
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getContents()
+	{
+		return $this->getBody()->getContents();
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getParsedBody()
+	{
+		return $this->getPsr7()->getParsedBody();
+	}
+
+	/**
+	 * @return UriInterface
+	 */
+	public function getUri()
+	{
+		return $this->getPsr7()->getUri();
 	}
 
 	/**
@@ -147,10 +210,11 @@ class ApiRequest
 	 */
 	public function withAttributes(array $attributes)
 	{
-		$new = clone $this;
-		$new->attributes = $attributes;
+		foreach ($attributes as $k => $v) {
+			$this->withAttribute($k, $v);
+		}
 
-		return $new;
+		return $this;
 	}
 
 	/**
@@ -160,10 +224,10 @@ class ApiRequest
 	 */
 	public function withAttribute($name, $value)
 	{
-		$new = clone $this;
-		$new->attributes[$name] = $value;
+		$this->request = $this->getPsr7()
+			->withAttribute($name, $value);
 
-		return $new;
+		return $this;
 	}
 
 	/**
@@ -172,13 +236,15 @@ class ApiRequest
 	 */
 	public function hasAttribute($name)
 	{
-		return isset($this->attributes[$name]);
+		$attrs = $this->getPsr7()->getAttributes();
+
+		return array_key_exists($name, $attrs);
 	}
 
 	/**
 	 * @param string $name
 	 * @param mixed $default
-	 * @return AbstractParameter
+	 * @return mixed
 	 */
 	public function getAttribute($name, $default = NULL)
 	{
@@ -190,7 +256,7 @@ class ApiRequest
 			return $default;
 		}
 
-		return $this->attributes[$name];
+		return $this->getPsr7()->getAttribute($name, $default);
 	}
 
 	/**
@@ -198,7 +264,38 @@ class ApiRequest
 	 */
 	public function getAttributes()
 	{
-		return $this->attributes;
+		return $this->getPsr7()->getAttributes();
+	}
+
+	/**
+	 * DATA ********************************************************************
+	 */
+
+	/**
+	 * @return bool
+	 */
+	public function hasData()
+	{
+		return $this->data !== NULL;
+	}
+
+	/**
+	 * @param mixed $data
+	 * @return static
+	 */
+	public function setData($data)
+	{
+		$this->data = $data;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getData()
+	{
+		return $this->data;
 	}
 
 }

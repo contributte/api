@@ -39,11 +39,11 @@ class DebugTransformer implements ITransformer
 	}
 
 	/**
-	 * @param mixed $data
+	 * @param mixed $request
 	 * @param array $options
 	 * @return mixed
 	 */
-	public function decode($data, array $options = [])
+	public function decode($request, array $options = [])
 	{
 		throw new InvalidStateException('No decode mode');
 	}

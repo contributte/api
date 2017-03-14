@@ -152,14 +152,10 @@ class ApiRouter
 	 */
 	protected function fallback(ApiRequest $request, ApiResponse $response)
 	{
-		$psr7 = $response
-			->getPsr7()
-			->withStatus(404);
+		$response->setStatus(404);
+		$response->setBody('No matched middleware route by given URL');
 
-		$psr7->getBody()
-			->write('No matched middleware route by given URL');
-
-		return $response->withPsr7($psr7);
+		return $response;
 	}
 
 }

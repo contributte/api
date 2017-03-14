@@ -50,16 +50,17 @@ use Contributte\Api\Annotation\Controller\Path;
 use Contributte\Api\Annotation\Controller\RootPath;
 use Contributte\Api\Http\Request\ApiRequest;
 use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\UI\Controller\IController;
 
 /**
  * @Controller
- * @RootPath("/users")
+ * @RootPath("/hello")
  */
-final class UsersController
+final class HelloController implements IController
 {
 
     /**
-     * @Path("/")
+     * @Path("/world")
      * @Method("GET")
      * @param ApiRequest $request
      * @param ApiResponse $response
@@ -67,7 +68,7 @@ final class UsersController
      */
     public function index(ApiRequest $request, ApiResponse $response)
     {
-        $response->getPsr7()->getBody()->write('Hello world!');
+        $response->setBody('Hello world!');
 
         return $response;
     }

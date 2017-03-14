@@ -56,7 +56,7 @@ class ApiRouter implements IRouter
 	protected function matchEndpoint(Endpoint $endpoint, ApiRequest $request)
 	{
 		// Skip unsupported HTTP method
-		if (!$endpoint->hasMethod($request->getPsr7()->getMethod())) {
+		if (!$endpoint->hasMethod($request->getMethod())) {
 			return NULL;
 		}
 
@@ -81,7 +81,7 @@ class ApiRouter implements IRouter
 		if ($psr7->getAttribute(ApiMiddleware::ATTR_URL)) {
 			$url = $psr7->getAttribute(ApiMiddleware::ATTR_URL);
 		} else {
-			$url = $request->getPsr7()->getUri()->getPath();
+			$url = $request->getUri()->getPath();
 		}
 
 		// Url has always slash at the beginning

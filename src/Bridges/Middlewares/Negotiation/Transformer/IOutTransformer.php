@@ -2,16 +2,18 @@
 
 namespace Contributte\Api\Bridges\Middlewares\Negotiation\Transformer;
 
+use Contributte\Api\Http\Response\ApiResponse;
+
 interface IOutTransformer
 {
 
 	/**
 	 * Encode given data for response
 	 *
-	 * @param mixed $data
+	 * @param ApiResponse $response
 	 * @param array $options
-	 * @return mixed
+	 * @return ApiResponse
 	 */
-	public function encode($data, array $options = []);
+	public function encode(ApiResponse $response, array $options = []);
 
 }
