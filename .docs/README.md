@@ -16,7 +16,7 @@ composer require contributte/api
 
 ```yaml
 extensions:
-	api: Contributte\Api\Bridges\DI\ApiAnnotationsExtension
+    api: Contributte\Api\Bridges\DI\ApiAnnotationsExtension
 ```
 
 ## Middlewares
@@ -29,7 +29,7 @@ composer require contributte/middlewares
 
 ```yaml
 extensions:
-	middlewares: Contributte\Middlewares\DI\NetteMiddlewareExtension
+    middlewares: Contributte\Middlewares\DI\NetteMiddlewareExtension
 ```
 
 ## Usage
@@ -83,42 +83,42 @@ This is complex example of API configuration with middleware support.
 
 ```yaml
 extensions:
-	api: Contributte\Api\Bridges\DI\ApiAnnotationsExtension
-	middlewares: Contributte\Middlewares\DI\NetteMiddlewareExtension
+    api: Contributte\Api\Bridges\DI\ApiAnnotationsExtension
+    middlewares: Contributte\Middlewares\DI\NetteMiddlewareExtension
 
 services:
-	# Middlewares
-	middleware.tracy: Contributte\Middlewares\Middleware\TracyMiddleware
-	middleware.basepath: Contributte\Middlewares\Middleware\AutoBasePathMiddleware
-	middleware.router: Contributte\Middlewares\Middleware\RouterMiddleware([
-		"^/api/{path:.+}": @middleware.api,
-		"^/{path:.*}": @middleware.presenter
-	])
+    # Middlewares
+    middleware.tracy: Contributte\Middlewares\Middleware\TracyMiddleware
+    middleware.basepath: Contributte\Middlewares\Middleware\AutoBasePathMiddleware
+    middleware.router: Contributte\Middlewares\Middleware\RouterMiddleware([
+        "^/api/{path:.+}": @middleware.api,
+        "^/{path:.*}": @middleware.presenter
+    ])
 
-	# Case #1 (handle API request)[api/]
-	middleware.api:
-		class: Contributte\Api\Bridges\Middlewares\ApiMiddleware([
-			Contributte\Api\Bridges\Middlewares\ApiPrefix('api')
-			Contributte\Api\Bridges\Middlewares\ApiContentNegotiation([
-				Contributte\Api\Bridges\Middlewares\Negotiation\UrlNegotiator([
-					"json": Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\JsonTransformer(),
-					"debug": Contributte\Api\Bridges\Tracy\Negotiation\Transformer\DebugTransformer(),
-					"*": Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\JsonTransformer()
-				])
-			]),
-			Contributte\Api\Bridges\Middlewares\ApiEmitter()
-		])
+    # Case #1 (handle API request)[api/]
+    middleware.api:
+        class: Contributte\Api\Bridges\Middlewares\ApiMiddleware([
+            Contributte\Api\Bridges\Middlewares\ApiPrefix('api')
+            Contributte\Api\Bridges\Middlewares\ApiContentNegotiation([
+                Contributte\Api\Bridges\Middlewares\Negotiation\UrlNegotiator([
+                    "json": Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\JsonTransformer(),
+                    "debug": Contributte\Api\Bridges\Tracy\Negotiation\Transformer\DebugTransformer(),
+                    "*": Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\JsonTransformer()
+                ])
+            ]),
+            Contributte\Api\Bridges\Middlewares\ApiEmitter()
+        ])
 
-	# Case #2 (handle classic nette application)
-	middleware.presenter:
-		class: Contributte\Middlewares\Middleware\PresenterMiddleware
-		setup:
-			- setErrorPresenter(Error)
-			- setCatchExceptions(FALSE)
+    # Case #2 (handle classic nette application)
+    middleware.presenter:
+        class: Contributte\Middlewares\Middleware\PresenterMiddleware
+        setup:
+            - setErrorPresenter(Error)
+            - setCatchExceptions(FALSE)
 
 middlewares:
-	middlewares:
-		- @middleware.tracy
-		- @middleware.basepath
-		- @middleware.router
+    middlewares:
+        - @middleware.tracy
+        - @middleware.basepath
+        - @middleware.router
 ```
