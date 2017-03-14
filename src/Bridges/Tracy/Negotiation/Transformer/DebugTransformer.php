@@ -30,20 +30,22 @@ class DebugTransformer implements ITransformer
 	/**
 	 * @param ApiResponse $response
 	 * @param array $options
-	 * @return mixed
+	 * @return ApiResponse
 	 */
 	public function encode(ApiResponse $response, array $options = [])
 	{
 		Debugger::$maxDepth = $this->maxDepth;
 		Debugger::$maxLength = $this->maxLength;
 
-		return Debugger::dump($response->getData(), TRUE);
+		$response->setBody(Debugger::dump($response->getData(), TRUE));
+
+		return $response;
 	}
 
 	/**
 	 * @param ApiRequest $request
 	 * @param array $options
-	 * @return mixed
+	 * @return void
 	 */
 	public function decode(ApiRequest $request, array $options = [])
 	{
