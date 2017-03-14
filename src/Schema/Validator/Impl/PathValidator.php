@@ -4,6 +4,7 @@ namespace Contributte\Api\Schema\Validator\Impl;
 
 use Contributte\Api\Exception\Logical\Validation\InvalidSchemaException;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
+use Contributte\Api\Schema\Endpoint;
 use Contributte\Api\Schema\Validator\IValidator;
 use Contributte\Api\Utils\Regex;
 
@@ -25,7 +26,7 @@ class PathValidator implements IValidator
 	 * @param SchemaBuilder $builder
 	 * @return void
 	 */
-	public function validateDuplicities(SchemaBuilder $builder)
+	protected function validateDuplicities(SchemaBuilder $builder)
 	{
 		$controllers = $builder->getControllers();
 		$paths = [];
@@ -34,23 +35,31 @@ class PathValidator implements IValidator
 			foreach ($controller->getMethods() as $method) {
 				// Init controller paths
 				if (!isset($paths[$controller->getClass()])) {
-					$paths[$controller->getClass()] = [];
+					$paths[$controller->getClass()] = [
+						Endpoint::METHOD_GET => [],
+						Endpoint::METHOD_POST => [],
+						Endpoint::METHOD_PUT => [],
+						Endpoint::METHOD_DELETE => [],
+						Endpoint::METHOD_OPTION => [],
+					];
 				}
 
 				// If this RootPath exists, throw an exception
-				if (array_key_exists($method->getPath(), $paths[$controller->getClass()])) {
-					throw new InvalidSchemaException(
-						sprintf(
-							'Duplicate @Path "%s" in %s at methods "%s()" and "%s()"',
-							$method->getPath(),
-							$controller->getClass(),
-							$method->getName(),
-							$paths[$controller->getClass()][$method->getPath()]
-						)
-					);
-				}
+				foreach ($method->getMethods() as $httpMethod) {
+					if (array_key_exists($method->getPath(), $paths[$controller->getClass()][$httpMethod])) {
+						throw new InvalidSchemaException(
+							sprintf(
+								'Duplicate @Path "%s" in %s at methods "%s()" and "%s()"',
+								$method->getPath(),
+								$controller->getClass(),
+								$method->getName(),
+								$paths[$controller->getClass()][$httpMethod][$method->getPath()]
+							)
+						);
+					}
 
-				$paths[$controller->getClass()][$method->getPath()] = $method->getName();
+					$paths[$controller->getClass()][$httpMethod][$method->getPath()] = $method->getName();
+				}
 			}
 		}
 	}

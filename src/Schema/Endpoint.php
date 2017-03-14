@@ -7,8 +7,14 @@ use Contributte\Api\Exception\Logical\InvalidArgumentException;
 final class Endpoint
 {
 
-	/** @var array */
-	private static $allowed = [
+	// Methods
+	const METHOD_GET = 'GET';
+	const METHOD_POST = 'POST';
+	const METHOD_PUT = 'PUT';
+	const METHOD_DELETE = 'DELETE';
+	const METHOD_OPTION = 'OPTION';
+
+	const METHODS = [
 		'GET',
 		'POST',
 		'PUT',
@@ -58,7 +64,7 @@ final class Endpoint
 	{
 		$method = strtoupper($method);
 
-		if (!in_array($method, self::$allowed)) {
+		if (!in_array($method, self::METHODS)) {
 			throw new InvalidArgumentException(sprintf('Method %s is not allowed', $method));
 		}
 
