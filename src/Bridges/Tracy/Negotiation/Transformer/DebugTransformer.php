@@ -4,6 +4,8 @@ namespace Contributte\Api\Bridges\Tracy\Negotiation\Transformer;
 
 use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\ITransformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
+use Contributte\Api\Http\Request\ApiRequest;
+use Contributte\Api\Http\Response\ApiResponse;
 use Tracy\Debugger;
 
 class DebugTransformer implements ITransformer
@@ -26,24 +28,24 @@ class DebugTransformer implements ITransformer
 	}
 
 	/**
-	 * @param mixed $data
+	 * @param ApiResponse $response
 	 * @param array $options
 	 * @return mixed
 	 */
-	public function encode($data, array $options = [])
+	public function encode(ApiResponse $response, array $options = [])
 	{
 		Debugger::$maxDepth = $this->maxDepth;
 		Debugger::$maxLength = $this->maxLength;
 
-		return Debugger::dump($data, TRUE);
+		return Debugger::dump($response->getData(), TRUE);
 	}
 
 	/**
-	 * @param mixed $request
+	 * @param ApiRequest $request
 	 * @param array $options
 	 * @return mixed
 	 */
-	public function decode($request, array $options = [])
+	public function decode(ApiRequest $request, array $options = [])
 	{
 		throw new InvalidStateException('No decode mode');
 	}
