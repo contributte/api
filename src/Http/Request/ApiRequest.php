@@ -289,7 +289,7 @@ class ApiRequest
 	 */
 	public function getQueryParam($name, $default = NULL)
 	{
-		if (!$this->hasParameter($name)) {
+		if (!$this->hasQueryParam($name)) {
 			if (func_num_args() < 2) {
 				throw new InvalidStateException(sprintf('No query parameter "%s" found', $name));
 			}
