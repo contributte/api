@@ -75,7 +75,7 @@ final class ArrayGenerator implements IGenerator
 				$endpoint[SchemaMapping::PATTERN] = sprintf('#%s$/?\z#A', $pattern);
 
 				// Append to schema
-				$schema[$mask] = $endpoint;
+				$schema[] = $endpoint;
 			}
 		}
 
