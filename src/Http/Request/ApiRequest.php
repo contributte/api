@@ -183,7 +183,7 @@ class ApiRequest
 	{
 		if (!$this->hasParameter($name)) {
 			if (func_num_args() < 2) {
-				throw new InvalidStateException('No parameter found');
+				throw new InvalidStateException(sprintf('No parameter "%s" found', $name));
 			}
 
 			return $default;
@@ -250,7 +250,7 @@ class ApiRequest
 	{
 		if (!$this->hasAttribute($name)) {
 			if (func_num_args() < 2) {
-				throw new InvalidStateException('No attribute found');
+				throw new InvalidStateException(sprintf('No attribute "%s" found', $name));
 			}
 
 			return $default;
@@ -265,6 +265,39 @@ class ApiRequest
 	public function getAttributes()
 	{
 		return $this->getPsr7()->getAttributes();
+	}
+
+	/**
+	 * QUERY PARAM *************************************************************
+	 */
+
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	public function hasQueryParam($name)
+	{
+		return array_key_exists($name, $this->getPsr7()->getQueryParams());
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $default
+	 *
+	 * @return AbstractParameter
+	 */
+	public function getQueryParam($name, $default = NULL)
+	{
+		if (!$this->hasParameter($name)) {
+			if (func_num_args() < 2) {
+				throw new InvalidStateException(sprintf('No query parameter "%s" found', $name));
+			}
+
+			return $default;
+		}
+
+		return $this->getPsr7()->getQueryParams()[$name];
 	}
 
 	/**
