@@ -110,7 +110,8 @@ class PathValidator implements IValidator
 				// -> A-Z
 				// -> 0-9
 				// -> -_/{}
-				$match = Regex::match($path, '#([^a-zA-Z0-9\-_/{}]+)#');
+				// @regex https://regex101.com/r/d7f5YI/1
+				$match = Regex::match($path, '#([^a-zA-Z0-9\-_\/{}]+)#');
 
 				if ($match !== NULL) {
 					throw new InvalidSchemaException(
@@ -129,20 +130,25 @@ class PathValidator implements IValidator
 				// -> A-Z
 				// -> 0-9
 				// -> -_
-				$match = Regex::match($path, '#\{.*([^a-zA-Z0-9\-_]+).*\}#');
+				// @regex https://regex101.com/r/APckUJ/3
+				$matches = Regex::matchAll($path, '#\{(.+)\}#U');
+				if ($matches) {
+					foreach ($matches as $item) {
+						$match = Regex::match($item[1], '#.*([^a-zA-Z0-9\-_]+).*#');
 
-				if ($match !== NULL) {
-					throw new InvalidSchemaException(
-						sprintf(
-							'@Path "%s" in "%s::%s()" contains illegal characters "%s" in parameter. Allowed characters in parameter are only {[a-z-A-Z0-9-_]+}',
-							$path,
-							$controller->getClass(),
-							$method->getName(),
-							$match[1]
-						)
-					);
+						if ($match !== NULL) {
+							throw new InvalidSchemaException(
+								sprintf(
+									'@Path "%s" in "%s::%s()" contains illegal characters "%s" in parameter. Allowed characters in parameter are only {[a-z-A-Z0-9-_]+}',
+									$path,
+									$controller->getClass(),
+									$method->getName(),
+									$match[1]
+								)
+							);
+						}
+					}
 				}
-
 			}
 		}
 	}

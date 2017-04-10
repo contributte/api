@@ -24,7 +24,7 @@ final class Regex
 	 * @param int $flags
 	 * @return mixed
 	 */
-	public static function matchAll($subject, $pattern, $flags = 0)
+	public static function matchAll($subject, $pattern, $flags = PREG_SET_ORDER)
 	{
 		$ret = preg_match_all($pattern, $subject, $m, $flags);
 

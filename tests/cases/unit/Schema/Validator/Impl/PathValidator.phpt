@@ -97,3 +97,64 @@ test(function () {
 		Assert::fail('This is fail. Paths+Method are different.');
 	}
 });
+
+// Validate: invalid parameter (ends)
+test(function () {
+	$builder = new SchemaBuilder();
+
+	$c1 = $builder->addController('c1');
+	$c1m1 = $c1->addMethod('foo1');
+	$c1m1->setPath('/{foo$}');
+	$c1m1->addMethod('GET');
+
+	Assert::exception(function () use ($builder) {
+		$validator = new PathValidator();
+		$validator->validate($builder);
+	}, ValidationException::class, '@Path "/{foo$}" in "c1::foo1()" contains illegal characters "$". Allowed characters are only [a-zA-Z0-9-_/{}].');
+});
+
+// Validate: invalid parameter (starts)
+test(function () {
+	$builder = new SchemaBuilder();
+
+	$c1 = $builder->addController('c1');
+	$c1m1 = $c1->addMethod('foo1');
+	$c1m1->setPath('/{%foo}');
+	$c1m1->addMethod('GET');
+
+	Assert::exception(function () use ($builder) {
+		$validator = new PathValidator();
+		$validator->validate($builder);
+	}, ValidationException::class, '@Path "/{%foo}" in "c1::foo1()" contains illegal characters "%". Allowed characters are only [a-zA-Z0-9-_/{}].');
+});
+
+// Validate: invalid parameter (contains)
+test(function () {
+	$builder = new SchemaBuilder();
+
+	$c1 = $builder->addController('c1');
+	$c1m1 = $c1->addMethod('foo1');
+	$c1m1->setPath('/{foo&&&bar}');
+	$c1m1->addMethod('GET');
+
+	Assert::exception(function () use ($builder) {
+		$validator = new PathValidator();
+		$validator->validate($builder);
+	}, ValidationException::class, '@Path "/{foo&&&bar}" in "c1::foo1()" contains illegal characters "&&&". Allowed characters are only [a-zA-Z0-9-_/{}].');
+});
+
+// Validate: multiple parameters
+test(function () {
+	$builder = new SchemaBuilder();
+
+	$c1 = $builder->addController('c1');
+	$c1m1 = $c1->addMethod('foo1');
+	$c1m1->setPath('/{foo}/{bar}');
+	$c1m1->addMethod('GET');
+	try {
+		$validator = new PathValidator();
+		$validator->validate($builder);
+	} catch (Exception $e) {
+		Assert::fail('This is fail. Parameters are OK.');
+	}
+});
