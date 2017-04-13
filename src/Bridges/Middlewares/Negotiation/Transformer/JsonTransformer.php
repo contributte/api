@@ -17,6 +17,9 @@ class JsonTransformer implements ITransformer
 	 */
 	public function encode(ApiResponse $response, array $options = [])
 	{
+		// Return immediately if response has no data
+		if (!$response->hasData()) return $response;
+
 		// Setup content type
 		$response->setHeader('Content-Type', 'application/json');
 

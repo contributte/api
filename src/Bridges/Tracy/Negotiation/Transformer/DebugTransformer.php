@@ -37,7 +37,14 @@ class DebugTransformer implements ITransformer
 		Debugger::$maxDepth = $this->maxDepth;
 		Debugger::$maxLength = $this->maxLength;
 
-		$response->setBody(Debugger::dump($response->getData(), TRUE));
+		$tmp = clone $response;
+
+		if (!$response->hasData()) {
+			$response->setHeader('Content-Type', 'text/html');
+			$response->setBody(Debugger::dump($tmp, TRUE));
+		} else {
+			$response->setBody(Debugger::dump($tmp, TRUE));
+		}
 
 		return $response;
 	}
