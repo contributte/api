@@ -33,7 +33,6 @@ test(function () {
 	$router = new ApiRouter($schema);
 	$matched = $router->match($request);
 
-	var_dump($matched->getParameters());
 	Assert::type(ApiRequest::class, $matched);
 	Assert::true($matched->hasParameter('id'));
 	Assert::equal('22', $matched->getParameter('id'));
