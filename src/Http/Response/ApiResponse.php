@@ -85,11 +85,38 @@ class ApiResponse
 	 * @param mixed $body
 	 * @return static
 	 */
-	public function setBody($body)
+	public function appendBody($body)
 	{
 		$this->getPsr7()
 			->getBody()
 			->write($body);
+
+		return $this;
+	}
+
+	/**
+	 * @param mixed $body
+	 * @return static
+	 */
+	public function setBody($body)
+	{
+		$this->clearBody();
+
+		$this->getPsr7()
+			->getBody()
+			->write($body);
+
+		return $this;
+	}
+
+	/**
+	 * @return static
+	 */
+	public function clearBody()
+	{
+		$this->getPsr7()
+			->getBody()
+			->rewind();
 
 		return $this;
 	}
