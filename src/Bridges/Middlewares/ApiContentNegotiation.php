@@ -22,6 +22,9 @@ class ApiContentNegotiation
 	/** @var IResponseNegotiator[] */
 	protected $responseNegotiators = [];
 
+	/** @var bool */
+	protected $catchException = TRUE;
+
 	/**
 	 * @param array $negotiators
 	 */
@@ -33,6 +36,15 @@ class ApiContentNegotiation
 	/**
 	 * SETTERS *****************************************************************
 	 */
+
+	/**
+	 * @param bool $catch
+	 * @return void
+	 */
+	public function setCatchException($catch = TRUE)
+	{
+		$this->catchException = boolval($catch);
+	}
 
 	/**
 	 * @param IRequestNegotiator[] $negotiators
@@ -116,6 +128,7 @@ class ApiContentNegotiation
 		try {
 			$response = $next($request, $response);
 		} catch (Exception $e) {
+			if ($this->catchException === FALSE) throw $e;
 			$response = $this->negotiateException($e, $request, $response);
 		}
 
@@ -146,9 +159,7 @@ class ApiContentNegotiation
 			$negotiated = $negotiator->negotiateRequest($request, $response);
 
 			// If it's not NULL, we have an ApiRequest
-			if ($negotiated !== NULL) {
-				return $negotiated;
-			}
+			if ($negotiated !== NULL) return $negotiated;
 		}
 
 		return $request;
@@ -169,9 +180,7 @@ class ApiContentNegotiation
 			$negotiated = $negotiator->negotiateResponse($request, $response);
 
 			// If it's not NULL, we have an ApiResponse
-			if ($negotiated !== NULL) {
-				return $negotiated;
-			}
+			if ($negotiated !== NULL) return $negotiated;
 		}
 
 		return $response;
