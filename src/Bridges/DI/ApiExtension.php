@@ -4,6 +4,7 @@ namespace Contributte\Api\Bridges\DI;
 
 use Contributte\Api\Bridges\DI\Annotation\DoctrineAnnotationLoader;
 use Contributte\Api\Bridges\DI\Annotation\NetteAnnotationLoader;
+use Contributte\Api\Bridges\Tracy\BlueScreen\ApiBlueScreen;
 use Contributte\Api\Bridges\Tracy\Panel\ApiPanel\ApiPanel;
 use Contributte\Api\Dispatcher\ApiDispatcher;
 use Contributte\Api\Dispatcher\IDispatcher;
@@ -20,6 +21,7 @@ use Contributte\Api\Schema\Validator\SchemaBuilderValidator;
 use Contributte\Api\UI\IHandler;
 use Contributte\Api\UI\ServiceHandler;
 use Nette\DI\CompilerExtension;
+use Nette\DI\ContainerBuilder;
 use Nette\PhpGenerator\ClassType;
 use Nette\Utils\Validators;
 
@@ -109,11 +111,13 @@ class ApiExtension extends CompilerExtension
 	public function afterCompile(ClassType $class)
 	{
 		$config = $this->validateConfig($this->defaults);
+		$initialize = $class->getMethod('initialize');
 
 		if ($config['debug'] === TRUE) {
-			$class->getMethod('initialize')
-				->addBody('$this->getService(?)->addPanel($this->getByType(?));', ['tracy.bar', ApiPanel::class]);
+			$initialize->addBody('$this->getService(?)->addPanel($this->getByType(?));', ['tracy.bar', ApiPanel::class]);
 		}
+
+		$initialize->addBody('?::register($this->getService(?));', [ContainerBuilder::literal(ApiBlueScreen::class) , 'tracy.blueScreen']);
 	}
 
 	/**
