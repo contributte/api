@@ -13,8 +13,8 @@ use Contributte\Api\Router\ApiRouter;
 use Contributte\Api\Router\IRouter;
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
-use Contributte\Api\Schema\Factory\ArrayFactory;
-use Contributte\Api\Schema\Generator\ArrayGenerator;
+use Contributte\Api\Schema\Factory\ArrayHydrator;
+use Contributte\Api\Schema\Generator\ArraySerializator;
 use Contributte\Api\Schema\Validator\Impl\PathValidator;
 use Contributte\Api\Schema\Validator\Impl\RootPathValidator;
 use Contributte\Api\Schema\Validator\SchemaBuilderValidator;
@@ -94,11 +94,11 @@ class ApiExtension extends CompilerExtension
 		$this->validateSchema($schemaBuilder);
 
 		// Convert schema to array (for DI)
-		$generator = new ArrayGenerator();
-		$schema = $generator->generate($schemaBuilder);
+		$generator = new ArraySerializator();
+		$schema = $generator->serialize($schemaBuilder);
 
 		$builder->addDefinition($this->prefix('schemaFactory'))
-			->setClass(ArrayFactory::class, [$schema]);
+			->setClass(ArrayHydrator::class, [$schema]);
 
 		$builder->getDefinition($this->prefix('schema'))
 			->setFactory('@' . $this->prefix('schemaFactory') . '::create');

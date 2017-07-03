@@ -9,14 +9,14 @@ use Contributte\Api\Schema\SchemaMapping;
 use Contributte\Api\Utils\Helpers;
 use Contributte\Api\Utils\Regex;
 
-final class ArrayGenerator implements IGenerator
+final class ArraySerializator implements ISerializator
 {
 
 	/**
 	 * @param SchemaBuilder $builder
 	 * @return array
 	 */
-	public function generate(SchemaBuilder $builder)
+	public function serialize(SchemaBuilder $builder)
 	{
 		$controllers = $builder->getControllers();
 		$schema = [];

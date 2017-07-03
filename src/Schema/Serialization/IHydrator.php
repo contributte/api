@@ -4,12 +4,13 @@ namespace Contributte\Api\Schema\Factory;
 
 use Contributte\Api\Schema\ApiSchema;
 
-interface IFactory
+interface IHydrator
 {
 
 	/**
+	 * @param mixed $data
 	 * @return ApiSchema
 	 */
-	public function create();
+	public function hydrate($data);
 
 }

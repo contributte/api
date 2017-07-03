@@ -8,28 +8,18 @@ use Contributte\Api\Schema\EndpointHandler;
 use Contributte\Api\Schema\EndpointParameter;
 use Contributte\Api\Schema\SchemaMapping;
 
-final class ArrayFactory implements IFactory
+final class ArrayHydrator implements IHydrator
 {
-
-	/** @var array */
-	private $schema;
 
 	/**
 	 * @param array $schema
-	 */
-	public function __construct(array $schema)
-	{
-		$this->schema = $schema;
-	}
-
-	/**
 	 * @return ApiSchema
 	 */
-	public function create()
+	public function hydrate($schema)
 	{
 		$schema = new ApiSchema();
 
-		foreach ($this->schema as $route) {
+		foreach ($schema as $route) {
 			// @todo replace to EndpointHandler::factory()
 			// move validation inside, make class immutable
 			$handler = new EndpointHandler();
