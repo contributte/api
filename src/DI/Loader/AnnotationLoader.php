@@ -1,8 +1,7 @@
 <?php
 
-namespace Contributte\Api\Bridges\DI\Annotation;
+namespace Contributte\Api\DI\Loader;
 
-use Contributte\Api\Bridges\DI\Loader\ILoader;
 use Contributte\Api\UI\Controller\IController;
 use Nette\DI\ContainerBuilder;
 use Nette\DI\ServiceDefinition;

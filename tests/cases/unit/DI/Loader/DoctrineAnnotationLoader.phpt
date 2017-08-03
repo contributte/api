@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Test: Bridges\DI\Annotation\NetteAnnotationLoader
+ * Test: DI\Loader\DoctrineAnnotationLoader
  */
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__ . '/../../../../bootstrap.php';
 
-use Contributte\Api\Bridges\DI\Annotation\NetteAnnotationLoader;
+use Contributte\Api\DI\Loader\DoctrineAnnotationLoader;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 use Contributte\Api\UI\Controller\IController;
 use Fixtures\Controllers\FoobarController;
@@ -32,10 +32,11 @@ test(function () {
 		->once()
 		->with(FoobarController::class);
 
-	$loader = new NetteAnnotationLoader($builder);
+	$loader = new DoctrineAnnotationLoader($builder);
 	$schemaBuilder = $loader->load();
 
 	Assert::type(SchemaBuilder::class, $schemaBuilder);
+
 	Mockery::close();
 });
 
@@ -45,7 +46,7 @@ test(function () {
 	$builder->addDefinition('foobar')
 		->setClass(FoobarController::class);
 
-	$loader = new NetteAnnotationLoader($builder);
+	$loader = new DoctrineAnnotationLoader($builder);
 	$schemaBuilder = $loader->load();
 
 	Assert::type(SchemaBuilder::class, $schemaBuilder);
@@ -65,6 +66,7 @@ test(function () {
 
 	Assert::equal('baz2', $controller->getMethods()['baz2']->getName());
 	Assert::equal('/baz2', $controller->getMethods()['baz2']->getPath());
+	Assert::equal(['GET', 'POST'], $controller->getMethods()['baz2']->getMethods());
 
 	Mockery::close();
 });

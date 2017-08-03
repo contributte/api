@@ -1,14 +1,21 @@
 <?php
 
-namespace Contributte\Api\Bridges\DI\Annotation;
+namespace Contributte\Api\DI\Loader;
 
+use Contributte\Api\Annotation\Controller\Method;
+use Contributte\Api\Annotation\Controller\Path;
+use Contributte\Api\Annotation\Controller\RootPath;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 use Contributte\Api\Schema\Builder\SchemaController;
-use Contributte\Api\Utils\Regex;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Nette\Reflection\ClassType;
 
-final class NetteAnnotationLoader extends AnnotationLoader
+final class DoctrineAnnotationLoader extends AnnotationLoader
 {
+
+	/** @var AnnotationReader */
+	private $reader;
 
 	/**
 	 * @return SchemaBuilder
@@ -51,11 +58,14 @@ final class NetteAnnotationLoader extends AnnotationLoader
 	 */
 	protected function parseControllerClassAnnotations(SchemaController $controller, ClassType $class)
 	{
+		// Read class annotations
+		$annotations = $this->createReader()->getClassAnnotations($class);
+
 		// Iterate over all class annotations
-		foreach ($class->getAnnotations() as $name => $annotation) {
+		foreach ($annotations as $annotation) {
 			// Parse @RootPath
-			if ($this->compare($name, 'RootPath')) {
-				$controller->setRootPath((string) $annotation[0]);
+			if (get_class($annotation) == RootPath::class) {
+				$controller->setRootPath($annotation->getPath());
 				continue;
 			}
 		}
@@ -73,46 +83,47 @@ final class NetteAnnotationLoader extends AnnotationLoader
 			// Skip protected/private methods
 			if (!$method->isPublic()) continue;
 
-			// Skip if method has no @Path/@Method annotation
-			if (!$method->hasAnnotation('Path')
-				|| !$method->hasAnnotation('Method')
-			) continue;
+			// Read method annotations
+			$annotations = $this->createReader()->getMethodAnnotations($method);
+
+			// Skip if method has no @Path/@Method annotations
+			if (count($annotations) <= 0) continue;
 
 			// Append method to scheme
 			$schemaMethod = $controller->addMethod($method->getName());
 
 			// Iterate over all method annotations
-			foreach ($method->getAnnotations() as $name => $annotation) {
-				// Internal nette param
-				if ($name === 'name') continue;
-
+			foreach ($annotations as $annotation) {
 				// Parse @Path =========================
-				if ($this->compare($name, 'Path')) {
-					$schemaMethod->setPath((string) $annotation[0]);
+				if (get_class($annotation) === Path::class) {
+					$schemaMethod->setPath($annotation->getPath());
 					continue;
 				}
 
 				// Parse @Method =======================
-				if ($this->compare($name, 'Method')) {
-					$schemaMethod->appendMethods((array) $annotation[0]);
+				if (get_class($annotation) === Method::class) {
+					$schemaMethod->appendMethods($annotation->getMethods());
 					continue;
 				}
 			}
 		}
 	}
 
-	/**
+	/*
 	 * HELPERS *****************************************************************
 	 */
 
 	/**
-	 * @param string $annotation
-	 * @param string $expected
-	 * @return bool
+	 * @return AnnotationReader
 	 */
-	private function compare($annotation, $expected)
+	private function createReader()
 	{
-		return Regex::match(strtolower($annotation), sprintf('#%s$$#U', strtolower($expected))) !== NULL;
+		if (!$this->reader) {
+			AnnotationRegistry::registerLoader('class_exists');
+			$this->reader = new AnnotationReader();
+		}
+
+		return $this->reader;
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Contributte\Api\Bridges\DI\Loader;
+namespace Contributte\Api\DI\Loader;
 
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 
