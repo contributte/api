@@ -6,8 +6,8 @@ use Contributte\Api\Annotation\Controller\Controller;
 use Contributte\Api\Annotation\Controller\Method;
 use Contributte\Api\Annotation\Controller\Path;
 use Contributte\Api\Annotation\Controller\RootPath;
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 use Contributte\Api\UI\Controller\IController;
 
 /**

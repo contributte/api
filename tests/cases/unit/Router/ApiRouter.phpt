@@ -6,12 +6,11 @@
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
-use Contributte\Api\Http\Request\ApiRequest;
+use Contributte\Api\Http\ApiRequest;
 use Contributte\Api\Router\ApiRouter;
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Endpoint;
 use Contributte\Api\Schema\EndpointParameter;
-use Contributte\Psr7\Psr7ServerRequest;
 use Tester\Assert;
 
 // Match parameter {id}
@@ -27,9 +26,7 @@ test(function () {
 	$schema = new ApiSchema();
 	$schema->addEndpoint($endpoint);
 
-	$psr7 = new Psr7ServerRequest('GET', 'http://example.com/users/22/');
-	$request = (new ApiRequest())->withPsr7($psr7);
-
+	$request = ApiRequest::fromGlobals()->withNewUri('http://example.com/users/22/');
 	$router = new ApiRouter($schema);
 	$matched = $router->match($request);
 
@@ -55,9 +52,7 @@ test(function () {
 	$schema = new ApiSchema();
 	$schema->addEndpoint($endpoint);
 
-	$psr7 = new Psr7ServerRequest('GET', 'http://example.com/users/1/baz');
-	$request = (new ApiRequest())->withPsr7($psr7);
-
+	$request = ApiRequest::fromGlobals()->withNewUri('http://example.com/users/1/baz');
 	$router = new ApiRouter($schema);
 	$matched = $router->match($request);
 
