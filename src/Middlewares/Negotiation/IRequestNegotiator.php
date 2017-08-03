@@ -1,9 +1,9 @@
 <?php
 
-namespace Contributte\Api\Bridges\Middlewares\Negotiation;
+namespace Contributte\Api\Middlewares\Negotiation;
 
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 
 interface IRequestNegotiator
 {

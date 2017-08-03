@@ -1,9 +1,9 @@
 <?php
 
-namespace Contributte\Api\Bridges\Middlewares\Negotiation\Transformer;
+namespace Contributte\Api\Middlewares\Transformer;
 
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 
 class JsonTransformer implements ITransformer
 {
@@ -21,11 +21,9 @@ class JsonTransformer implements ITransformer
 		if (!$response->hasData()) return $response;
 
 		// Setup content type
-		$response->setHeader('Content-Type', 'application/json');
-
-		// Encode body
-		$body = json_encode($response->getData());
-		$response->setBody($body);
+		$response = $response
+			->setJson($response->getData())
+			->withHeader('Content-Type', 'application/json');
 
 		return $response;
 	}
@@ -40,8 +38,7 @@ class JsonTransformer implements ITransformer
 	public function decode(ApiRequest $request, array $options = [])
 	{
 		// Decode request pure JSON
-		$body = json_decode($request->getContents(), TRUE);
-		$request->setData($body);
+		$request = $request->withParsedBody($request->getJsonBody());
 
 		return $request;
 	}

@@ -1,11 +1,11 @@
 <?php
 
-namespace Contributte\Api\Bridges\Tracy\Negotiation\Transformer;
+namespace Contributte\Api\Middlewares\Transformer;
 
 use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\ITransformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 use Tracy\Debugger;
 
 class DebugTransformer implements ITransformer

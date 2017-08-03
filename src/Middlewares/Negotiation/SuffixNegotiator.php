@@ -1,11 +1,11 @@
 <?php
 
-namespace Contributte\Api\Bridges\Middlewares\Negotiation;
+namespace Contributte\Api\Middlewares\Negotiation;
 
-use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\IOutTransformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
+use Contributte\Api\Middlewares\Transformer\ITransformer;
 
 class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 {
@@ -16,11 +16,11 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 	// Attributes in ServerRequestInterface
 	const ATTR_SUFFIX = 'C-Negotiation-Suffix';
 
-	/** @var IOutTransformer[] */
+	/** @var ITransformer[] */
 	private $transformers = [];
 
 	/**
-	 * @param IOutTransformer[] $transformers
+	 * @param ITransformer[] $transformers
 	 */
 	public function __construct(array $transformers)
 	{
@@ -32,7 +32,7 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 	 */
 
 	/**
-	 * @param IOutTransformer[] $transformers
+	 * @param ITransformer[] $transformers
 	 * @return void
 	 */
 	private function addTransformers(array $transformers)
@@ -44,10 +44,10 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 
 	/**
 	 * @param string $suffix
-	 * @param IOutTransformer $transformer
+	 * @param ITransformer $transformer
 	 * @return void
 	 */
-	private function addTransformer($suffix, IOutTransformer $transformer)
+	private function addTransformer($suffix, ITransformer $transformer)
 	{
 		$this->transformers[$suffix] = $transformer;
 	}
@@ -67,8 +67,7 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 			throw new InvalidStateException('Please add at least one transformer');
 		}
 
-		$psr7Request = $request->getPsr7();
-		$path = $psr7Request->getUri()->getPath();
+		$path = $request->getUri()->getPath();
 
 		foreach ($this->transformers as $suffix => $transformer) {
 			// Skip fallback transformer
@@ -84,11 +83,11 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 
 				// Update ApiRequest without suffix (.json, ...) and also fill
 				// request attribute
-				$request = $request->withPsr7(
-					$psr7Request
-						->withUri($psr7Request->getUri()->withPath($newPath))
-						->withAttribute(self::ATTR_SUFFIX, $suffix)
-				);
+				$request = $request
+					->withUri($request->getUri()->withPath($newPath))
+					->withAttribute(self::ATTR_SUFFIX, $suffix);
+
+				// @todo handle incomming request
 
 				return $request;
 			}
@@ -108,7 +107,7 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 			throw new InvalidStateException('Please add at least one transformer');
 		}
 
-		$requestSuffix = $request->getPsr7()->getAttribute(self::ATTR_SUFFIX);
+		$requestSuffix = $request->getAttribute(self::ATTR_SUFFIX);
 
 		foreach ($this->transformers as $suffix => $transformer) {
 			// Skip fallback transformer
@@ -119,14 +118,14 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 
 			// Try match by suffix
 			if ($requestSuffix === $suffix) {
-				return $this->transform($transformer, $request, $response);
+				return $this->transformOut($transformer, $request, $response);
 			}
 		}
 
 		// Try fallback
 		if (isset($this->transformers[self::FALLBACK])) {
 			// Transform (fallback) data to given format
-			return $this->transform($this->transformers[self::FALLBACK], $request, $response);
+			return $this->transformOut($this->transformers[self::FALLBACK], $request, $response);
 		}
 
 		return $response;
@@ -137,14 +136,25 @@ class SuffixNegotiator implements IResponseNegotiator, IRequestNegotiator
 	 */
 
 	/**
-	 * @param IOutTransformer $transformer
+	 * @param ITransformer $transformer
 	 * @param ApiRequest $request
 	 * @param ApiResponse $response
 	 * @return ApiResponse
 	 */
-	protected function transform(IOutTransformer $transformer, ApiRequest $request, ApiResponse $response)
+	protected function transformOut(ITransformer $transformer, ApiRequest $request, ApiResponse $response)
 	{
 		return $transformer->encode($response);
+	}
+
+	/**
+	 * @param ITransformer $transformer
+	 * @param ApiRequest $request
+	 * @param ApiResponse $response
+	 * @return ApiRequest
+	 */
+	protected function transformIn(ITransformer $transformer, ApiRequest $request, ApiResponse $response)
+	{
+		return $transformer->decode($request);
 	}
 
 	/**
