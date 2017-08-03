@@ -3,8 +3,8 @@
 namespace Contributte\Api\Dispatcher;
 
 use Contributte\Api\Exception\Logical\Request\BadRequestException;
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 use Contributte\Api\Router\IRouter;
 use Contributte\Api\UI\IHandler;
 

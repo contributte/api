@@ -2,8 +2,8 @@
 
 namespace Contributte\Api\Dispatcher;
 
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 
 class ApiJsonDispatcher extends ApiDispatcher
 {
@@ -15,10 +15,9 @@ class ApiJsonDispatcher extends ApiDispatcher
 	 */
 	protected function fallback(ApiRequest $request, ApiResponse $response)
 	{
-		$response->setStatus(404);
-		$response->setBody(json_encode(['error' => 'No matched route by given URL']));
-
-		return $response;
+		return $response
+			->withStatus(404)
+			->setJson(['error' => 'No matched route by given URL']);
 	}
 
 }
