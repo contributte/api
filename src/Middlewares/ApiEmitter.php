@@ -1,11 +1,11 @@
 <?php
 
-namespace Contributte\Api\Bridges\Middlewares;
+namespace Contributte\Api\Middlewares;
 
 use Contributte\Api\Dispatcher\IDispatcher;
 use Contributte\Api\Exception\Logical\InvalidStateException;
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 use Exception;
 
 class ApiEmitter
@@ -23,7 +23,7 @@ class ApiEmitter
 	}
 
 	/**
-	 * API - INVOKING **********************************************************
+	 * MIDDLEWARE **************************************************************
 	 */
 
 	/**
@@ -37,7 +37,10 @@ class ApiEmitter
 		// Pass this API request/response objects to API dispatcher
 		$response = $this->dispatch($request, $response);
 
-		return $next($request, $response);
+		// Pass response to next middleware
+		$response = $next($request, $response);
+
+		return $response;
 	}
 
 	/**

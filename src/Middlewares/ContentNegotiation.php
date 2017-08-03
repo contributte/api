@@ -1,14 +1,14 @@
 <?php
 
-namespace Contributte\Api\Bridges\Middlewares;
+namespace Contributte\Api\Middlewares;
 
-use Contributte\Api\Bridges\Middlewares\Negotiation\IRequestNegotiator;
-use Contributte\Api\Bridges\Middlewares\Negotiation\IResponseNegotiator;
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
+use Contributte\Api\Middlewares\Negotiation\IRequestNegotiator;
+use Contributte\Api\Middlewares\Negotiation\IResponseNegotiator;
 use Exception;
 
-class ApiContentNegotiation
+class ContentNegotiation
 {
 
 	// Attributes in ServerRequestInterface
@@ -27,10 +27,12 @@ class ApiContentNegotiation
 
 	/**
 	 * @param array $negotiators
+	 * @param array $options
 	 */
-	public function __construct(array $negotiators = [])
+	public function __construct(array $negotiators = [], array $options = [])
 	{
 		$this->addNegotiations($negotiators);
+		$this->parseOptions($options);
 	}
 
 	/**
@@ -103,6 +105,17 @@ class ApiContentNegotiation
 	}
 
 	/**
+	 * @param array $options
+	 * @return void
+	 */
+	public function parseOptions(array $options)
+	{
+		if (isset($options['catch'])) {
+			$this->setCatchException($options['catch']);
+		}
+	}
+
+	/**
 	 * API - INVOKING **********************************************************
 	 */
 
@@ -115,12 +128,12 @@ class ApiContentNegotiation
 	public function __invoke(ApiRequest $request, ApiResponse $response, callable $next)
 	{
 		// Should we skip negotiation?
-		if ($request->getPsr7()->getAttribute(self::ATTR_SKIP, FALSE) === TRUE) {
+		if ($request->getAttribute(self::ATTR_SKIP, FALSE) === TRUE) {
 			return $next($request, $response);
 		}
 
 		// 1) Request negotiation
-		if ($request->getPsr7()->getAttribute(self::ATTR_SKIP_REQUEST, FALSE) !== TRUE) {
+		if ($request->getAttribute(self::ATTR_SKIP_REQUEST, FALSE) !== TRUE) {
 			$request = $this->negotiateRequest($request, $response);
 		}
 
@@ -133,7 +146,7 @@ class ApiContentNegotiation
 		}
 
 		// 3) Response negotiation
-		if ($request->getPsr7()->getAttribute(self::ATTR_SKIP_RESPONSE, FALSE) !== TRUE) {
+		if ($request->getAttribute(self::ATTR_SKIP_RESPONSE, FALSE) !== TRUE) {
 			$response = $this->negotiateResponse($request, $response);
 		}
 
@@ -200,7 +213,7 @@ class ApiContentNegotiation
 		]);
 
 		$code = $exception->getCode();
-		$response->setStatus($code < 200 || $code > 504 ? 404 : $code);
+		$response = $response->withStatus($code < 200 || $code > 504 ? 404 : $code);
 
 		return $response;
 	}

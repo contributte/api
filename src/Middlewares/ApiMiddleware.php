@@ -1,49 +1,53 @@
 <?php
 
-namespace Contributte\Api\Bridges\Middlewares;
+namespace Contributte\Api\Middlewares;
 
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
+use Contributte\Middlewares\Utils\ChainBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class ApiMiddleware
 {
 
-	// Attributes in ServerRequestInterface
-	const ATTR_URL = 'C-Api-Url';
-	const ATTR_FORMAT = 'C-Api-Format';
-
-	/** @var callable[] */
-	protected $invokers;
+	/** @var array */
+	protected $middlewares = [];
 
 	/**
-	 * @param callable[] $invokers
+	 * @param array $middlewares
 	 */
-	public function __construct(array $invokers)
+	public function __construct(array $middlewares)
 	{
-		$this->invokers = $invokers;
+		$this->middlewares = $middlewares;
 	}
 
 	/**
-	 * API - MIDDLEWARE ********************************************************
+	 * MIDDLEWARE **************************************************************
 	 */
 
 	/**
-	 * @param ServerRequestInterface $psr7Request
-	 * @param ResponseInterface $psr7Response
+	 * @param ServerRequestInterface $request
+	 * @param ResponseInterface $response
 	 * @param callable $next
-	 * @return ResponseInterface
+	 * @return ApiResponse
 	 */
-	public function __invoke(ServerRequestInterface $psr7Request, ResponseInterface $psr7Response, callable $next)
+	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
 	{
-		// Process this middleware
-		$apiResponse = $this->invoke($psr7Request, $psr7Response);
+		// Create API request & response
+		$apiRequest = $this->createApiRequest($request, $response);
+		$apiResponse = $this->createApiResponse($request, $response);
 
-		// Pass to next middleware
-		$psr7Response = $next($psr7Request, $apiResponse->getPsr7());
+		// Create chain of middlewares
+		$chain = ChainBuilder::factory($this->middlewares);
 
-		return $psr7Response;
+		// Pass request & response to API internal middlewares (ContentNegotiation, Emitter, etc..)
+		$apiResponse = $chain($apiRequest, $apiResponse);
+
+		// Pass request & response to next middleware
+		$apiResponse = $next($apiRequest, $apiResponse);
+
+		return $apiResponse;
 	}
 
 	/**
@@ -53,37 +57,13 @@ class ApiMiddleware
 	/**
 	 * @param ServerRequestInterface $psr7Request
 	 * @param ResponseInterface $psr7Response
-	 * @return ApiResponse
-	 */
-	protected function invoke(ServerRequestInterface $psr7Request, ResponseInterface $psr7Response)
-	{
-		// Create API request & response
-		$apiRequest = $this->createApiRequest($psr7Request, $psr7Response);
-		$apiResponse = $this->createApiResponse($psr7Request, $psr7Response);
-
-		/** @var callable $invoker */
-		$invoker = $this->createChain($this->invokers);
-
-		// Pass this API request/response to API invokers
-		$apiResponse = $invoker(
-			$apiRequest,
-			$apiResponse,
-			function (ApiRequest $request, ApiResponse $response) {
-				return $response;
-			}
-		);
-
-		return $apiResponse;
-	}
-
-	/**
-	 * @param ServerRequestInterface $psr7Request
-	 * @param ResponseInterface $psr7Response
 	 * @return ApiRequest
 	 */
 	protected function createApiRequest(ServerRequestInterface $psr7Request, ResponseInterface $psr7Response)
 	{
-		return (new ApiRequest())->withPsr7($psr7Request);
+		if ($psr7Request instanceof ApiRequest) return $psr7Request;
+
+		return ApiRequest::of($psr7Request);
 	}
 
 	/**
@@ -93,27 +73,9 @@ class ApiMiddleware
 	 */
 	protected function createApiResponse(ServerRequestInterface $psr7Request, ResponseInterface $psr7Response)
 	{
-		return (new ApiResponse())->withPsr7($psr7Response);
-	}
+		if ($psr7Response instanceof ApiResponse) return $psr7Response;
 
-	/**
-	 * @param callable[] $invokers
-	 * @return callable
-	 */
-	protected function createChain(array $invokers)
-	{
-		// Last invoker
-		$next = function (ApiRequest $request, ApiResponse $response) {
-			return $response;
-		};
-
-		while ($invoker = array_pop($invokers)) {
-			$next = function (ApiRequest $request, ApiResponse $response) use ($invoker, $next) {
-				return $invoker($request, $response, $next);
-			};
-		}
-
-		return $next;
+		return ApiResponse::of($psr7Response);
 	}
 
 }
