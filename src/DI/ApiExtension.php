@@ -1,11 +1,9 @@
 <?php
 
-namespace Contributte\Api\Bridges\DI;
+namespace Contributte\Api\DI;
 
-use Contributte\Api\Bridges\DI\Annotation\DoctrineAnnotationLoader;
-use Contributte\Api\Bridges\DI\Annotation\NetteAnnotationLoader;
-use Contributte\Api\Bridges\Tracy\BlueScreen\ApiBlueScreen;
-use Contributte\Api\Bridges\Tracy\Panel\ApiPanel\ApiPanel;
+use Contributte\Api\DI\Annotation\DoctrineAnnotationLoader;
+use Contributte\Api\DI\Annotation\NetteAnnotationLoader;
 use Contributte\Api\Dispatcher\ApiDispatcher;
 use Contributte\Api\Dispatcher\IDispatcher;
 use Contributte\Api\Exception\Logical\InvalidStateException;
@@ -13,15 +11,15 @@ use Contributte\Api\Router\ApiRouter;
 use Contributte\Api\Router\IRouter;
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
-use Contributte\Api\Schema\Factory\ArrayHydrator;
-use Contributte\Api\Schema\Generator\ArraySerializator;
-use Contributte\Api\Schema\Validator\Impl\PathValidator;
-use Contributte\Api\Schema\Validator\Impl\RootPathValidator;
+use Contributte\Api\Schema\Serialization\ArrayHydrator;
+use Contributte\Api\Schema\Serialization\ArraySerializator;
+use Contributte\Api\Schema\Validation\PathValidation;
+use Contributte\Api\Schema\Validation\RootPathValidation;
 use Contributte\Api\Schema\Validator\SchemaBuilderValidator;
+use Contributte\Api\Tracy\Panel\ApiPanel\ApiPanel;
+use Contributte\Api\UI\ContainerServiceHandler;
 use Contributte\Api\UI\IHandler;
-use Contributte\Api\UI\ServiceHandler;
 use Nette\DI\CompilerExtension;
-use Nette\DI\ContainerBuilder;
 use Nette\PhpGenerator\ClassType;
 use Nette\Utils\Validators;
 
@@ -59,7 +57,7 @@ class ApiExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('handler'))
 			->setClass(IHandler::class)
-			->setFactory(ServiceHandler::class);
+			->setFactory(ContainerServiceHandler::class);
 
 		$builder->addDefinition($this->prefix('schema'))
 			->setClass(ApiSchema::class);
@@ -154,8 +152,8 @@ class ApiExtension extends CompilerExtension
 	protected function validateSchema($builder)
 	{
 		$validator = new SchemaBuilderValidator();
-		$validator->add(new RootPathValidator());
-		$validator->add(new PathValidator());
+		$validator->add(new RootPathValidation());
+		$validator->add(new PathValidation());
 
 		$validator->validate($builder);
 	}

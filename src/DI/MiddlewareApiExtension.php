@@ -1,6 +1,6 @@
 <?php
 
-namespace Contributte\Api\Bridges\DI;
+namespace Contributte\Api\DI;
 
 use Nette\DI\CompilerExtension;
 
