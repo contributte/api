@@ -2,7 +2,7 @@
 
 namespace Contributte\Api\Router;
 
-use Contributte\Api\Http\Request\ApiRequest;
+use Contributte\Api\Http\ApiRequest;
 
 interface IRouter
 {

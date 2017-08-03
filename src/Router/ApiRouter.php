@@ -2,8 +2,7 @@
 
 namespace Contributte\Api\Router;
 
-use Contributte\Api\Bridges\Middlewares\ApiMiddleware;
-use Contributte\Api\Http\Request\ApiRequest;
+use Contributte\Api\Http\ApiRequest;
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Endpoint;
 use Contributte\Api\Utils\Regex;
@@ -74,19 +73,11 @@ class ApiRouter implements IRouter
 	protected function compareUrl(Endpoint $endpoint, ApiRequest $request)
 	{
 		// Parse url from ApiRequest
-		$psr7 = $request->getPsr7();
-
-		// If ServerRequestInterface has a right API attribute,
-		// then use them as URL address (attribute should be filled in routing phase)
-		if ($psr7->getAttribute(ApiMiddleware::ATTR_URL)) {
-			$url = $psr7->getAttribute(ApiMiddleware::ATTR_URL);
-		} else {
-			$url = $request->getUri()->getPath();
-		}
+		$url = $request->getUri()->getPath();
 
 		// Url has always slash at the beginning
 		// and no trailing slash at the end
-		$url = sprintf('/%s', trim($url, '/'));
+		$url = '/' . trim($url, '/');
 
 		// Try to match against the pattern
 		$match = Regex::match($url, $endpoint->getPattern());
@@ -95,7 +86,7 @@ class ApiRouter implements IRouter
 		if ($match === NULL) return NULL;
 
 		// Fill ApiRequest attributes with matched variables
-		$request = $request->withAttribute(ApiRequest::ATTR_ROUTER_VARS, $match);
+		$request = $request->withAttribute(ApiRequest::ATTR_ROUTER, $match);
 
 		// Fill ApiRequest parameters with matched variables
 		foreach ($endpoint->getParameters() as $param) {
