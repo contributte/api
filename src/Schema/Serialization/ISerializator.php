@@ -1,6 +1,6 @@
 <?php
 
-namespace Contributte\Api\Schema\Generator;
+namespace Contributte\Api\Schema\Serialization;
 
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 

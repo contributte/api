@@ -1,6 +1,6 @@
 <?php
 
-namespace Contributte\Api\Schema\Factory;
+namespace Contributte\Api\Schema\Serialization;
 
 use Contributte\Api\Schema\ApiSchema;
 use Contributte\Api\Schema\Endpoint;
