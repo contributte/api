@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Test: Schema\Validator\Impl\PathValidator
+ * Test: Schema\Validation\PathValidation
  */
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__ . '/../../../../bootstrap.php';
 
 use Contributte\Api\Exception\Logical\ValidationException;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
-use Contributte\Api\Schema\Validator\Impl\PathValidator;
+use Contributte\Api\Schema\Validation\PathValidation;
 use Tester\Assert;
 
 // Validate: start slash
@@ -20,7 +20,7 @@ test(function () {
 	$c1m1->setPath('foobar');
 
 	Assert::exception(function () use ($builder) {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	}, ValidationException::class, '@Path "foobar" in "c1::foo()" must starts with "/" (slash).');
 });
@@ -34,7 +34,7 @@ test(function () {
 	$c1m1->setPath('/foobar/');
 
 	Assert::exception(function () use ($builder) {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	}, ValidationException::class, '@Path "/foobar/" in "c1::foo()" must not ends with "/" (slash).');
 });
@@ -53,7 +53,7 @@ test(function () {
 	$c1m2->addMethod('GET');
 
 	Assert::exception(function () use ($builder) {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	}, ValidationException::class, 'Duplicate @Path "/foobar" in c1 at methods "foo2()" and "foo1()"');
 });
@@ -72,7 +72,7 @@ test(function () {
 	$c1m2->setMethods(['POST', 'PUT']);
 
 	Assert::exception(function () use ($builder) {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	}, ValidationException::class, 'Duplicate @Path "/foobar" in c1 at methods "foo2()" and "foo1()"');
 });
@@ -91,7 +91,7 @@ test(function () {
 	$c1m2->setMethods(['POST']);
 
 	try {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	} catch (Exception $e) {
 		Assert::fail('This is fail. Paths+Method are different.');
@@ -108,7 +108,7 @@ test(function () {
 	$c1m1->addMethod('GET');
 
 	Assert::exception(function () use ($builder) {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	}, ValidationException::class, '@Path "/{foo$}" in "c1::foo1()" contains illegal characters "$". Allowed characters are only [a-zA-Z0-9-_/{}].');
 });
@@ -123,7 +123,7 @@ test(function () {
 	$c1m1->addMethod('GET');
 
 	Assert::exception(function () use ($builder) {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	}, ValidationException::class, '@Path "/{%foo}" in "c1::foo1()" contains illegal characters "%". Allowed characters are only [a-zA-Z0-9-_/{}].');
 });
@@ -138,7 +138,7 @@ test(function () {
 	$c1m1->addMethod('GET');
 
 	Assert::exception(function () use ($builder) {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	}, ValidationException::class, '@Path "/{foo&&&bar}" in "c1::foo1()" contains illegal characters "&&&". Allowed characters are only [a-zA-Z0-9-_/{}].');
 });
@@ -152,7 +152,7 @@ test(function () {
 	$c1m1->setPath('/{foo}/{bar}');
 	$c1m1->addMethod('GET');
 	try {
-		$validator = new PathValidator();
+		$validator = new PathValidation();
 		$validator->validate($builder);
 	} catch (Exception $e) {
 		Assert::fail('This is fail. Parameters are OK.');

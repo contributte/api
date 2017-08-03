@@ -4,17 +4,17 @@ namespace Contributte\Api\Schema\Validator;
 
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 
-class SchemaBuilderValidator implements IValidator
+class SchemaBuilderValidator
 {
 
-	/** @var IValidator[] */
+	/** @var IValidation[] */
 	private $validators = [];
 
 	/**
-	 * @param IValidator $validator
+	 * @param IValidation $validator
 	 * @return void
 	 */
-	public function add(IValidator $validator)
+	public function add(IValidation $validator)
 	{
 		$this->validators[] = $validator;
 	}

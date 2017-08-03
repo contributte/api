@@ -1,13 +1,12 @@
 <?php
 
-namespace Contributte\Api\Schema\Validator\Impl;
+namespace Contributte\Api\Schema\Validation;
 
 use Contributte\Api\Exception\Logical\Validation\InvalidSchemaException;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
-use Contributte\Api\Schema\Validator\IValidator;
 use Contributte\Api\Utils\Regex;
 
-class RootPathValidator implements IValidator
+class RootPathValidation implements IValidation
 {
 
 	/**
