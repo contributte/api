@@ -11,6 +11,7 @@ final class EndpointParameter
 	const TYPE_FLOAT = 4;
 	const TYPE_BOOLEAN = 5;
 	const TYPE_DATETIME = 6;
+	const TYPE_OBJECT = 7;
 
 	/** @var string */
 	private $name;

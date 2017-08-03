@@ -1,6 +1,6 @@
 <?php
 
-namespace Contributte\Api\Bridges\Tracy\Panel\ApiPanel;
+namespace Contributte\Api\Tracy\Panel\ApiPanel;
 
 use Contributte\Api\Schema\ApiSchema;
 use Tracy\IBarPanel;

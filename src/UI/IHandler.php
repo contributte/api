@@ -2,8 +2,8 @@
 
 namespace Contributte\Api\UI;
 
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 
 interface IHandler
 {

@@ -3,11 +3,11 @@
 namespace Contributte\Api\UI;
 
 use Contributte\Api\Exception\Logical\InvalidStateException;
-use Contributte\Api\Http\Request\ApiRequest;
-use Contributte\Api\Http\Response\ApiResponse;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
 use Nette\DI\Container;
 
-final class ServiceHandler implements IHandler
+class ContainerServiceHandler implements IHandler
 {
 
 	/** @var Container */

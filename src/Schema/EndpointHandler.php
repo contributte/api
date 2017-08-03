@@ -5,8 +5,6 @@ namespace Contributte\Api\Schema;
 final class EndpointHandler
 {
 
-	const TYPE_CONTROLLER = 1;
-
 	/** @var string */
 	private $class;
 

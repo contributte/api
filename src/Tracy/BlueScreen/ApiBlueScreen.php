@@ -1,6 +1,6 @@
 <?php
 
-namespace Contributte\Api\Bridges\Tracy\BlueScreen;
+namespace Contributte\Api\Tracy\BlueScreen;
 
 use Contributte\Api\Exception\Runtime\ApiException;
 use Tracy\BlueScreen;

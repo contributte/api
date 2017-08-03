@@ -1,10 +1,10 @@
 <?php
 
-namespace Contributte\Api\Schema\Validator;
+namespace Contributte\Api\Schema\Validation;
 
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 
-interface IValidator
+interface IValidation
 {
 
 	/**
