@@ -41,7 +41,7 @@ test(function () {
 
 	$request = ApiRequest::fromGlobals()->withNewUri('https://contributte.org/foo.json');
 	$response = ApiResponse::fromGlobals();
-	$response->setData(['foo' => 'bar']);
+	$response = $response->writeJsonBody(['foo' => 'bar']);
 
 	// 1# Negotiate request
 	$request = $negotiation->negotiateRequest($request, $response);
@@ -57,7 +57,7 @@ test(function () {
 
 	$request = ApiRequest::fromGlobals()->withNewUri('https://contributte.org/foo.bar');
 	$response = ApiResponse::fromGlobals();
-	$response->setData(['foo' => 'bar']);
+	$response = $response->writeJsonBody(['foo' => 'bar']);
 
 	// 1# Negotiate request
 	$request = $negotiation->negotiateRequest($request, $response);

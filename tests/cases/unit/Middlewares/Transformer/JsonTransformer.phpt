@@ -16,7 +16,7 @@ use function GuzzleHttp\Psr7\stream_for;
 test(function () {
 	$transformer = new JsonTransformer();
 	$response = new ApiResponse();
-	$response->setData(['foo' => 'bar']);
+	$response = $response->writeJsonBody(['foo' => 'bar']);
 
 	$response = $transformer->encode($response);
 	$response->getBody()->rewind();
