@@ -3,7 +3,6 @@
 namespace Contributte\Api\Schema\Serialization;
 
 use Contributte\Api\Schema\Builder\SchemaBuilder;
-use Contributte\Api\Schema\EndpointHandler;
 use Contributte\Api\Schema\EndpointParameter;
 use Contributte\Api\Schema\SchemaMapping;
 use Contributte\Api\Utils\Helpers;
