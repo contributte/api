@@ -2,8 +2,7 @@
 
 namespace Contributte\Api\DI;
 
-use Contributte\Api\DI\Annotation\DoctrineAnnotationLoader;
-use Contributte\Api\DI\Annotation\NetteAnnotationLoader;
+use Contributte\Api\DI\Loader\DoctrineAnnotationLoader;
 use Contributte\Api\Dispatcher\ApiDispatcher;
 use Contributte\Api\Dispatcher\IDispatcher;
 use Contributte\Api\Exception\Logical\InvalidStateException;
@@ -16,26 +15,24 @@ use Contributte\Api\Schema\Serialization\ArraySerializator;
 use Contributte\Api\Schema\Validation\PathValidation;
 use Contributte\Api\Schema\Validation\RootPathValidation;
 use Contributte\Api\Schema\Validator\SchemaBuilderValidator;
+use Contributte\Api\Tracy\BlueScreen\ApiBlueScreen;
 use Contributte\Api\Tracy\Panel\ApiPanel\ApiPanel;
 use Contributte\Api\UI\ContainerServiceHandler;
 use Contributte\Api\UI\IHandler;
 use Nette\DI\CompilerExtension;
+use Nette\DI\ContainerBuilder;
 use Nette\PhpGenerator\ClassType;
-use Nette\Utils\Validators;
 
 class ApiExtension extends CompilerExtension
 {
 
 	// Loader types
-	const LOADER = ['annotations', 'neon', 'php'];
+	const LOADERS = ['annotations', 'neon', 'php'];
 
 	/** @var array */
 	private $defaults = [
 		'debug' => FALSE,
-		'loader' => [
-			'type' => 'annotations',
-			'impl' => DoctrineAnnotationLoader::class,
-		],
+		'loader' => 'annotations',
 	];
 
 	/**
@@ -73,20 +70,8 @@ class ApiExtension extends CompilerExtension
 	 */
 	public function beforeCompile()
 	{
-		$config = $this->validateConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
-		$schemaBuilder = NULL;
-
-		// Create loader and fill schema builder
-		if ($config['loader']['type'] === 'annotations') {
-			$schemaBuilder = $this->loadAnnotations();
-		} else if ($config['loader']['type'] === 'neon') {
-			throw new InvalidStateException('Not implemented');
-		} else if ($config['loader']['type'] === 'php') {
-			throw new InvalidStateException('Not implemented');
-		} else {
-			throw new InvalidStateException('Unknown loader type');
-		}
+		$schemaBuilder = $this->getSchemaBuilder();
 
 		// Validate schema
 		$this->validateSchema($schemaBuilder);
@@ -95,11 +80,12 @@ class ApiExtension extends CompilerExtension
 		$generator = new ArraySerializator();
 		$schema = $generator->serialize($schemaBuilder);
 
-		$builder->addDefinition($this->prefix('schemaFactory'))
-			->setClass(ArrayHydrator::class, [$schema]);
+		// Register services
+		$builder->addDefinition($this->prefix('hydrator'))
+			->setClass(ArrayHydrator::class);
 
 		$builder->getDefinition($this->prefix('schema'))
-			->setFactory('@' . $this->prefix('schemaFactory') . '::create');
+			->setFactory('@' . $this->prefix('hydrator') . '::hydrate', [$schema]);
 	}
 
 	/**
@@ -119,28 +105,37 @@ class ApiExtension extends CompilerExtension
 	}
 
 	/**
-	 * Create annotation loaders and create ApiSchema
+	 * HELPERS *****************************************************************
+	 */
+
+	/**
+	 * @return SchemaBuilder
+	 */
+	protected function getSchemaBuilder()
+	{
+		$config = $this->validateConfig($this->defaults);
+
+		// Create loader and fill schema builder
+		if ($config['loader'] === 'annotations') {
+			return $this->loadAnnotations();
+		} else if ($config['loader'] === 'neon') {
+			throw new InvalidStateException('Not implemented');
+		} else if ($config['loader'] === 'php') {
+			throw new InvalidStateException('Not implemented');
+		} else {
+			throw new InvalidStateException('Unknown loader type');
+		}
+	}
+
+	/**
+	 * Create annotation loaders and create SchemaBuilder
 	 *
 	 * @return SchemaBuilder
 	 */
 	protected function loadAnnotations()
 	{
-		$config = $this->validateConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
-
-		// Validation loader
-		Validators::assertField($config['loader'], 'impl', 'type');
-
-		// Create annotation
-		if ($config['loader']['impl'] === DoctrineAnnotationLoader::class) {
-			// Doctrine-like @annotations
-			$loader = new DoctrineAnnotationLoader($builder);
-		} else if ($config['loader']['impl'] === NetteAnnotationLoader::class) {
-			// Nette-like-simple @annotations
-			$loader = new NetteAnnotationLoader($builder);
-		} else {
-			throw new InvalidStateException('Unknown annotation loader');
-		}
+		$loader = new DoctrineAnnotationLoader($builder);
 
 		return $loader->load();
 	}
