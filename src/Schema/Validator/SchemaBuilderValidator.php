@@ -3,6 +3,7 @@
 namespace Contributte\Api\Schema\Validator;
 
 use Contributte\Api\Schema\Builder\SchemaBuilder;
+use Contributte\Api\Schema\Validation\IValidation;
 
 class SchemaBuilderValidator
 {
