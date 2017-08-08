@@ -22,7 +22,7 @@ class JsonTransformer implements ITransformer
 
 		// Setup content type
 		$response = $response
-			->setJson($response->getData())
+			->writeJsonBody($response->getData())
 			->withHeader('Content-Type', 'application/json');
 
 		return $response;

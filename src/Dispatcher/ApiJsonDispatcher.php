@@ -17,7 +17,7 @@ class ApiJsonDispatcher extends ApiDispatcher
 	{
 		return $response
 			->withStatus(404)
-			->setJson(['error' => 'No matched route by given URL']);
+			->writeJsonBody(['error' => 'No matched route by given URL']);
 	}
 
 }

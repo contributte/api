@@ -2,7 +2,6 @@
 
 namespace Contributte\Api\Middlewares\Transformer;
 
-use Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\ITransformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\ApiRequest;
 use Contributte\Api\Http\ApiResponse;
@@ -40,10 +39,10 @@ class DebugTransformer implements ITransformer
 		$tmp = clone $response;
 
 		if (!$response->hasData()) {
-			$response->setHeader('Content-Type', 'text/html');
-			$response->setBody(Debugger::dump($tmp, TRUE));
+			$response = $response->withHeader('Content-Type', 'text/html')
+				->writeBody(Debugger::dump($tmp, TRUE), TRUE);
 		} else {
-			$response->setBody(Debugger::dump($tmp, TRUE));
+			$response = $response->writeBody(Debugger::dump($tmp, TRUE), TRUE);
 		}
 
 		return $response;
