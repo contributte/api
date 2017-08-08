@@ -26,11 +26,12 @@ class ApiResponse extends Psr7Response
 	 * @param mixed $data
 	 * @return static
 	 */
-	public function setData($data)
+	public function withData($data)
 	{
-		$this->data = $data;
+		$new = clone $this;
+		$new->data = $data;
 
-		return $this;
+		return $new;
 	}
 
 	/**
@@ -45,12 +46,10 @@ class ApiResponse extends Psr7Response
 	 * @param array $data
 	 * @return static
 	 */
-	public function setJson(array $data)
+	public function writeJsonBody(array $data)
 	{
-		$new = $this->withHeader('Content-Type', 'application/json');
-		$new->setBody(json_encode($data));
-
-		return $new;
+		return $this->withHeader('Content-Type', 'application/json')
+			->writeBody(json_encode($data), TRUE);
 	}
 
 }

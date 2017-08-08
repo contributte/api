@@ -207,7 +207,7 @@ class ContentNegotiation
 	 */
 	protected function negotiateException(Exception $exception, ApiRequest $request, ApiResponse $response)
 	{
-		$response->setData([
+		$response = $response->withData([
 			'error' => $exception->getMessage(),
 			'code' => $exception->getCode(),
 		]);
