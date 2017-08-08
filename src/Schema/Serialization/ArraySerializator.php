@@ -40,7 +40,6 @@ final class ArraySerializator implements ISerializator
 				// Create endpoint
 				$endpoint = [
 					SchemaMapping::HANDLER => [
-						SchemaMapping::HANDLER_TYPE => EndpointHandler::TYPE_CONTROLLER,
 						SchemaMapping::HANDLER_CLASS => $controller->getClass(),
 						SchemaMapping::HANDLER_METHOD => $method->getName(),
 					],

@@ -6,7 +6,6 @@ interface SchemaMapping
 {
 
 	const HANDLER = 'handler';
-	const HANDLER_TYPE = 'type';
 	const HANDLER_CLASS = 'class';
 	const HANDLER_METHOD = 'method';
 	const METHODS = 'method';
