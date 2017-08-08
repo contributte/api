@@ -40,6 +40,17 @@ final class FoobarController implements IController
 	}
 
 	/**
+	 * @Path("/baz2")
+	 * @Method(methods={"PUT"})
+	 * @param ApiRequest $request
+	 * @param ApiResponse $response
+	 * @return void
+	 */
+	public function baz3(ApiRequest $request, ApiResponse $response)
+	{
+	}
+
+	/**
 	 * @return void
 	 */
 	public function getData1()

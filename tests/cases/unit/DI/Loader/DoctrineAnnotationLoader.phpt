@@ -58,7 +58,7 @@ test(function () {
 	Assert::equal(FoobarController::class, $controller->getClass());
 	Assert::equal('/foobar', $controller->getRootPath());
 
-	Assert::count(2, $controller->getMethods());
+	Assert::count(3, $controller->getMethods());
 
 	Assert::equal('baz1', $controller->getMethods()['baz1']->getName());
 	Assert::equal('/baz1', $controller->getMethods()['baz1']->getPath());
