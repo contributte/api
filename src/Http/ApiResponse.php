@@ -42,14 +42,4 @@ class ApiResponse extends Psr7Response
 		return $this->data;
 	}
 
-	/**
-	 * @param array $data
-	 * @return static
-	 */
-	public function writeJsonBody(array $data)
-	{
-		return $this->withHeader('Content-Type', 'application/json')
-			->writeBody(json_encode($data), TRUE);
-	}
-
 }
