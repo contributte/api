@@ -12,14 +12,14 @@ final class ArrayHydrator implements IHydrator
 {
 
 	/**
-	 * @param array $schema
+	 * @param array $data
 	 * @return ApiSchema
 	 */
-	public function hydrate($schema)
+	public function hydrate($data)
 	{
 		$schema = new ApiSchema();
 
-		foreach ($schema as $route) {
+		foreach ($data as $route) {
 			// @todo replace to EndpointHandler::factory()
 			// move validation inside, make class immutable
 			$handler = new EndpointHandler();
