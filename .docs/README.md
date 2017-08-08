@@ -63,9 +63,7 @@ final class HelloController implements IController
      */
     public function index(ApiRequest $request, ApiResponse $response)
     {
-        $response->setBody('Hello world!');
-
-        return $response;
+        return $response->writeBody('Hello world!');
     }
 }
 ```
@@ -91,14 +89,14 @@ services:
     middleware.tracy: Contributte\Middlewares\Middleware\TracyMiddleware
     middleware.basepath: Contributte\Middlewares\Middleware\AutoBasePathMiddleware
     middleware.router: Contributte\Middlewares\Middleware\RouterMiddleware([
-        "^/api/{path:.+}": @middleware.api,
+        "^/api/{path:.+}": api-negotiation
         "^/{path:.*}": @middleware.presenter
     ])
 
-    # Case #1 (handle API request)[api/]
+    api-negotiation
     middleware.api:
         class: Contributte\Api\Bridges\Middlewares\ApiMiddleware([
-            Contributte\Api\Bridges\Middlewares\ApiPrefix('api')
+            api-negotiation
             Contributte\Api\Bridges\Middlewares\ApiContentNegotiation([
                 Contributte\Api\Bridges\Middlewares\Negotiation\UrlNegotiator([
                     "json": Contributte\Api\Bridges\Middlewares\Negotiation\Transformer\JsonTransformer(),
