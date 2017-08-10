@@ -32,9 +32,10 @@ final class ArraySerializator implements ISerializator
 				// Build full mask (@RootPath + @Path)
 				// without duplicated slashes (//)
 				// and without trailing slash at the end
+				// but with slash at the beginning
 				$mask = '/' . $controller->getRootPath() . '/' . $method->getPath();
 				$mask = Helpers::slashless($mask);
-				$mask = rtrim($mask, '/');
+				$mask = '/' . trim($mask, '/');
 
 				// Create endpoint
 				$endpoint = [
