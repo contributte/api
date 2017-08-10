@@ -207,15 +207,12 @@ class ContentNegotiation
 	 */
 	protected function negotiateException(Exception $exception, ApiRequest $request, ApiResponse $response)
 	{
-		$response = $response->withData([
+		$code = $exception->getCode();
+
+		return $response->withData([
 			'error' => $exception->getMessage(),
 			'code' => $exception->getCode(),
-		]);
-
-		$code = $exception->getCode();
-		$response = $response->withStatus($code < 200 || $code > 504 ? 404 : $code);
-
-		return $response;
+		])->withStatus($code < 200 || $code > 504 ? 404 : $code);
 	}
 
 }
