@@ -1,0 +1,132 @@
+<?php
+
+namespace Contributte\Api\DI;
+
+use Contributte\Api\Middlewares\ApiEmitter;
+use Contributte\Api\Middlewares\ApiMiddleware;
+use Contributte\Api\Middlewares\ContentNegotiation;
+use Contributte\Api\Middlewares\Negotiation\SuffixNegotiator;
+use Contributte\Api\Middlewares\Transformer\DebugTransformer;
+use Contributte\Api\Middlewares\Transformer\JsonTransformer;
+use Contributte\Middlewares\AutoBasePathMiddleware;
+use Contributte\Middlewares\DI\StandaloneMiddlewareExtension;
+use Contributte\Middlewares\TracyMiddleware;
+use Nette\DI\CompilerExtension;
+use Nette\DI\Helpers;
+use Nette\DI\Statement;
+use RuntimeException;
+
+class Api2MiddlewareExtension extends CompilerExtension
+{
+
+	/** @var array */
+	protected $defaults = [
+		'tracy' => '%debugMode%',
+		'negotiation' => FALSE,
+	];
+
+	/**
+	 * Register services (middlewares wrapper)
+	 *
+	 * @return void
+	 */
+	public function loadConfiguration()
+	{
+		// Is MiddlewaresExtension (contributte/middlewares) registered?
+		if (!$this->getMiddlewaresExtension()) {
+			throw new RuntimeException(sprintf('Extension %s is not registered', StandaloneMiddlewareExtension::class));
+		}
+
+		$config = $this->loadConfig();
+
+		if ($config['negotiation'] === TRUE) {
+			$this->loadContentNegotiation();
+		} else {
+			$this->loadMiddlewares();
+		}
+	}
+
+	/**
+	 * Setup middlewares extension from this extension
+	 * - with content negotiation
+	 *
+	 * @return void
+	 */
+	protected function loadContentNegotiation()
+	{
+		// HACK! Update middlewares extension
+		$extension = $this->getMiddlewaresExtension();
+		$config = $this->getConfig();
+
+		$transformers = [
+			'*' => new Statement(JsonTransformer::class),
+			'json' => new Statement(JsonTransformer::class),
+			'debug' => new Statement(DebugTransformer::class),
+		];
+
+		// No .debug transformer in production mode
+		if ($config['debug'] !== TRUE) unset($transformers['debug']);
+
+		$extension->setConfig([
+			'middlewares' => [
+				new Statement(TracyMiddleware::class . '::factory', [$config['tracy']]),
+				new Statement(AutoBasePathMiddleware::class),
+				new Statement(ApiMiddleware::class, [[
+					new Statement(ContentNegotiation::class, [[
+							new Statement(SuffixNegotiator::class, [$transformers]),
+						]]
+					),
+					new Statement(ApiEmitter::class)],
+				]),
+			],
+		]);
+	}
+
+	/**
+	 * Setup middlewares extension from this extension
+	 *
+	 * @return void
+	 */
+	protected function loadMiddlewares()
+	{
+		// HACK! Update middlewares extension
+		$extension = $this->getMiddlewaresExtension();
+		$config = $this->getConfig();
+
+		$extension->setConfig([
+			'middlewares' => [
+				new Statement(TracyMiddleware::class . '::factory', [$config['tracy']]),
+				new Statement(AutoBasePathMiddleware::class),
+				new Statement(ApiMiddleware::class, [
+					[new Statement(ApiEmitter::class)],
+				]),
+			],
+		]);
+	}
+
+	/**
+	 * HELPERS *****************************************************************
+	 */
+
+	/**
+	 * @return StandaloneMiddlewareExtension
+	 */
+	protected function getMiddlewaresExtension()
+	{
+		$ext = $this->compiler->getExtensions(StandaloneMiddlewareExtension::class);
+
+		return $ext ? reset($ext) : NULL;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function loadConfig()
+	{
+		$config = $this->validateConfig($this->defaults);
+		$this->config = Helpers::expand($config, $this->getContainerBuilder()->parameters);
+
+		return $this->config;
+	}
+
+}

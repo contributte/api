@@ -21,6 +21,7 @@ use Contributte\Api\UI\ContainerServiceHandler;
 use Contributte\Api\UI\IHandler;
 use Nette\DI\CompilerExtension;
 use Nette\DI\ContainerBuilder;
+use Nette\DI\Helpers;
 use Nette\PhpGenerator\ClassType;
 
 class ApiExtension extends CompilerExtension
@@ -30,8 +31,8 @@ class ApiExtension extends CompilerExtension
 	const LOADERS = ['annotations', 'neon', 'php'];
 
 	/** @var array */
-	private $defaults = [
-		'debug' => FALSE,
+	protected $defaults = [
+		'debug' => '%debugMode%',
 		'loader' => 'annotations',
 	];
 
@@ -43,6 +44,7 @@ class ApiExtension extends CompilerExtension
 	public function loadConfiguration()
 	{
 		$builder = $this->getContainerBuilder();
+		$this->loadConfig();
 
 		$builder->addDefinition($this->prefix('dispatcher'))
 			->setClass(IDispatcher::class)
@@ -94,7 +96,7 @@ class ApiExtension extends CompilerExtension
 	 */
 	public function afterCompile(ClassType $class)
 	{
-		$config = $this->validateConfig($this->defaults);
+		$config = $this->loadConfig();
 		$initialize = $class->getMethod('initialize');
 
 		if ($config['debug'] === TRUE) {
@@ -113,7 +115,7 @@ class ApiExtension extends CompilerExtension
 	 */
 	protected function getSchemaBuilder()
 	{
-		$config = $this->validateConfig($this->defaults);
+		$config = $this->loadConfig();
 
 		// Create loader and fill schema builder
 		if ($config['loader'] === 'annotations') {
@@ -151,6 +153,17 @@ class ApiExtension extends CompilerExtension
 		$validator->add(new PathValidation());
 
 		$validator->validate($builder);
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function loadConfig()
+	{
+		$config = $this->validateConfig($this->defaults);
+		$this->config = Helpers::expand($config, $this->getContainerBuilder()->parameters);
+
+		return $this->config;
 	}
 
 }
