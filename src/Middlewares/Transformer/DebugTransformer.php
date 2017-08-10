@@ -5,8 +5,8 @@ namespace Contributte\Api\Middlewares\Transformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\ApiRequest;
 use Contributte\Api\Http\ApiResponse;
-use function GuzzleHttp\Psr7\stream_for;
 use Tracy\Debugger;
+use function GuzzleHttp\Psr7\stream_for;
 
 class DebugTransformer implements ITransformer
 {

@@ -73,11 +73,10 @@ class Api2MiddlewareExtension extends CompilerExtension
 				new Statement(AutoBasePathMiddleware::class),
 				new Statement(ApiMiddleware::class, [[
 					new Statement(ContentNegotiation::class, [[
-							new Statement(SuffixNegotiator::class, [$transformers]),
-						]]
-					),
-					new Statement(ApiEmitter::class)],
-				]),
+						new Statement(SuffixNegotiator::class, [$transformers]),
+					]]),
+					new Statement(ApiEmitter::class),
+				]]),
 			],
 		]);
 	}
