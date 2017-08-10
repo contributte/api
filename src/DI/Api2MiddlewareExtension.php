@@ -65,7 +65,7 @@ class Api2MiddlewareExtension extends CompilerExtension
 		];
 
 		// No .debug transformer in production mode
-		if ($config['debug'] !== TRUE) unset($transformers['debug']);
+		if ($config['tracy'] !== TRUE) unset($transformers['debug']);
 
 		$extension->setConfig([
 			'middlewares' => [
