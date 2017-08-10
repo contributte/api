@@ -52,6 +52,15 @@ class RootPathValidation implements IValidation
 		foreach ($controllers as $controller) {
 			$rootPath = $controller->getRootPath();
 
+			if (strlen($rootPath) === 1) {
+				if ($rootPath === '/') continue;
+
+				// MUST: Be exactly /
+				throw new InvalidSchemaException(
+					sprintf('@RootPath "%s" in "%s" must be exactly "/" (slash).', $rootPath, $controller->getClass())
+				);
+			}
+
 			// MUST: Starts with slash (/)
 			if (substr($rootPath, 0, 1) !== '/') {
 				throw new InvalidSchemaException(
