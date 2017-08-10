@@ -5,6 +5,7 @@ namespace Contributte\Api\Middlewares\Transformer;
 use Contributte\Api\Exception\Logical\InvalidStateException;
 use Contributte\Api\Http\ApiRequest;
 use Contributte\Api\Http\ApiResponse;
+use function GuzzleHttp\Psr7\stream_for;
 use Tracy\Debugger;
 
 class DebugTransformer implements ITransformer
@@ -40,6 +41,7 @@ class DebugTransformer implements ITransformer
 
 		if (!$response->hasData()) {
 			$response = $response->withHeader('Content-Type', 'text/html')
+				->withBody(stream_for())
 				->writeBody(Debugger::dump($tmp, TRUE), TRUE);
 		} else {
 			$response = $response->writeBody(Debugger::dump($tmp, TRUE), TRUE);
