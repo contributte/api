@@ -9,14 +9,14 @@ use Contributte\Api\Middlewares\Negotiation\SuffixNegotiator;
 use Contributte\Api\Middlewares\Transformer\DebugTransformer;
 use Contributte\Api\Middlewares\Transformer\JsonTransformer;
 use Contributte\Middlewares\AutoBasePathMiddleware;
-use Contributte\Middlewares\DI\StandaloneMiddlewareExtension;
+use Contributte\Middlewares\DI\MiddlewaresExtension;
 use Contributte\Middlewares\TracyMiddleware;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Helpers;
 use Nette\DI\Statement;
 use RuntimeException;
 
-class Api2MiddlewareExtension extends CompilerExtension
+class Api2MiddlewaresExtension extends CompilerExtension
 {
 
 	/** @var array */
@@ -34,7 +34,7 @@ class Api2MiddlewareExtension extends CompilerExtension
 	{
 		// Is MiddlewaresExtension (contributte/middlewares) registered?
 		if (!$this->getMiddlewaresExtension()) {
-			throw new RuntimeException(sprintf('Extension %s is not registered', StandaloneMiddlewareExtension::class));
+			throw new RuntimeException(sprintf('Extension %s is not registered', MiddlewaresExtension::class));
 		}
 
 		$config = $this->loadConfig();
@@ -108,11 +108,11 @@ class Api2MiddlewareExtension extends CompilerExtension
 	 */
 
 	/**
-	 * @return StandaloneMiddlewareExtension
+	 * @return MiddlewaresExtension
 	 */
 	protected function getMiddlewaresExtension()
 	{
-		$ext = $this->compiler->getExtensions(StandaloneMiddlewareExtension::class);
+		$ext = $this->compiler->getExtensions(MiddlewaresExtension::class);
 
 		return $ext ? reset($ext) : NULL;
 	}
