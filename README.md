@@ -81,12 +81,12 @@ As you can see, the architecture is ultra simple. `ApiRequest` & `ApiResponse` e
 
 ## Overview
 
-- [Installation - how to register an extension](https://github.com/contributte/api/tree/master/.docs##installation)
-- [Middlewares - how to setup middlewares](https://github.com/contributte/api/tree/master/.docs##middlewares)
-- [Bridge - how use API & middlewares easily](https://github.com/contributte/api/tree/master/.docs##bridge)
-- [Usage - controller showtime](https://github.com/contributte/api/tree/master/.docs##usage)
-- [Advanced - complex configuration](https://github.com/contributte/api/tree/master/.docs##advanced)
-- [Playground - real examples](https://github.com/contributte/api/tree/master/.docs##playground)
+- [Installation - how to register an extension](https://github.com/contributte/api/tree/master/.docs#installation)
+- [Middlewares - how to setup middlewares](https://github.com/contributte/api/tree/master/.docs#middlewares)
+- [Bridge - how use API & middlewares easily](https://github.com/contributte/api/tree/master/.docs#bridge)
+- [Usage - controller showtime](https://github.com/contributte/api/tree/master/.docs#usage)
+- [Advanced - complex configuration](https://github.com/contributte/api/tree/master/.docs#advanced)
+- [Playground - real examples](https://github.com/contributte/api/tree/master/.docs#playground)
 
 ## Maintainers
 

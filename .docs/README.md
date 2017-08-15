@@ -101,7 +101,7 @@ At the end, open your browser and locate to `localhost/<api-project>/hello/world
 
 ### Request & Response
 
-`Contributte\Api\Http\ApiRequest` & `Contributte\Api\Http\ApiResponse` implement the PSR-7 interfaces. Please  
+`Contributte\Api\Http\ApiRequest` & `Contributte\Api\Http\ApiResponse` implement the PSR-7 interfaces.  
 
 ## Advanced
 
