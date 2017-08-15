@@ -39,6 +39,16 @@ Controllers are small objects which can be registered in DIC as services (same a
 That's all. Take a look, it's really simple.
 
 ```php
+namespace App\Controllers;
+
+use Contributte\Api\Annotation\Controller\Controller;
+use Contributte\Api\Annotation\Controller\Method;
+use Contributte\Api\Annotation\Controller\Path;
+use Contributte\Api\Annotation\Controller\RootPath;
+use Contributte\Api\Http\ApiRequest;
+use Contributte\Api\Http\ApiResponse;
+use Contributte\Api\UI\Controller\IController;
+
 /**
  * @Controller
  * @RootPath("/hello")
@@ -55,17 +65,28 @@ final class HelloController implements IController
      */
     public function index(ApiRequest $request, ApiResponse $response)
     {
-        return $response->setBody('Hello world!');
+        return $response->writeBody('Hello world!');
     }
 }
 ```
 
-As you can see, the architecture is ultra simple. `ApiRequest` & `ApiResponse` have no constructor, so you can easily
-extend this class and implement it on your own.
+And register your controller as service.
+
+```yaml
+services:
+    - App\Controllers\HelloController
+```
+
+As you can see, the architecture is ultra simple. `ApiRequest` & `ApiResponse` extend PSR-7, so you can re-use these declared methods.
 
 ## Overview
 
-- [Installation - how to register an extension](https://github.com/contributte/api/tree/master/.docs#installation)
+- [Installation - how to register an extension](https://github.com/contributte/api/tree/master/.docs##installation)
+- [Middlewares - how to setup middlewares](https://github.com/contributte/api/tree/master/.docs##middlewares)
+- [Bridge - how use API & middlewares easily](https://github.com/contributte/api/tree/master/.docs##bridge)
+- [Usage - controller showtime](https://github.com/contributte/api/tree/master/.docs##usage)
+- [Advanced - complex configuration](https://github.com/contributte/api/tree/master/.docs##advanced)
+- [Playground - real examples](https://github.com/contributte/api/tree/master/.docs##playground)
 
 ## Maintainers
 
@@ -85,7 +106,7 @@ extend this class and implement it on your own.
 
 -----
 
-The development is sponsored by [Tlapnet](http://www.tlapnet.cz). Thank you guys! :+1:
+The development is sponsored by [Tlapnet](http://www.tlapnet.cz) and a lot of coffeees. Thank you guys! :+1:
 
 -----
 
