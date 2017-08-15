@@ -24,9 +24,10 @@ composer require contributte/api
 
 ## Version
 
-| State       | Version | Branch   | PHP      |
-|-------------|---------|----------|----------|
-| development | `^0.2`  | `master` | `>= 5.6` |
+| State       | Version      | Branch   | PHP      |
+|-------------|--------------|----------|----------|
+| development | `dev-master` | `master` | `>= 5.6` |
+| stable      | `^0.3.0`     | `master` | `>= 5.6` |
 
 ## Prolog
 
