@@ -24,11 +24,7 @@ extensions:
 
 ## Middlewares
 
-This API is mainly based on [contributte/middlewares](https://github.com/contributte/middlewares). You should register also middleware extension.
-
-```
-composer require contributte/middlewares
-```
+This API is mainly based on [contributte/middlewares](https://github.com/contributte/middlewares). You should register also middleware extension in your config file.
 
 ```yaml
 extensions:
