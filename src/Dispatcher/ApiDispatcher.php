@@ -2,7 +2,7 @@
 
 namespace Contributte\Api\Dispatcher;
 
-use Contributte\Api\Exception\Logical\Request\BadRequestException;
+use Contributte\Api\Exception\Logical\BadRequestException;
 use Contributte\Api\Http\ApiRequest;
 use Contributte\Api\Http\ApiResponse;
 use Contributte\Api\Router\IRouter;

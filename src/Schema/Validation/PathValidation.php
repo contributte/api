@@ -2,7 +2,7 @@
 
 namespace Contributte\Api\Schema\Validation;
 
-use Contributte\Api\Exception\Logical\Validation\InvalidSchemaException;
+use Contributte\Api\Exception\Logical\InvalidSchemaException;
 use Contributte\Api\Schema\Builder\SchemaBuilder;
 use Contributte\Api\Schema\Endpoint;
 use Contributte\Api\Utils\Regex;
