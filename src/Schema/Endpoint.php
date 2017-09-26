@@ -21,7 +21,7 @@ final class Endpoint
 		'PUT',
 		'DELETE',
 		'OPTIONS',
-		'PATCH'
+		'PATCH',
 	];
 
 	/** @var string[] */
