@@ -13,6 +13,7 @@ final class Endpoint
 	const METHOD_PUT = 'PUT';
 	const METHOD_DELETE = 'DELETE';
 	const METHOD_OPTION = 'OPTIONS';
+	const METHOD_PATCH = 'PATCH';
 
 	const METHODS = [
 		'GET',
@@ -20,6 +21,7 @@ final class Endpoint
 		'PUT',
 		'DELETE',
 		'OPTIONS',
+		'PATCH'
 	];
 
 	/** @var string[] */

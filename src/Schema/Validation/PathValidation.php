@@ -40,6 +40,7 @@ class PathValidation implements IValidation
 						Endpoint::METHOD_PUT => [],
 						Endpoint::METHOD_DELETE => [],
 						Endpoint::METHOD_OPTION => [],
+						Endpoint::METHOD_PATCH => [],
 					];
 				}
 
