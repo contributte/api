@@ -1,43 +1,53 @@
-# API
+# Contributte/API -> Apitte 
 
 :boom: Powerful API (`PSR-7`, `REST`, `Relay`, `Middleware`, `GraphQL`, `DataQL`, `Annotations`) for [`Nette Framework`](https://github.com/nette/).
 
 -----
 
-[![Build Status](https://img.shields.io/travis/contributte/api.svg?style=flat-square)](https://travis-ci.org/contributte/api)
-[![Code coverage](https://img.shields.io/coveralls/contributte/api.svg?style=flat-square)](https://coveralls.io/r/contributte/api)
-[![Licence](https://img.shields.io/packagist/l/contributte/api.svg?style=flat-square)](https://packagist.org/packages/contributte/api)
+:exclamation: This project is discontinued. 
 
-[![Downloads this Month](https://img.shields.io/packagist/dm/contributte/api.svg?style=flat-square)](https://packagist.org/packages/contributte/api)
-[![Downloads total](https://img.shields.io/packagist/dt/contributte/api.svg?style=flat-square)](https://packagist.org/packages/contributte/api)
-[![Latest stable](https://img.shields.io/packagist/v/contributte/api.svg?style=flat-square)](https://packagist.org/packages/contributte/api)
+:+1: It has been moved under [Apitte](https://github.com/apitte) organization and split into more repositories (:zap:). 
 
-## Discussion / Help
+-----
+
+## Contributte
 
 [![Join the chat](https://img.shields.io/gitter/room/contributte/contributte.svg?style=flat-square)](http://bit.ly/ctteg)
 
-## Install
+## Apitte
+
+[![Join the chat](https://img.shields.io/gitter/room/apitte/apitte.svg?style=flat-square)](http://bit.ly/apittegitter)
+
+## Migration
+
+Everything is pretty much same except (:warning:) namespaces.
+
+-----
+
+### #1 Install
+
+**Before**
 
 ```
 composer require contributte/api
 ```
 
-## Version
+**After**
 
-| State       | Version      | Branch   | PHP      |
-|-------------|--------------|----------|----------|
-| development | `dev-master` | `master` | `>= 5.6` |
-| stable      | `^0.3.0`     | `master` | `>= 5.6` |
+There are more features and more packages. Just check it out. :muscle:
 
-## Prolog
+```
+composer require apitte/core
+composer require apitte/debug
+composer require apitte/mapping
+composer require apitte/middlewares
+composer require apitte/mapping
+composer require apitte/openapi
+```
 
-This really powerful annotation-based API library is build on top of the PSR-7 standard. It reuses immutable `Request` & `Response` objects. It's well known that [Presenters](https://api.nette.org/2.4/Nette.Application.UI.Presenter.html) are the `alpha` and the `omega` in Nette applications. The presenters are not very suitable for API requests.
+-----
 
-We have taken an idea from Java ([Spring Framework](https://spring.io/guides/gs/rest-service/)) and many others and together we have created a Controller-based API. With full annotation support.
-
-Controllers are small objects which can be registered in DIC as services (same as [Presenters](https://api.nette.org/2.4/Nette.Application.UI.Presenter.html)). They have a few public annotated methods. If one of the methods is matched by a router, it is called with `ApiRequest` and `ApiResponse` passed objects.
-
-That's all. Take a look, it's really simple.
+### #2 Usage
 
 ```php
 namespace App\Controllers;
@@ -71,44 +81,37 @@ final class HelloController implements IController
 }
 ```
 
-And register your controller as service.
+**After**
 
-```yaml
-services:
-    - App\Controllers\HelloController
+```php
+namespace App\Controllers;
+
+use Apitte\Core\Annotation\Controller\Controller;
+use Apitte\Core\Annotation\Controller\Method;
+use Apitte\Core\Annotation\Controller\Path;
+use Apitte\Core\Annotation\Controller\RootPath;
+use Apitte\Core\Http\ApiRequest;
+use Apitte\Core\Http\ApiResponse;
+use Apitte\Core\UI\Controller\IController;
+
+/**
+ * @Controller
+ * @RootPath("/hello")
+ */
+final class HelloController implements IController
+{
+
+    /**
+     * @Path("/world")
+     * @Method("GET")
+     */
+    public function index(ApiRequest $request, ApiResponse $response)
+    {
+        return $response->writeBody('Hello world!');
+    }
+}
 ```
 
-As you can see, the architecture is ultra simple. `ApiRequest` & `ApiResponse` extend PSR-7, so you can re-use these declared methods.
+----
 
-## Overview
-
-- [Installation - how to register an extension](https://github.com/contributte/api/tree/master/.docs#installation)
-- [Middlewares - how to setup middlewares](https://github.com/contributte/api/tree/master/.docs#middlewares)
-- [Bridge - how use API & middlewares easily](https://github.com/contributte/api/tree/master/.docs#bridge)
-- [Usage - controller showtime](https://github.com/contributte/api/tree/master/.docs#usage)
-- [Advanced - complex configuration](https://github.com/contributte/api/tree/master/.docs#advanced)
-- [Playground - real examples](https://github.com/contributte/api/tree/master/.docs#playground)
-
-## Maintainers
-
-<table>
-  <tbody>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/f3l1x">
-            <img width="150" height="150" src="https://avatars2.githubusercontent.com/u/538058?v=3&s=150">
-        </a>
-        </br>
-        <a href="https://github.com/f3l1x">Milan Felix Šulc</a>
-      </td>
-    </tr>
-  <tbody>
-</table>
-
------
-
-The development is sponsored by [Tlapnet](http://www.tlapnet.cz) and a lot of coffeees. Thank you guys! :+1:
-
------
-
-Thank you for testing, reporting and contributing.
+Thank you for understanding. We would like to make API event better.
