@@ -28,21 +28,21 @@ Everything is pretty much same except (:warning:) namespaces.
 
 **Before**
 
-```
-$ composer require contributte/api
+```bash
+composer require contributte/api
 ```
 
 **After**
 
 There are more features and more packages. Just check it out. :muscle:
 
-```
-$ composer require apitte/core
-  composer require apitte/debug
-  composer require apitte/mapping
-  composer require apitte/middlewares
-  composer require apitte/mapping
-  composer require apitte/openapi
+```bash
+composer require apitte/core
+composer require apitte/debug
+composer require apitte/mapping
+composer require apitte/middlewares
+composer require apitte/mapping
+composer require apitte/openapi
 ```
 
 -----
