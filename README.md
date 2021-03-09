@@ -28,7 +28,7 @@ Everything is pretty much same except (:warning:) namespaces.
 
 **Before**
 
-```
+```bash
 composer require contributte/api
 ```
 
@@ -36,7 +36,7 @@ composer require contributte/api
 
 There are more features and more packages. Just check it out. :muscle:
 
-```
+```bash
 composer require apitte/core
 composer require apitte/debug
 composer require apitte/mapping
