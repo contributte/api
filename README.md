@@ -28,7 +28,7 @@ Everything is pretty much same except (:warning:) namespaces.
 
 **Before**
 
-```
+```bash
 composer require contributte/api
 ```
 
@@ -36,7 +36,7 @@ composer require contributte/api
 
 There are more features and more packages. Just check it out. :muscle:
 
-```
+```bash
 composer require apitte/core
 composer require apitte/debug
 composer require apitte/mapping
@@ -67,17 +67,17 @@ use Contributte\Api\UI\Controller\IController;
 final class HelloController implements IController
 {
 
-    /**
-     * @Path("/world")
-     * @Method("GET")
-     * @param ApiRequest $request
-     * @param ApiResponse $response
-     * @return ApiResponse
-     */
-    public function index(ApiRequest $request, ApiResponse $response)
-    {
-        return $response->writeBody('Hello world!');
-    }
+	/**
+	 * @Path("/world")
+	 * @Method("GET")
+	 * @param ApiRequest $request
+	 * @param ApiResponse $response
+	 * @return ApiResponse
+	 */
+	public function index(ApiRequest $request, ApiResponse $response)
+	{
+		return $response->writeBody('Hello world!');
+	}
 }
 ```
 
@@ -101,14 +101,14 @@ use Apitte\Core\UI\Controller\IController;
 final class HelloController implements IController
 {
 
-    /**
-     * @Path("/world")
-     * @Method("GET")
-     */
-    public function index(ApiRequest $request, ApiResponse $response)
-    {
-        return $response->writeBody('Hello world!');
-    }
+	/**
+	 * @Path("/world")
+	 * @Method("GET")
+	 */
+	public function index(ApiRequest $request, ApiResponse $response)
+	{
+		return $response->writeBody('Hello world!');
+	}
 }
 ```
 
