@@ -1,0 +1,12 @@
+request:
+	method: GET
+	body:
+	query:
+
+controller: Tests\Fixtures\App\PingController
+
+response:
+	statusCode: 200
+	body: """
+		pong
+	"""

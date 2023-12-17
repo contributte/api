@@ -1,117 +1,53 @@
-# Contributte/API -> Apitte 
+![](https://heatbadger.now.sh/github/readme/contributte/api/)
 
-:boom: Powerful API (`PSR-7`, `REST`, `Relay`, `Middleware`, `GraphQL`, `DataQL`, `Annotations`) for [`Nette Framework`](https://github.com/nette/).
+<p align=center>
+  <a href="https://github.com/contributte/api/actions"><img src="https://badgen.net/github/checks/contributte/api/master?cache=300"></a>
+  <a href="https://coveralls.io/r/contributte/api"> <img src="https://badgen.net/coveralls/c/github/contributte/api?cache=300"> </a>
+  <a href="https://packagist.org/packages/contributte/api"> <img src="https://badgen.net/packagist/dm/contributte/api"> </a>
+  <a href="https://packagist.org/packages/contributte/api"> <img src="https://badgen.net/packagist/v/contributte/api"> </a>
+</p>
+<p align=center>
+  <a href="https://packagist.org/packages/contributte/api"><img src="https://badgen.net/packagist/php/contributte/api"></a>
+  <a href="https://github.com/contributte/api"><img src="https://badgen.net/github/license/contributte/api"></a>
+  <a href="https://bit.ly/ctteg"><img src="https://badgen.net/badge/support/gitter/cyan"></a>
+  <a href="https://bit.ly/cttfo"><img src="https://badgen.net/badge/support/forum/yellow"></a>
+  <a href="https://contributte.org/partners.html"><img src="https://badgen.net/badge/become/a%20patron/F96854"></a>
+<p>
 
------
+<p align=center>
+Website 🚀 <a href="https://contributte.org">contributte.org</a> | Contact 👨🏻‍💻 <a href="https://f3l1x.io">f3l1x.io</a> | Twitter 🐦 <a href="https://twitter.com/contributte">@contributte</a>
+</p>
 
-:exclamation: This project is discontinued. 
+## Usage
 
-:+1: It has been moved under [Apitte](https://github.com/apitte) organization and split into more repositories (:zap:). 
+To install the latest version of `contributte/api` use [Composer](https://getcomposer.org).
 
------
-
-## Contributte
-
-[![Join the chat](https://img.shields.io/gitter/room/contributte/contributte.svg?style=flat-square)](http://bit.ly/ctteg)
-
-## Apitte
-
-[![Join the chat](https://img.shields.io/gitter/room/apitte/apitte.svg?style=flat-square)](http://bit.ly/apittegitter)
-
-## Migration
-
-Everything is pretty much same except (:warning:) namespaces.
-
------
-
-### #1 Install
-
-**Before**
-
-```bash
+```
 composer require contributte/api
 ```
 
-**After**
+## Documentation
 
-There are more features and more packages. Just check it out. :muscle:
+For details on how to use this package, check out our [documentation](.docs).
 
-```bash
-composer require apitte/core
-composer require apitte/debug
-composer require apitte/mapping
-composer require apitte/middlewares
-composer require apitte/mapping
-composer require apitte/openapi
-```
+## Version
+
+| State  | Version | Branch   | Nette | PHP     |
+|--------|---------|----------|-------|---------|
+| dev    | `^0.5`  | `master` | 3.1+  | `>=8.1` |
+| stable | `^0.4`  | `master` | 3.1+  | `>=8.1` |
+
+## Development
+
+See [how to contribute](https://contributte.org/contributing.html) to this package.
+
+This package is currently maintaining by these authors.
+
+<a href="https://github.com/f3l1x">
+  <img width="80" height="80" src="https://avatars2.githubusercontent.com/u/538058?v=3&s=80">
+</a>
 
 -----
 
-### #2 Usage
-
-```php
-namespace App\Controllers;
-
-use Contributte\Api\Annotation\Controller\Controller;
-use Contributte\Api\Annotation\Controller\Method;
-use Contributte\Api\Annotation\Controller\Path;
-use Contributte\Api\Annotation\Controller\RootPath;
-use Contributte\Api\Http\ApiRequest;
-use Contributte\Api\Http\ApiResponse;
-use Contributte\Api\UI\Controller\IController;
-
-/**
- * @Controller
- * @RootPath("/hello")
- */
-final class HelloController implements IController
-{
-
-	/**
-	 * @Path("/world")
-	 * @Method("GET")
-	 * @param ApiRequest $request
-	 * @param ApiResponse $response
-	 * @return ApiResponse
-	 */
-	public function index(ApiRequest $request, ApiResponse $response)
-	{
-		return $response->writeBody('Hello world!');
-	}
-}
-```
-
-**After**
-
-```php
-namespace App\Controllers;
-
-use Apitte\Core\Annotation\Controller\Controller;
-use Apitte\Core\Annotation\Controller\Method;
-use Apitte\Core\Annotation\Controller\Path;
-use Apitte\Core\Annotation\Controller\RootPath;
-use Apitte\Core\Http\ApiRequest;
-use Apitte\Core\Http\ApiResponse;
-use Apitte\Core\UI\Controller\IController;
-
-/**
- * @Controller
- * @RootPath("/hello")
- */
-final class HelloController implements IController
-{
-
-	/**
-	 * @Path("/world")
-	 * @Method("GET")
-	 */
-	public function index(ApiRequest $request, ApiResponse $response)
-	{
-		return $response->writeBody('Hello world!');
-	}
-}
-```
-
-----
-
-Thank you for understanding. We would like to make API event better.
+Consider to [support](https://contributte.org/partners.html) **contributte** development team.
+Also thank you for using this package.
