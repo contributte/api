@@ -34,10 +34,10 @@ final class ApiTest extends TestCase
 	{
 		$httpRequest = new HttpRequest(
 			new UrlScript('http://localhost'),
-			null,
-			null,
-			null,
-			null,
+			[],
+			[],
+			[],
+			[],
 			$def['request']['method'] ?? 'GET'
 		);
 
