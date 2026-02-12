@@ -36,7 +36,7 @@ class ApiExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		$expectService = Expect::anyOf(
-			Expect::string()->required()->assert(fn ($input) => str_starts_with($input, '@') || class_exists($input) || interface_exists($input)),
+			Expect::string()->required()->assert(fn ($input) => is_string($input) && (str_starts_with($input, '@') || class_exists($input) || interface_exists($input))),
 			Expect::type(Statement::class)->required(),
 		);
 
