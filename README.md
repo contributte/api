@@ -2,7 +2,7 @@
 
 <p align=center>
   <a href="https://github.com/contributte/api/actions"><img src="https://badgen.net/github/checks/contributte/api/master?cache=300"></a>
-  <a href="https://coveralls.io/r/contributte/api"> <img src="https://badgen.net/coveralls/c/github/contributte/api?cache=300"> </a>
+  <a href="https://codecov.io/gh/contributte/api"><img src="https://badgen.net/codecov/c/github/contributte/api"></a>
   <a href="https://packagist.org/packages/contributte/api"> <img src="https://badgen.net/packagist/dm/contributte/api"> </a>
   <a href="https://packagist.org/packages/contributte/api"> <img src="https://badgen.net/packagist/v/contributte/api"> </a>
 </p>
